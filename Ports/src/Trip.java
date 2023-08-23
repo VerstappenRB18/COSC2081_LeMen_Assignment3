@@ -1,7 +1,9 @@
+import javax.sound.sampled.Port;
+
 public class Trip {
     private String vehicleId; // or Vehicle vehicle; if you have a Vehicle class
-    private String departurePortId; // or Ports departurePort; if you have a Ports class
-    private String arrivalPortId; // or Ports arrivalPort; if you have a Ports class
+    private Ports departurePort; // or Ports departurePort; if you have a Ports class
+    private Ports arrivalPort; // or Ports arrivalPort; if you have a Ports class
     private String departureDate;
     private String arrivalDate;
     private String status;
@@ -10,18 +12,18 @@ public class Trip {
     //default constructor
     public Trip() {
         this.vehicleId = null;
-        this.departurePortId = null;
-        this.arrivalPortId = null;
+        this.departurePort = null;
+        this.arrivalPort = null;
         this.departureDate = null;
         this.arrivalDate = null;
         this.status = null;
     }
 
     // parameterized constructor
-    public Trip(String vehicleId, String departurePortId, String arrivalPortId, String departureDate, String arrivalDate, String status) {
+    public Trip(String vehicleId, Ports departurePort, Ports arrivalPort, String departureDate, String arrivalDate, String status) {
         this.vehicleId = vehicleId;
-        this.departurePortId = departurePortId;
-        this.arrivalPortId = arrivalPortId;
+        this.departurePort = departurePort;
+        this.arrivalPort = arrivalPort;
         this.departureDate = departureDate;
         this.arrivalDate = arrivalDate;
         this.status = status;

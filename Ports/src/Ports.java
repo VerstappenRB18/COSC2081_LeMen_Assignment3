@@ -40,6 +40,78 @@ public class Ports {
     }
 
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getStoringCapacity() {
+        return storingCapacity;
+    }
+
+    public void setStoringCapacity(double storingCapacity) {
+        this.storingCapacity = storingCapacity;
+    }
+
+    public boolean isLandingAbility() {
+        return landingAbility;
+    }
+
+    public void setLandingAbility(boolean landingAbility) {
+        this.landingAbility = landingAbility;
+    }
+
+    public List<Container> getContainersList() {
+        return containersList;
+    }
+
+    public void setContainersList(List<Container> containersList) {
+        this.containersList = containersList;
+    }
+
+    public List<Vehicle> getVehicleList() {
+        return vehicleList;
+    }
+
+    public void setVehicleList(List<Vehicle> vehicleList) {
+        this.vehicleList = vehicleList;
+    }
+
+    public List<Trip> getTrafficHistory() {
+        return trafficHistory;
+    }
+
+    public void setTrafficHistory(List<Trip> trafficHistory) {
+        this.trafficHistory = trafficHistory;
+    }
+
     // calculateDistance
     public double calculateDistance(Ports otherPort) {
         final int R = 6371; // Radius of the Earth in kilometers
@@ -63,5 +135,34 @@ public class Ports {
         } else {
             System.out.println("Container cannot be null");
         }
+    }
+    // Add a vehicle to the vehicle list
+    public void addVehicle(Vehicle vehicle) {
+        if (vehicle != null) {
+            vehicleList.add(vehicle);
+        } else {
+            System.out.println("Vehicle cannot be null");
+        }
+    }
+    // Add a new trip to the trip list
+    public void addTrip(Trip trip) {
+        if (trip != null) {
+            trafficHistory.add(trip);
+        } else {
+            System.out.println("Trip cannot be null");
+        }
+    }
+
+    public double getAvailableStorage() {
+        double totalWeight = 0.0;
+
+        // Sum the weight of all containers
+        for (Container container : containersList) {
+            totalWeight += container.getWeight();
+        }
+
+        // Subtract the total weight from the storing capacity
+
+        return storingCapacity - totalWeight;
     }
 }
