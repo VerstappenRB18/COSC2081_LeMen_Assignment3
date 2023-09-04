@@ -1,5 +1,7 @@
 package container;
 
+import java.util.HashMap;
+
 public class Container {
     public enum ContainerType {
         DRY_STORAGE(3.5, 4.6),
@@ -26,6 +28,7 @@ public class Container {
     }
 
     private static int containerCounter = 0;
+    private static HashMap<ContainerType, Double> totalWeightByType = new HashMap<>();
     private String id;
     private double weight;
     private ContainerType type;
@@ -41,6 +44,7 @@ public class Container {
         this.id = "c-" + (++ containerCounter);
         this.weight = weight;
         this.type = type;
+        totalWeightByType.put(type, totalWeightByType.getOrDefault(type, 0.0) + weight);
     }
 
     public String getId() {
@@ -61,5 +65,9 @@ public class Container {
 
     public double getFuelConsumptionPerKmForTruck() {
         return type != null ? type.getTruckConsumption() * weight : 0.0;
+    }
+
+    public static double getTotalWeight(ContainerType type) {
+        return totalWeightByType.getOrDefault(type, 0.0);
     }
 }
