@@ -3,6 +3,7 @@ package container;
 import java.util.HashMap;
 
 public class Container {
+
     public enum ContainerType {
         DRY_STORAGE(3.5, 4.6),
         OPEN_TOP(2.8, 3.2),
@@ -28,23 +29,30 @@ public class Container {
     }
 
     private static int containerCounter = 0;
-    private static HashMap<ContainerType, Double> totalWeightByType = new HashMap<>();
-    private String id;
-    private double weight;
-    private ContainerType type;
+    private static final HashMap<ContainerType, Double> totalWeightByType = new HashMap<>();
+    private final String id;
+    private final double weight;
+    private final ContainerType type;
 
     public Container() {
         this(0.0, null);
+    }
+
+    private String generateContainerID() {
+        return "c-" + (++containerCounter);
     }
 
     public Container(double weight, ContainerType type) {
         if (weight < 0) {
             throw new IllegalArgumentException("Weight cannot be negative.");
         }
-        this.id = "c-" + (++ containerCounter);
+        this.id = generateContainerID();
         this.weight = weight;
         this.type = type;
-        totalWeightByType.put(type, totalWeightByType.getOrDefault(type, 0.0) + weight);
+
+        if(type != null){
+            totalWeightByType.merge(type, weight, Double::sum);
+        }
     }
 
     public String getId() {

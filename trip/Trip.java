@@ -1,9 +1,13 @@
+package trip;
+
+import ports.Ports;
+import vehicle.Vehicle;
 import javax.sound.sampled.Port;
 
 public class Trip {
-    private String vehicleId; // or Vehicle vehicle; if you have a Vehicle class
-    private Ports departurePort; // or Ports departurePort; if you have a Ports class
-    private Ports arrivalPort; // or Ports arrivalPort; if you have a Ports class
+    private Vehicle vehicle;
+    private Ports departurePort;
+    private Ports arrivalPort;
     private String departureDate;
     private String arrivalDate;
     private String status;
@@ -11,7 +15,7 @@ public class Trip {
 
     //default constructor
     public Trip() {
-        this.vehicleId = null;
+        this.vehicle = null;
         this.departurePort = null;
         this.arrivalPort = null;
         this.departureDate = null;
@@ -20,8 +24,8 @@ public class Trip {
     }
 
     // parameterized constructor
-    public Trip(String vehicleId, Ports departurePort, Ports arrivalPort, String departureDate, String arrivalDate, String status) {
-        this.vehicleId = vehicleId;
+    public Trip(Vehicle vehicle, Ports departurePort, Ports arrivalPort, String departureDate, String arrivalDate, String status) {
+        this.vehicle = vehicle;
         this.departurePort = departurePort;
         this.arrivalPort = arrivalPort;
         this.departureDate = departureDate;

@@ -1,17 +1,23 @@
+package ports;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import container.Container;
+import trip.Trip;
+import vehicle.*;
 
 public class Ports {
-    String id;
-    String name;
-    double latitude;
-    double longitude;
-    double storingCapacity;
-    boolean landingAbility;
-    List<Container> containersList;
-    List<Vehicle> vehicleList;
-    List<Trip>trafficHistory;
+    private static int portCounter = 0;
+    private String id;
+    private String name;
+    private double latitude;
+    private double longitude;
+    private double storingCapacity;
+    private boolean landingAbility;
+    private List<Container> containersList;
+    private List<Vehicle> vehicleList;
+    private List<Trip>trafficHistory;
 
     // Default Constructor
     public Ports() {
@@ -27,8 +33,8 @@ public class Ports {
     }
 
     // Parameter Constructor
-    public Ports(String id, String name, double latitude, double longitude, double storingCapacity, boolean landingAbility, List<Container> containersList, List<Vehicle> vehicleList, List<Trip> trafficHistory) {
-        this.id = id;
+    public Ports(String name, double latitude, double longitude, double storingCapacity, boolean landingAbility, List<Container> containersList, List<Vehicle> vehicleList, List<Trip> trafficHistory) {
+        this.id = generatePortId();
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -39,6 +45,9 @@ public class Ports {
         this.trafficHistory = trafficHistory != null ? trafficHistory : new ArrayList<>();
     }
 
+    private String generatePortId() {
+        return "p-" + (++portCounter);
+    }
 
     public String getId() {
         return id;
