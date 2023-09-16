@@ -21,7 +21,7 @@ public class Ports {
     private List<Container> containersList;
     private List<Vehicle> vehicleList;
     private List<Trip> trafficHistory;
-    private static final String filename = "ports.txt";
+    static final String filename = "ports.txt";
 
 
     // Default Constructor
@@ -238,28 +238,154 @@ public class Ports {
     }
 
 
-    public static void updatePort(String filename, String id, Ports updatedPort, List<Ports> portsList) throws IOException {
-        for (int i = 0; i < portsList.size(); i++) {
-            if (portsList.get(i).getId().equals(id)) {
-                Ports existingPort = portsList.get(i);
-                existingPort.setName(updatedPort.getName());
-                existingPort.setLatitude(updatedPort.getLatitude());
-                existingPort.setLongitude(updatedPort.getLongitude());
-                existingPort.setStoringCapacity(updatedPort.getStoringCapacity());
-                existingPort.setLandingAbility(updatedPort.isLandingAbility());
-                existingPort.setContainersList(updatedPort.getContainersList());
-                existingPort.setVehicleList(updatedPort.getVehicleList());
-                existingPort.setTrafficHistory(updatedPort.getTrafficHistory());
+    // Method to create and add a new port to the list and save it to the file
+    public static void createPort(List<Ports> portsList, String filename) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-                saveAllToFile(filename, portsList);
-                System.out.println("Port updated successfully.");
-                return;
+        System.out.print("Enter name: ");
+        String name = reader.readLine();
+
+        double latitude = -1;
+        do {
+            System.out.print("Enter latitude (between -90 and 90): ");
+            try {
+                latitude = Double.parseDouble(reader.readLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
             }
-        }
-        System.err.println("No port found with ID: " + id);
+        } while (latitude < -90 || latitude > 90);
+
+        double longitude = -1;
+        do {
+            System.out.print("Enter longitude (between -180 and 180): ");
+            try {
+                longitude = Double.parseDouble(reader.readLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        } while (longitude < -180 || longitude > 180);
+
+        double storingCapacity = -1;
+        do {
+            System.out.print("Enter storing capacity (greater than 0): ");
+            try {
+                storingCapacity = Double.parseDouble(reader.readLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        } while (storingCapacity <= 0);
+
+        Boolean landingAbility = null;
+        do {
+            System.out.print("Does it have landing ability? (true/false): ");
+            String landingAbilityStr = reader.readLine().trim().toLowerCase();
+            if (landingAbilityStr.equals("true")) {
+                landingAbility = true;
+            } else if (landingAbilityStr.equals("false")) {
+                landingAbility = false;
+            } else {
+                System.out.println("Invalid input. Please enter true or false.");
+            }
+        } while (landingAbility == null);
+
+        Ports port = new Ports(name, latitude, longitude, storingCapacity, landingAbility, null, null, null);
+        portsList.add(port);
+        port.saveToFile(filename);
+
+        System.out.println("Port created successfully.");
     }
 
-    public static void deletePort(String filename, String id, List<Ports> portsList) throws IOException {
+    // Method to update an existing port details
+    public static void updatePort(List<Ports> portsList, String filename) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        while (true) {
+            System.out.print("Enter port ID to update: ");
+            String id = reader.readLine();
+
+            Ports existingPort = null;
+
+            for (Ports port : portsList) {
+                if (port.getId().equals(id)) {
+                    existingPort = port;
+                    break;
+                }
+            }
+
+            if (existingPort == null) {
+                System.err.println("No port found with ID: " + id);
+                continue;
+            }
+
+            System.out.print("Enter new name: ");
+            String name = reader.readLine();
+
+            double latitude = -1;
+            do {
+                System.out.print("Enter new latitude (between -90 and 90): ");
+                try {
+                    latitude = Double.parseDouble(reader.readLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                }
+            } while (latitude < -90 || latitude > 90);
+            existingPort.setLatitude(latitude);
+
+            double longitude = -1;
+            do {
+                System.out.print("Enter new longitude (between -180 and 180): ");
+                try {
+                    longitude = Double.parseDouble(reader.readLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                }
+            } while (longitude < -180 || longitude > 180);
+            existingPort.setLongitude(longitude);
+
+            double storingCapacity = -1;
+            do {
+                System.out.print("Enter new storing capacity (greater than 0): ");
+                try {
+                    storingCapacity = Double.parseDouble(reader.readLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                }
+            } while (storingCapacity <= 0);
+            existingPort.setStoringCapacity(storingCapacity);
+
+            Boolean landingAbility = null;
+            do {
+                System.out.print("Update landing ability? (true/false): ");
+                String landingAbilityStr = reader.readLine().trim().toLowerCase();
+                if (landingAbilityStr.equals("true")) {
+                    landingAbility = true;
+                } else if (landingAbilityStr.equals("false")) {
+                    landingAbility = false;
+                } else {
+                    System.out.println("Invalid input. Please enter true or false.");
+                }
+            } while (landingAbility == null);
+            existingPort.setLandingAbility(landingAbility);
+
+            existingPort.setName(name);
+
+            saveAllToFile(filename, portsList);
+            System.out.println("Port updated successfully.");
+            return;
+        }
+    }
+
+
+
+
+
+    // Method to delete a port from the list and save the updated list to the file
+    public static void deletePort(List<Ports> portsList, String filename) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.print("Enter port ID to delete: ");
+        String id = reader.readLine();
+
         for (int i = 0; i < portsList.size(); i++) {
             if (portsList.get(i).getId().equals(id)) {
                 portsList.remove(i);
