@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
-      <change afterPath="$PROJECT_DIR$/ports.txt" afterDir="false" />
+    <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ports.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ports.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ports/PortManagementSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/ports/PortManagementSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ports/Ports.java" beforeDir="false" afterPath="$PROJECT_DIR$/ports/Ports.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +112,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694103629437</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
+      <option name="closed" value="true" />
+      <created>1694844842195</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1694844842195</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
