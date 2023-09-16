@@ -99,15 +99,44 @@ public class Container {
         return type != null ? type.getTruckConsumption() * weight : 0.0;
     }
 
-    public static double getTotalWeight(ContainerType type) {
-        return totalWeightByType.getOrDefault(type, 0.0);
-    }
+
 
     public String getContainer() {
         return id + "," + weight + "," + type;
     }
 
+    public static void getTotalWeightByType() {
+        // Clear existing data
+        totalWeightByType.clear();
 
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if(parts.length >= 3) {
+                    String typeString = parts[2];
+                    if(typeString == null || typeString.isBlank()) {
+                        System.out.println("Container type is null or blank on line: " + line);
+                        continue;
+                    }
+                    try {
+                        ContainerType type = ContainerType.valueOf(typeString);
+                        double weight = Double.parseDouble(parts[1]);
+                        totalWeightByType.merge(type, weight, Double::sum);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Invalid data on line: " + line);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the file: " + e.getMessage());
+        }
+
+        // Print the total weights by type
+        for (Map.Entry<ContainerType, Double> entry : totalWeightByType.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+    }
 
     public static void createContainer(Scanner input) {
         System.out.print("Please enter the Container's weight: ");
@@ -175,7 +204,7 @@ public class Container {
             if (!isFound) { // Check if the ID was not found and notify the user
                 System.out.println("No record found with the ID: " + searchKey);
                 System.out.println("Please try again.");
-                continue; // Repeat the loop to prompt the user again
+                // Repeat the loop to prompt the user again
             } else {
                 try (FileWriter writer = new FileWriter(filename)) {
                     for (int i = 0; i < arrayList.size(); i++) {

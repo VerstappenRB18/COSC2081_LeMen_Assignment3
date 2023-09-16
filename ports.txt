@@ -9,3 +9,5 @@ p-8,Port Hotel,127.00,137.00,8000.00,false
 p-9,Port India,128.00,138.00,9000.00,true
 p-10,Port Juliet,129.00,139.00,10000.00,false
 p-12,Port Kristen,120.00,220.00,10000.00,false
+p-11,Port Lmao,200.00,350.00,1000.00,true
+p-13,Port Open,200.00,320.00,1500.00,false
