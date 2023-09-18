@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java" />
+    <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
+      <change afterPath="$PROJECT_DIR$/vehicle/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vehicles.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vehicle/Ship.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Ship.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vehicle/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Truck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vehicle/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Vehicle.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -98,6 +105,9 @@
       <workItem from="1694533750529" duration="462000" />
       <workItem from="1694671293027" duration="752000" />
       <workItem from="1694755305878" duration="9318000" />
+      <workItem from="1694961039897" duration="1228000" />
+      <workItem from="1694962887202" duration="2170000" />
+      <workItem from="1694965091872" duration="8176000" />
     </task>
     <task id="LOCAL-00001" summary="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
       <option name="closed" value="true" />

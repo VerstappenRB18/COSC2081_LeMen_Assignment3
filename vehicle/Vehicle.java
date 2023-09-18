@@ -8,15 +8,25 @@ import trip.Trip;
 public abstract class Vehicle {
     protected static int vehicleCounter = 0;
     protected String id;
+    protected String name; // Add this field to store the name of the vehicle
     protected double carryingCapacity;
     protected double fuelCapacity;
     protected double currentFuel;
     protected Ports currentPort;
-    protected List<container.Container> containers = new ArrayList<>();
+    protected List<Container> containers = new ArrayList<>();
     protected Map<Container.ContainerType, Integer> containerByType = new HashMap<>();
 
     protected String generateVehicleId() {
         return "v-" + (++vehicleCounter);
+    }
+    public abstract String toCSVFormat(); // Add this method signature
+
+    public static int getVehicleCounter() {
+        return vehicleCounter;
+    }
+
+    public static void setVehicleCounter(int vehicleCounter) {
+        Vehicle.vehicleCounter = vehicleCounter;
     }
 
     public boolean addContainer(Container container) {
@@ -105,4 +115,14 @@ public abstract class Vehicle {
     public String getId() {
         return id;
     }
+    @Override
+    public String toString() {
+        return "Vehicle ID: " + id + '\n' +
+                "Name: " + name + '\n' +
+                "Carrying Capacity: " + carryingCapacity + '\n' +
+                "Fuel Capacity: " + fuelCapacity + '\n' +
+                "Current Fuel: " + currentFuel;
+    }
+
+
 }
