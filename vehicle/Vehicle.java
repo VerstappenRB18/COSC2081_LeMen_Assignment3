@@ -92,7 +92,7 @@ public abstract class Vehicle {
         targetPort.getVehicleList().add(this);
 
         // Create a new Trip object to record this journey and add it to the target port's traffic history
-        Trip newTrip = new Trip(this, currentPort, targetPort, departureDate, arrivalDate, "Completed");
+        Trip newTrip = new Trip();
         targetPort.addTrip(newTrip);
 
         // Update the vehicle's current location
