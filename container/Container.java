@@ -136,7 +136,7 @@ public class Container {
         }
     }
 
-    public static void createContainer(Scanner input) {
+    public static Container createContainer(Scanner input) {
         System.out.print("Please enter the Container's weight: ");
         double weight = input.nextDouble();
         input.nextLine();
@@ -174,6 +174,7 @@ public class Container {
         } catch (IOException e) {
             System.out.println("Container not successfully added");
         }
+        return container;
     }
 
     public static void deleteContainer(ArrayList<String> arrayList, Scanner input) {

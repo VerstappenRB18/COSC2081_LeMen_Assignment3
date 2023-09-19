@@ -29,6 +29,24 @@ public abstract class Vehicle {
         Vehicle.vehicleCounter = vehicleCounter;
     }
 
+    public static Vehicle createVehicle(Scanner input, Ports currentPort) {
+        System.out.print("Please enter the Vehicle's name: ");
+        String name = input.next();
+
+        System.out.print("Please enter the Vehicle's carrying capacity: ");
+        double carryingCapacity = input.nextDouble();
+
+        System.out.print("Please enter the Vehicle's fuel capacity: ");
+        double fuelCapacity = input.nextDouble();
+
+        System.out.print("Please enter the Vehicle's current fuel level: ");
+        double currentFuel = input.nextDouble();
+
+        // Here we return null because we cannot instantiate an abstract class
+        // This method should be overridden in the subclasses (Ship and Truck) to return a new instance of them
+        return null;
+    }
+
     public boolean addContainer(Container container) {
         if (container != null) {
             containers.add(container);
@@ -145,5 +163,4 @@ public abstract class Vehicle {
 
         return sb.toString();
     }
-
 }
