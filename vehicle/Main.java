@@ -99,47 +99,92 @@ public class Main {
     public static void createVehicle(List<Vehicle> vehicleList, String filename) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        try {
-            System.out.print("Enter vehicle name: ");
-            String name = reader.readLine().trim();
+        while (true) {
+            try {
+                System.out.print("Enter vehicle name: ");
+                String name = reader.readLine().trim();
 
-            System.out.print("Enter carrying capacity: ");
-            double carryingCapacity = Double.parseDouble(reader.readLine());
+                double carryingCapacity = -1;
+                do {
+                    try {
+                        System.out.print("Enter carrying capacity: ");
+                        carryingCapacity = Double.parseDouble(reader.readLine());
+                        if (carryingCapacity < 0) {
+                            System.err.println("Carrying capacity must be a positive number.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid input. Please enter a valid number.");
+                    }
+                } while (carryingCapacity < 0);
 
-            System.out.print("Enter fuel capacity: ");
-            double fuelCapacity = Double.parseDouble(reader.readLine());
+                double fuelCapacity = -1;
+                do {
+                    try {
+                        System.out.print("Enter fuel capacity: ");
+                        fuelCapacity = Double.parseDouble(reader.readLine());
+                        if (fuelCapacity < 0) {
+                            System.err.println("Fuel capacity must be a positive number.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid input. Please enter a valid number.");
+                    }
+                } while (fuelCapacity < 0);
 
-            System.out.print("Enter current fuel: ");
-            double currentFuel = Double.parseDouble(reader.readLine());
+                double currentFuel = -1;
+                do {
+                    try {
+                        System.out.print("Enter current fuel: ");
+                        currentFuel = Double.parseDouble(reader.readLine());
+                        if (currentFuel < 0) {
+                            System.err.println("Current fuel must be a positive number.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid input. Please enter a valid number.");
+                    }
+                } while (currentFuel < 0);
 
-            System.out.print("Enter vehicle type (truck/ship): ");
-            String vehicleType = reader.readLine().trim().toLowerCase();
+                String vehicleType = "";
+                do {
+                    System.out.print("Enter vehicle type (truck/ship): ");
+                    vehicleType = reader.readLine().trim().toLowerCase();
+                    if (!vehicleType.equals("truck") && !vehicleType.equals("ship")) {
+                        System.err.println("Invalid vehicle type.");
+                    }
+                } while (!vehicleType.equals("truck") && !vehicleType.equals("ship"));
 
-            Vehicle vehicle = null;
+                Vehicle vehicle = null;
 
-            if (vehicleType.equals("truck")) {
-                System.out.print("Enter truck type (basic/reefer/tanker): ");
-                String truckTypeStr = reader.readLine().trim().toLowerCase();
-                Truck.TruckType truckType = Truck.TruckType.valueOf(truckTypeStr.toUpperCase());
+                if (vehicleType.equals("truck")) {
+                    String truckTypeStr = "";
+                    do {
+                        System.out.print("Enter truck type (basic/reefer/tanker): ");
+                        truckTypeStr = reader.readLine().trim().toLowerCase();
+                        if (!truckTypeStr.equals("basic") && !truckTypeStr.equals("reefer") && !truckTypeStr.equals("tanker")) {
+                            System.err.println("Invalid truck type.");
+                        }
+                    } while (!truckTypeStr.equals("basic") && !truckTypeStr.equals("reefer") && !truckTypeStr.equals("tanker"));
 
-                vehicle = new Truck(name, truckType, carryingCapacity, fuelCapacity, currentFuel);
-            } else if (vehicleType.equals("ship")) {
-                // You will need to add proper handling for creating a Ship object here
-                System.out.println("Ship creation not supported at the moment.");
-                return;
-            } else {
-                System.out.println("Invalid vehicle type.");
-                return;
+                    Truck.TruckType truckType = Truck.TruckType.valueOf(truckTypeStr.toUpperCase());
+
+                    vehicle = new Truck(name, truckType, carryingCapacity, fuelCapacity, currentFuel);
+                } else if (vehicleType.equals("ship")) {
+                    // You will need to add proper handling for creating a Ship object here
+                    System.out.println("Ship creation not supported at the moment.");
+                    return;
+                }
+
+                vehicleList.add(vehicle);
+                saveVehicleToFile(vehicleList, filename);
+
+                System.out.println("Vehicle created successfully.");
+                break; // Exit the loop when all input is valid
+            } catch (IOException e) {
+                System.out.println("An error occurred while creating the vehicle. Please check your input and try again.");
+                // Re-prompt the user for input
             }
-
-            vehicleList.add(vehicle);
-            saveVehicleToFile(vehicleList, filename);
-
-            System.out.println("Vehicle created successfully.");
-        } catch (IOException | NumberFormatException e) {
-            System.out.println("An error occurred while creating the vehicle. Please check your input and try again.");
         }
     }
+
 
     public static void updateVehicle(List<Vehicle> vehicleList) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -159,47 +204,46 @@ public class Main {
 
             if (existingVehicle == null) {
                 System.err.println("No vehicle found with ID: " + id);
-                continue;
+                continue; // Re-prompt the user for input
             }
 
             System.out.print("Enter new name for the vehicle: ");
             String name = reader.readLine();
             existingVehicle.name = name;
 
-            while (true) {
-                System.out.print("Enter new carrying capacity for the vehicle (a positive number): ");
+            double newCarryingCapacity = -1;
+            while (newCarryingCapacity < 0) {
                 try {
-                    double carryingCapacity = Double.parseDouble(reader.readLine());
-                    if (carryingCapacity > 0) {
-                        existingVehicle.carryingCapacity = carryingCapacity;
-                        break;
-                    } else {
+                    System.out.print("Enter new carrying capacity for the vehicle (a positive number): ");
+                    newCarryingCapacity = Double.parseDouble(reader.readLine());
+                    if (newCarryingCapacity < 0) {
                         System.err.println("Carrying capacity must be a positive number.");
                     }
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid input. Please enter a valid number.");
                 }
             }
+            existingVehicle.carryingCapacity = newCarryingCapacity;
 
-            while (true) {
-                System.out.print("Enter new fuel capacity for the vehicle (a positive number): ");
+            double newFuelCapacity = -1;
+            while (newFuelCapacity < 0) {
                 try {
-                    double fuelCapacity = Double.parseDouble(reader.readLine());
-                    if (fuelCapacity > 0) {
-                        existingVehicle.fuelCapacity = fuelCapacity;
-                        break;
-                    } else {
+                    System.out.print("Enter new fuel capacity for the vehicle (a positive number): ");
+                    newFuelCapacity = Double.parseDouble(reader.readLine());
+                    if (newFuelCapacity < 0) {
                         System.err.println("Fuel capacity must be a positive number.");
                     }
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid input. Please enter a valid number.");
                 }
             }
+            existingVehicle.fuelCapacity = newFuelCapacity;
 
             System.out.println("Vehicle updated successfully.");
-            return;
+            break; // Exit the loop when all input is valid
         }
     }
+
     public static void saveVehicleToFile(List<Vehicle> vehicleList, String filename) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false))) {
             for (Vehicle vehicle : vehicleList) {

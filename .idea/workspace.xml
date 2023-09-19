@@ -5,12 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
-      <change afterPath="$PROJECT_DIR$/vehicle/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vehicles.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Ship.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Ship.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Truck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Vehicle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/PortManagementSystem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Vehicle.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Vehicle.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicles.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicles.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ports/PortManagementSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/ports/PortManagementSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vehicle/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,6 +110,9 @@
       <workItem from="1694961039897" duration="1228000" />
       <workItem from="1694962887202" duration="2170000" />
       <workItem from="1694965091872" duration="8176000" />
+      <workItem from="1695043872025" duration="714000" />
+      <workItem from="1695048353845" duration="1115000" />
+      <workItem from="1695094573585" duration="174000" />
     </task>
     <task id="LOCAL-00001" summary="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
       <option name="closed" value="true" />
