@@ -58,9 +58,19 @@ public class Container {
         return maxID;
     }
 
-    public Container() {
-        this(0.0, null);
+    public Container(String id, double weight, ContainerType type) {
+        if (weight < 0) {
+            throw new IllegalArgumentException("Weight cannot be negative.");
+        }
+        this.id = id; // Use the ID passed as a parameter
+        this.weight = weight;
+        this.type = type;
+
+        if (type != null) {
+            totalWeightByType.merge(type, weight, Double::sum);
+        }
     }
+
 
     private String generateContainerID() {
         return "c-" + (++containerCounter);
@@ -322,6 +332,27 @@ public class Container {
             System.out.println("An error occurred while reading the file: " + e.getMessage());
         }
     }
+
+    public static List<Container> readFromFile(String filename) throws IOException {
+        List<Container> containerList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String id = parts[0];
+                double weight = Double.parseDouble(parts[1]);
+                ContainerType type = ContainerType.valueOf(parts[2]);
+                Container container = new Container(id, weight, type); // Pass the ID read from the file
+                containerList.add(container);
+            }
+        }
+        return containerList;
+    }
+
+
+
+
+
     @Override
     public String toString() {
         return id;

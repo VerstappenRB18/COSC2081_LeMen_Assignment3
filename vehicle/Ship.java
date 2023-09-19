@@ -1,9 +1,32 @@
 package vehicle;
 
 import ports.Ports;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class Ship extends Vehicle {
+    public Ship(String[] data, Ports currentPort) {
+        super();
+        this.id = data[0];
+        this.name = data[1];
+        this.carryingCapacity = Double.parseDouble(data[2]);
+        this.fuelCapacity = Double.parseDouble(data[3]);
+        this.currentFuel = Double.parseDouble(data[4]);
+        this.currentPort = currentPort;
+        this.shipType = ShipType.valueOf(data[7].toUpperCase());
+        // You will also need to add code here to handle the container data
+    }
+
+    private Ports findPortById(List<Ports> portsList, String id) {
+        for (Ports port : portsList) {
+            if (port.getId().equals(id)) {
+                return port;
+            }
+        }
+        return null;
+    }
+
     public enum ShipType {
         CARGO, CRUISE, CONTAINER
     }

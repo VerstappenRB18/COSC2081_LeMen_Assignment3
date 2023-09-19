@@ -1,5 +1,8 @@
 package vehicle;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import container.Container;
 import ports.Ports;
@@ -19,7 +22,6 @@ public abstract class Vehicle {
     protected String generateVehicleId() {
         return "v-" + (++vehicleCounter);
     }
-    public abstract String toCSVFormat(); // Add this method signature
 
     public static int getVehicleCounter() {
         return vehicleCounter;
@@ -131,14 +133,37 @@ public abstract class Vehicle {
     public List<Container> getContainers() {
         return containers;
     }
+    public void saveToFile(String filename) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+            writer.write(toCSVFormat() + "\n");
+        }
+    }
+    public String toCSVFormat() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(id).append(",")
+                .append(name).append(",")
+                .append(carryingCapacity).append(",")
+                .append(fuelCapacity).append(",")
+                .append(currentFuel).append(",")
+                .append(currentPort.getId()).append(",")
+                .append(this.getClass().getSimpleName()).append(",") // Add vehicle type
+                .append(getContainersCSV()); // Add containers CSV
 
-    public String containersToCSV() {
+        return sb.toString();
+    }
+
+    private String getContainersCSV() {
         StringBuilder sb = new StringBuilder();
         for (Container container : containers) {
-            sb.append(container.toCSVFormat()).append("\n");
+            sb.append(container.getId()).append(";");
+        }
+        // Remove the last semicolon to avoid having an extra semicolon at the end
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1);
         }
         return sb.toString();
     }
+
 
     public String getId() {
         return id;

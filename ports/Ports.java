@@ -376,9 +376,6 @@ public class Ports {
     }
 
 
-
-
-
     // Method to delete a port from the list and save the updated list to the file
     public static void deletePort(List<Ports> portsList, String filename) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -406,6 +403,7 @@ public class Ports {
             }
         }
     }
+
 
     @Override
     public String toString() {
