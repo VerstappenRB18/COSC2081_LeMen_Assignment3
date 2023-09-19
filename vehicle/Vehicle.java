@@ -110,19 +110,40 @@ public abstract class Vehicle {
 
         return true;
     }
+    public List<Container> getContainers() {
+        return containers;
+    }
 
+    public String containersToCSV() {
+        StringBuilder sb = new StringBuilder();
+        for (Container container : containers) {
+            sb.append(container.toCSVFormat()).append("\n");
+        }
+        return sb.toString();
+    }
 
     public String getId() {
         return id;
     }
     @Override
     public String toString() {
-        return "Vehicle ID: " + id + '\n' +
-                "Name: " + name + '\n' +
-                "Carrying Capacity: " + carryingCapacity + '\n' +
-                "Fuel Capacity: " + fuelCapacity + '\n' +
-                "Current Fuel: " + currentFuel;
-    }
+        StringBuilder sb = new StringBuilder();
+        sb.append("Vehicle ID: ").append(id).append('\n')
+                .append("Name: ").append(name).append('\n')
+                .append("Carrying Capacity: ").append(carryingCapacity).append('\n')
+                .append("Fuel Capacity: ").append(fuelCapacity).append('\n')
+                .append("Current Fuel: ").append(currentFuel).append('\n');
 
+        if (this instanceof Truck) {
+            sb.append("Truck Type: ").append(((Truck) this).getTruckType()).append('\n');
+        }
+
+        sb.append("Containers: ");
+        for (Container container : containers) {
+            sb.append(container.toString()).append(", ");
+        }
+
+        return sb.toString();
+    }
 
 }

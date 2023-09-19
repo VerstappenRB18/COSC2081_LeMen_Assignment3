@@ -74,7 +74,7 @@ public class Container {
         this.weight = weight;
         this.type = type;
 
-        if(type != null){
+        if (type != null) {
             totalWeightByType.merge(type, weight, Double::sum);
         }
     }
@@ -99,8 +99,6 @@ public class Container {
         return type != null ? type.getTruckConsumption() * weight : 0.0;
     }
 
-
-
     public String getContainer() {
         return id + "," + weight + "," + type;
     }
@@ -113,9 +111,9 @@ public class Container {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if(parts.length >= 3) {
+                if (parts.length >= 3) {
                     String typeString = parts[2];
-                    if(typeString == null || typeString.isBlank()) {
+                    if (typeString == null || typeString.isBlank()) {
                         System.out.println("Container type is null or blank on line: " + line);
                         continue;
                     }
@@ -170,7 +168,6 @@ public class Container {
                 }
             }
             writer.append(container.getContainer());
-            // writer.append("\n");
             writer.close();
             raf.close();
             System.out.println("Container added successfully");
@@ -180,7 +177,7 @@ public class Container {
     }
 
     public static void deleteContainer(ArrayList<String> arrayList, Scanner input) {
-        while(true) {
+        while (true) {
             arrayList.clear();
             System.out.println("Enter the Container ID to delete a record: ");
             String searchKey = input.next();
@@ -222,6 +219,10 @@ public class Container {
         }
     }
 
+    public String toCSVFormat() {
+        // Assuming Container has fields id, weight, and type
+        return id + "," + weight + "," + type;
+    }
     public static void updateContainer(ArrayList<String> arrayList, Scanner input) {
         arrayList.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -319,5 +320,9 @@ public class Container {
         } catch (IOException e) {
             System.out.println("An error occurred while reading the file: " + e.getMessage());
         }
+    }
+    @Override
+    public String toString() {
+        return id;
     }
 }
