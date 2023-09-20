@@ -30,19 +30,20 @@ public class Main {
             System.out.println("3. Modify Container");
             System.out.println("4. View Container by ID");
             System.out.println("5. View All Containers");
-            System.out.println("6. Exit");
+            System.out.println("6. Get Containers' Weight By Type");
+            System.out.println("7. Exit");
             System.out.println("=================================");
 
            int option = -1;
-            while (option < 1 || option > 6) {
+            while (option < 1 || option > 7) {
                 try {
-                   System.out.print("Choose a valid option (1-6): ");
+                   System.out.print("Choose a valid option (1-7): ");
                     option = input.nextInt();
-                    if (option < 1 || option > 6) {
+                    if (option < 1 || option > 7) {
                         System.out.println("Invalid option. Please choose again.");
                     }
                 } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a number between 1 and 6.");
+                    System.out.println("Invalid input. Please enter a number between 1 and 7.");
                     input.next(); // clear the invalid input
                 }
             }
@@ -53,7 +54,8 @@ public class Main {
                 case 3 -> Container.updateContainer(arrayList, input);
                 case 4 -> Container.viewContainerById(input);
                 case 5 -> Container.viewAllContainers();
-                case 6 -> {
+                case 6 -> Container.getTotalWeightByType();
+                case 7 -> {
                     System.out.println("Goodbye!");
                    return;
                 }
