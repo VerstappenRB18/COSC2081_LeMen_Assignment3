@@ -60,11 +60,7 @@ public class Main {
                     }
                     Ports currentPortForTruck = portsList.get(portIndexForTruck);
                     Vehicle newTruck = Truck.createVehicle(scanner, currentPortForTruck, portsList);
-                    if (newTruck != null) {
-                        vehicleList.add(newTruck);
-                    } else {
-                        System.out.println("Failed to create a new truck.");
-                    }
+                    vehicleList.add(newTruck);
                     break;
                 case 2:
                     System.out.println("Available ports:");
@@ -79,11 +75,7 @@ public class Main {
                     }
                     Ports currentPortForShip = portsList.get(portIndexForShip);
                     Vehicle newShip = Ship.createVehicle(scanner, currentPortForShip, portsList);
-                    if (newShip != null) {
-                        vehicleList.add(newShip);
-                    } else {
-                        System.out.println("Failed to create a new ship.");
-                    }
+                    vehicleList.add(newShip);
                     break;
                 case 3:
                     System.out.print("Enter Vehicle ID to add container to: ");
