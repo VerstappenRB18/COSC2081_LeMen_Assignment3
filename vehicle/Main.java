@@ -48,57 +48,13 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    System.out.println("Available ports:");
-                    for (int i = 0; i < portsList.size(); i++) {
-                        System.out.println((i + 1) + ". " + portsList.get(i).getId());
-                    }
-                    System.out.print("Select a port by entering its number: ");
-                    int portIndexForTruck = scanner.nextInt() - 1;
-                    if (portIndexForTruck < 0 || portIndexForTruck >= portsList.size()) {
-                        System.out.println("Invalid choice. Please try again.");
-                        break;
-                    }
-                    Ports currentPortForTruck = portsList.get(portIndexForTruck);
-                    Vehicle newTruck = Truck.createVehicle(scanner, currentPortForTruck, portsList);
-                    vehicleList.add(newTruck);
+                    vehicleList.add(Truck.addVehicle(scanner, portsList));
                     break;
                 case 2:
-                    System.out.println("Available ports:");
-                    for (int i = 0; i < portsList.size(); i++) {
-                        System.out.println((i + 1) + ". " + portsList.get(i).getId());
-                    }
-                    System.out.print("Select a port by entering its number: ");
-                    int portIndexForShip = scanner.nextInt() - 1;
-                    if (portIndexForShip < 0 || portIndexForShip >= portsList.size()) {
-                        System.out.println("Invalid choice. Please try again.");
-                        break;
-                    }
-                    Ports currentPortForShip = portsList.get(portIndexForShip);
-                    Vehicle newShip = Ship.createVehicle(scanner, currentPortForShip, portsList);
-                    vehicleList.add(newShip);
+                    vehicleList.add(Ship.addVehicle(scanner, portsList));
                     break;
                 case 3:
-                    System.out.print("Enter Vehicle ID to add container to: ");
-                    String vehicleId = scanner.next();
-                    Vehicle vehicle = findVehicleById(vehicleList, vehicleId);
-                    if (vehicle == null) {
-                        System.out.println("Vehicle not found.");
-                        break;
-                    }
-                    System.out.println("Available Containers:");
-                    for (int i = 0; i < containerList.size(); i++) {
-                        System.out.println((i + 1) + ". " + containerList.get(i).toString());
-                    }
-                    System.out.print("Enter the ID of the Container to add: ");
-                    scanner.nextLine();
-                    String containerId = scanner.nextLine();
-                    Container container = findContainerById(containerList, containerId);
-                    if (container != null) {
-                        vehicle.addContainer(container);
-                        System.out.println("Container added to vehicle.");
-                    } else {
-                        System.out.println("Invalid container ID. Please try again.");
-                    }
+                    Vehicle.addContainer(scanner, vehicleList, containerList);
                     break;
                 case 4:
                     System.out.print("Enter Vehicle ID to unload a container from: ");
@@ -175,15 +131,6 @@ public class Main {
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getId().equals(id)) {
                 return vehicle;
-            }
-        }
-        return null;
-    }
-
-    public static Container findContainerById(List<Container> containerList, String id) {
-        for (Container container : containerList) {
-            if (container.getId().equals(id)) {
-                return container;
             }
         }
         return null;

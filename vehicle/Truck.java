@@ -2,6 +2,7 @@ package vehicle;
 
 import java.util.List;
 import java.util.Scanner;
+import java.io.*;
 
 import container.Container;
 import ports.Ports;
@@ -113,5 +114,29 @@ public class Truck extends Vehicle {
         return new Truck(name, carryingCapacity, fuelCapacity, currentFuel, currentPortForTruck, truckType);
     }
 
+    public static Vehicle addVehicle(Scanner input, List<Ports> portsList) {
+        // Implementation for adding a truck
+        System.out.println("Available ports:");
+        for (int i = 0; i < portsList.size(); i++) {
+            System.out.println((i + 1) + ". " + portsList.get(i).getId());
+        }
+        System.out.print("Select a port by entering its number: ");
+        int portIndexForTruck = input.nextInt() - 1;
+        if (portIndexForTruck < 0 || portIndexForTruck >= portsList.size()) {
+            System.out.println("Invalid choice. Please try again.");
+            return null;
+        }
+        Ports currentPortForTruck = portsList.get(portIndexForTruck);
+        Vehicle newTruck = Truck.createVehicle(input, currentPortForTruck, portsList);
 
+        // Save the new truck details to the vehicles.csv file
+        try {
+            newTruck.saveToFile("vehicles.csv");
+            System.out.println("New truck details saved to vehicles.csv.");
+        } catch (IOException e) {
+            System.err.println("An error occurred while saving to file: " + e.getMessage());
+        }
+
+        return newTruck;
+    }
 }

@@ -83,10 +83,25 @@ public abstract class Vehicle {
     }
 
 
-    public boolean addContainer(Container container) {
+    public static boolean addContainer(Scanner scanner, List<Vehicle> vehicleList, List<Container> containerList) {
+        System.out.print("Enter Vehicle ID to add container to: ");
+        String vehicleId = scanner.next();
+        Vehicle vehicle = findVehicleById(vehicleList, vehicleId);
+        if (vehicle == null) {
+            System.out.println("Vehicle not found.");
+            return false;
+        }
+        System.out.println("Available Containers:");
+        for (int i = 0; i < containerList.size(); i++) {
+            System.out.println((i + 1) + ". " + containerList.get(i).toString());
+        }
+        System.out.print("Enter the ID of the Container to add: ");
+        scanner.nextLine();
+        String containerId = scanner.nextLine();
+        Container container = findContainerById(containerList, containerId);
         if (container != null) {
-            if (this instanceof Truck) {
-                Truck thisTruck = (Truck) this;
+            if (vehicle instanceof Truck) {
+                Truck thisTruck = (Truck) vehicle;
                 switch (thisTruck.getTruckType()) {
                     case BASIC:
                         if (container.getType() == Container.ContainerType.REFRIGERATED || container.getType() == Container.ContainerType.LIQUID) {
@@ -108,15 +123,19 @@ public abstract class Vehicle {
                         break;
                 }
             }
-            containers.add(container);
-            containerByType.put(
+            vehicle.getContainers().add(container);
+            vehicle.getContainerByType().put(
                     container.getType(),
-                    containerByType.getOrDefault(container.getType(), 0) + 1
+                    vehicle.getContainerByType().getOrDefault(container.getType(), 0) + 1
             );
+            System.out.println("Container added to vehicle.");
             return true;
+        } else {
+            System.out.println("Invalid container ID. Please try again.");
+            return false;
         }
-        return false;
     }
+
     public void setCurrentPort(Ports currentPort) {
         this.currentPort = currentPort;
     }
@@ -335,5 +354,14 @@ public abstract class Vehicle {
         }
 
         return sb.toString();
+    }
+
+    private static Container findContainerById(List<Container> containerList, String id) {
+        for (Container container : containerList) {
+            if (container.getId().equals(id)) {
+                return container;
+            }
+        }
+        return null;
     }
 }
