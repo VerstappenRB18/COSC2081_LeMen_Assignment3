@@ -19,8 +19,8 @@ public class Truck extends Vehicle {
         try {
             this.truckType = TruckType.valueOf(data[7].toUpperCase());
         } catch (IllegalArgumentException e) {
-            this.truckType = TruckType.SMALL; // Set a default value
-            System.err.println("Invalid truck type in data file, setting to default (SMALL).");
+            this.truckType = TruckType.BASIC; // Set a default value
+            System.err.println("Invalid truck type in data file, setting to default (BASIC).");
         }
     }
 
@@ -35,7 +35,7 @@ public class Truck extends Vehicle {
 
 
     public enum TruckType {
-        SMALL, MEDIUM, LARGE
+        BASIC, REEFER, TANKER
     }
 
     private TruckType truckType;
@@ -102,7 +102,7 @@ public class Truck extends Vehicle {
 
         TruckType truckType = null;
         while (truckType == null) {
-            System.out.print("Please enter the Truck's type (SMALL, MEDIUM, LARGE): ");
+            System.out.print("Please enter the Truck's type (BASIC, TANKER, REEFER): ");
             try {
                 truckType = TruckType.valueOf(input.next().toUpperCase());
             } catch (IllegalArgumentException e) {

@@ -8,6 +8,8 @@ import container.Container;
 import ports.Ports;
 import trip.Trip;
 
+import static trip.Trip.findVehicleById;
+
 public abstract class Vehicle {
     protected static int vehicleCounter = 0;
     protected String id;
@@ -16,11 +18,18 @@ public abstract class Vehicle {
     protected double fuelCapacity;
     protected double currentFuel;
     protected Ports currentPort;
+    protected static int shipCounter = 0;
+    protected static int truckCounter = 0;
     protected List<Container> containers = new ArrayList<>();
     protected Map<Container.ContainerType, Integer> containerByType = new HashMap<>();
 
     protected String generateVehicleId() {
-        return "v-" + (++vehicleCounter);
+        if (this instanceof Ship) {
+            return "sh-" + (++shipCounter);
+        } else if (this instanceof Truck) {
+            return "tr-" + (++truckCounter);
+        }
+        return "v-" + (++vehicleCounter); // fallback, should not be reached
     }
 
     public static int getVehicleCounter() {
@@ -29,6 +38,21 @@ public abstract class Vehicle {
 
     public static void setVehicleCounter(int vehicleCounter) {
         Vehicle.vehicleCounter = vehicleCounter;
+    }
+    private static final double BASE_SHIP_CONSUMPTION = 1.0;
+    private static final double BASE_TRUCK_CONSUMPTION = 0.5;
+    protected double baseFuelConsumptionRate;
+
+    public double getFuelCapacity() {
+        return fuelCapacity;
+    }
+
+    public double getCurrentFuel() {
+        return currentFuel;
+    }
+
+    public void setCurrentFuel(double currentFuel) {
+        this.currentFuel = currentFuel;
     }
 
     public static Vehicle createVehicle(Scanner input, List<Ports> portsList) {
@@ -61,6 +85,29 @@ public abstract class Vehicle {
 
     public boolean addContainer(Container container) {
         if (container != null) {
+            if (this instanceof Truck) {
+                Truck thisTruck = (Truck) this;
+                switch (thisTruck.getTruckType()) {
+                    case BASIC:
+                        if (container.getType() == Container.ContainerType.REFRIGERATED || container.getType() == Container.ContainerType.LIQUID) {
+                            System.out.println("This type of truck cannot carry this type of container.");
+                            return false;
+                        }
+                        break;
+                    case REEFER:
+                        if (container.getType() != Container.ContainerType.REFRIGERATED) {
+                            System.out.println("This type of truck can only carry refrigerated containers.");
+                            return false;
+                        }
+                        break;
+                    case TANKER:
+                        if (container.getType() != Container.ContainerType.LIQUID) {
+                            System.out.println("This type of truck can only carry liquid containers.");
+                            return false;
+                        }
+                        break;
+                }
+            }
             containers.add(container);
             containerByType.put(
                     container.getType(),
@@ -74,7 +121,9 @@ public abstract class Vehicle {
         this.currentPort = currentPort;
     }
 
-
+    public Ports getCurrentPort() {
+        return currentPort;
+    }
 
     public Map<Container.ContainerType, Integer> getContainerByType() {
         return containerByType;
@@ -98,15 +147,36 @@ public abstract class Vehicle {
 
     public double calculateFuelConsumption(double distance) {
         double totalFuelConsumption = 0.0;
+
+        // Base fuel consumption rate for the vehicle when it is empty
+        double baseFuelConsumptionRate;
+        if (this instanceof Ship) {
+            baseFuelConsumptionRate = 1.0; // Set a value appropriate for a ship
+        } else { // this instanceof Truck
+            baseFuelConsumptionRate = 0.5; // Set a value appropriate for a truck
+        }
+
+        // Calculate the base fuel consumption
+        totalFuelConsumption += baseFuelConsumptionRate * distance;
+
+        // Add the fuel consumption due to the containers (if any)
         for (Container container : containers) {
             if (this instanceof Ship) {
                 totalFuelConsumption += container.getFuelConsumptionPerKmForShip() * distance;
-            } else if (this instanceof Truck) {
+            } else { // this instanceof Truck
                 totalFuelConsumption += container.getFuelConsumptionPerKmForTruck() * distance;
             }
         }
+
         return totalFuelConsumption;
     }
+
+
+    public boolean hasEnoughFuel(double distance) {
+        double requiredFuel = calculateFuelConsumption(distance);
+        return requiredFuel <= currentFuel;
+    }
+
 
     public boolean canMoveToPort(Ports currentPort, Ports targetPort) {
         if (!targetPort.isLandingAbility()) {
@@ -114,22 +184,29 @@ public abstract class Vehicle {
         }
 
         double distanceToTarget = currentPort.calculateDistance(targetPort);
-        double requiredFuel = calculateFuelConsumption(distanceToTarget);
-
-        return requiredFuel <= currentFuel;
+        return hasEnoughFuel(distanceToTarget);
     }
+
+
 
     public boolean moveToPort(Ports currentPort, Ports targetPort, String departureDate, String arrivalDate) {
         // First, check if it's possible to move to the target port
-        if (!canMoveToPort(currentPort, targetPort)) {
+        if (!canMoveToPort(currentPort,targetPort)) {
+            System.out.println("The vehicle cannot move to the target port due to landing restrictions.");
             return false;
         }
 
         // Calculate the distance to the target port
         double distanceToTarget = currentPort.calculateDistance(targetPort);
 
-        // Calculate the required fuel for the trip and update the vehicle's fuel level
+        // Calculate the required fuel for the trip and check if the vehicle has enough fuel
         double requiredFuel = calculateFuelConsumption(distanceToTarget);
+        if (requiredFuel > currentFuel) {
+            System.out.println("The vehicle does not have enough fuel to complete the trip.");
+            return false;
+        }
+
+        // Update the vehicle's fuel level
         currentFuel -= requiredFuel;
 
         // Update the lists of vehicles at the current and target ports
@@ -137,7 +214,7 @@ public abstract class Vehicle {
         targetPort.getVehicleList().add(this);
 
         // Create a new Trip object to record this journey and add it to the target port's traffic history
-        Trip newTrip = new Trip();
+        Trip newTrip = new Trip(this, currentPort, targetPort, departureDate, arrivalDate, Trip.TripStatus.COMPLETED);
         targetPort.addTrip(newTrip);
 
         // Update the vehicle's current location
@@ -145,6 +222,7 @@ public abstract class Vehicle {
 
         return true;
     }
+
     public List<Container> getContainers() {
         return containers;
     }
@@ -153,6 +231,9 @@ public abstract class Vehicle {
             writer.write(toCSVFormat() + "\n");
         }
     }
+
+
+
     public String toCSVFormat() {
         StringBuilder sb = new StringBuilder();
         sb.append(id).append(",")
@@ -178,6 +259,63 @@ public abstract class Vehicle {
         }
         return sb.toString();
     }
+
+
+    public double calculateDailyFuelConsumption(double dailyDistance) {
+        double baseFuelConsumptionRate = this instanceof Ship ? BASE_SHIP_CONSUMPTION : BASE_TRUCK_CONSUMPTION;
+        double totalFuelConsumption = baseFuelConsumptionRate * dailyDistance; // Base consumption for the distance
+
+        for (Container container : containers) {
+            double additionalConsumption = calculateFuelConsumption(dailyDistance, container.getWeight(), container.getType().name());
+            totalFuelConsumption += additionalConsumption - (baseFuelConsumptionRate * dailyDistance); // Subtract the base consumption to avoid double counting
+        }
+
+        return totalFuelConsumption;
+    }
+
+
+
+    public double calculateFuelConsumption(double distance, double weight, String containerType) {
+        double fuelConsumptionPerKm = getFuelConsumptionRate(containerType.replace("_", " ").toLowerCase());
+        return fuelConsumptionPerKm * weight * distance;
+    }
+
+
+
+
+    private double getFuelConsumptionRate(String containerType) {
+        switch(containerType.toLowerCase()) {
+            case "dry storage":
+                return this instanceof Ship ? 3.5 : 4.6;
+            case "open top":
+                return this instanceof Ship ? 2.8 : 3.2;
+            case "open side":
+                return this instanceof Ship ? 2.7 : 3.2;
+            case "refrigerated":
+                return this instanceof Ship ? 4.5 : 5.4;
+            case "liquid":
+                return this instanceof Ship ? 4.8 : 5.3;
+            default:
+                throw new IllegalArgumentException("Unknown container type: " + containerType);
+        }
+    }
+
+    public static void refuel(Scanner input, List<Vehicle> vehicleList) {
+        System.out.print("Enter Vehicle ID to refuel: ");
+        String vehicleId = input.next();
+
+        Vehicle vehicle = findVehicleById(vehicleList, vehicleId);
+        if (vehicle != null) {
+            vehicle.currentFuel = vehicle.fuelCapacity;
+            System.out.println("Vehicle successfully refueled to maximum capacity. Current fuel level: " + vehicle.currentFuel + " gallons.");
+        } else {
+            System.out.println("No vehicle found with the ID: " + vehicleId);
+        }
+    }
+
+
+
+
 
 
 

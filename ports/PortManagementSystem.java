@@ -23,7 +23,7 @@ public class PortManagementSystem {
 
         // Load ports, vehicles, containers, and trips from files
         try {
-            portsList = Ports.readFromFile("ports.txt");
+            portsList = Ports.readFromFile("ports.csv");
         } catch (IOException e) {
             System.err.println("Error loading ports from file: " + e.getMessage());
         }
