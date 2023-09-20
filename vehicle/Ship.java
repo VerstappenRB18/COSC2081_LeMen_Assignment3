@@ -14,7 +14,7 @@ public class Ship extends Vehicle {
         this.fuelCapacity = Double.parseDouble(data[3]);
         this.currentFuel = Double.parseDouble(data[4]);
         this.currentPort = currentPort;
-        this.shipType = ShipType.valueOf(data[7].toUpperCase());
+
 
         // You will also need to add code here to handle the container data
     }
@@ -28,29 +28,18 @@ public class Ship extends Vehicle {
         return null;
     }
 
-    public enum ShipType {
-        CARGO, CRUISE, CONTAINER
-    }
 
-    private ShipType shipType;
 
-    public Ship(String name, double carryingCapacity, double fuelCapacity, double currentFuel, Ports currentPort, ShipType shipType) {
+    public Ship(String name, double carryingCapacity, double fuelCapacity, double currentFuel, Ports currentPort) {
         this.id = generateVehicleId();
         this.name = name;
         this.carryingCapacity = carryingCapacity;
         this.fuelCapacity = fuelCapacity;
         this.currentFuel = currentFuel;
         this.currentPort = currentPort;
-        this.shipType = shipType;
     }
 
-    public ShipType getShipType() {
-        return shipType;
-    }
 
-    public void setShipType(ShipType shipType) {
-        this.shipType = shipType;
-    }
 
 
     @Override
@@ -63,7 +52,6 @@ public class Ship extends Vehicle {
                 .append(currentFuel).append(",")
                 .append(currentPort.getId()).append(",")
                 .append(this.getClass().getSimpleName()).append(",") // Add vehicle type
-                .append(shipType.name()).append(",") // Add ship type
                 .append(getContainersCSV()); // Add containers CSV
 
         return sb.toString();
@@ -84,17 +72,9 @@ public class Ship extends Vehicle {
         System.out.print("Please enter the Ship's current fuel level: ");
         double currentFuel = input.nextDouble();
 
-        ShipType shipType = null;
-        while (shipType == null) {
-            System.out.print("Please enter the Ship's type (CARGO, CRUISE, CONTAINER): ");
-            try {
-                shipType = ShipType.valueOf(input.next().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid ship type. Please try again.");
-            }
-        }
 
-        return new Ship(name, carryingCapacity, fuelCapacity, currentFuel, currentPortForShip, shipType);
+
+        return new Ship(name, carryingCapacity, fuelCapacity, currentFuel, currentPortForShip);
     }
 
 

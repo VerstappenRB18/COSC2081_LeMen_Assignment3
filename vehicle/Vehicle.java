@@ -16,11 +16,18 @@ public abstract class Vehicle {
     protected double fuelCapacity;
     protected double currentFuel;
     protected Ports currentPort;
+    protected static int shipCounter = 0;
+    protected static int truckCounter = 0;
     protected List<Container> containers = new ArrayList<>();
     protected Map<Container.ContainerType, Integer> containerByType = new HashMap<>();
 
     protected String generateVehicleId() {
-        return "v-" + (++vehicleCounter);
+        if (this instanceof Ship) {
+            return "sh-" + (++shipCounter);
+        } else if (this instanceof Truck) {
+            return "tr-" + (++truckCounter);
+        }
+        return "v-" + (++vehicleCounter); // fallback, should not be reached
     }
 
     public static int getVehicleCounter() {
@@ -63,6 +70,29 @@ public abstract class Vehicle {
 
     public boolean addContainer(Container container) {
         if (container != null) {
+            if (this instanceof Truck) {
+                Truck thisTruck = (Truck) this;
+                switch (thisTruck.getTruckType()) {
+                    case BASIC:
+                        if (container.getType() == Container.ContainerType.REFRIGERATED || container.getType() == Container.ContainerType.LIQUID) {
+                            System.out.println("This type of truck cannot carry this type of container.");
+                            return false;
+                        }
+                        break;
+                    case REEFER:
+                        if (container.getType() != Container.ContainerType.REFRIGERATED) {
+                            System.out.println("This type of truck can only carry refrigerated containers.");
+                            return false;
+                        }
+                        break;
+                    case TANKER:
+                        if (container.getType() != Container.ContainerType.LIQUID) {
+                            System.out.println("This type of truck can only carry liquid containers.");
+                            return false;
+                        }
+                        break;
+                }
+            }
             containers.add(container);
             containerByType.put(
                     container.getType(),
@@ -76,7 +106,9 @@ public abstract class Vehicle {
         this.currentPort = currentPort;
     }
 
-
+    public Ports getCurrentPort() {
+        return currentPort;
+    }
 
     public Map<Container.ContainerType, Integer> getContainerByType() {
         return containerByType;

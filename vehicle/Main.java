@@ -36,12 +36,13 @@ public class Main {
             System.out.println("1. Create a new Truck");
             System.out.println("2. Create a new Ship");
             System.out.println("3. Add a Container to a Vehicle");
-            System.out.println("4. Move a Vehicle to a different Port");
-            System.out.println("5. Display all Vehicles");
-            System.out.println("6. Display all Containers");
-            System.out.println("7. Calculate daily fuel consumption for a vehicle");
-            System.out.println("8. Exit");
-            System.out.print("Choose an option (1-8): ");
+            System.out.println("4. Unload a Container from a Vehicle");
+            System.out.println("5. Move a Vehicle to a different Port");
+            System.out.println("6. Display all Vehicles");
+            System.out.println("7. Display all Containers");
+            System.out.println("8. Calculate daily fuel consumption for a vehicle");
+            System.out.println("9. Exit");
+            System.out.print("Choose an option (1-9): ");
             int choice = scanner.nextInt();
 
             switch (choice) {
@@ -107,18 +108,39 @@ public class Main {
                     }
                     break;
                 case 4:
+                    System.out.print("Enter Vehicle ID to unload a container from: ");
+                    String unloadVehicleId = scanner.next();
+                    Vehicle unloadVehicle = findVehicleById(vehicleList, unloadVehicleId);
+                    if (unloadVehicle == null) {
+                        System.out.println("Vehicle not found.");
+                        break;
+                    }
+
+                    if (unloadVehicle.getContainers().isEmpty()) {
+                        System.out.println("No container to unload.");
+                        break;
+                    }
+
+                    Container unloadContainer = unloadVehicle.getContainers().get(0);
+                    if (unloadVehicle.unloadContainer(unloadContainer, unloadVehicle.getCurrentPort())) {
+                        System.out.println("Container unloaded successfully.");
+                    } else {
+                        System.out.println("Failed to unload container.");
+                    }
                     break;
                 case 5:
+                    break;
+                case 6:
                     for (Vehicle v : vehicleList) {
                         System.out.println(v);
                     }
                     break;
-                case 6:
+                case 7:
                     for (Container c : containerList) {
                         System.out.println(c);
                     }
                     break;
-                case 7:
+                case 8:
                     System.out.print("Enter Vehicle ID to calculate daily fuel consumption for: ");
                     String vehicleIdToCalculateFuel = scanner.next();
                     Vehicle vehicleToCalculateFuel = findVehicleById(vehicleList, vehicleIdToCalculateFuel);
@@ -131,7 +153,7 @@ public class Main {
                     double dailyFuelConsumption = vehicleToCalculateFuel.calculateDailyFuelConsumption(dailyDistance);
                     System.out.println("The daily fuel consumption for the vehicle is: " + dailyFuelConsumption + " liters");
                     break;
-                case 8:
+                case 9:
                     System.out.println("Saving data...");
                     saveAllData(vehicleList, "vehicles.csv");
                     System.out.println("Exiting...");
