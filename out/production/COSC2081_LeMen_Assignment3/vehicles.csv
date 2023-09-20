@@ -1,4 +1,5 @@
-v-1,truck,1.0,1.0,1.0,p-1,Truck,SMALL,
+v-1,truck,1.0,1.0,1.0,p-1,Truck,SMALL,c-9
 v-2,ship,1.0,1.0,1.0,p-1,Ship,CARGO,
 v-3,1,1.0,1.0,1.0,p-1,Truck,SMALL,
-v-4,trucky,1.0,1.0,1.0,p-5,Truck,SMALL,c-15
+v-4,trucky,1.0,1.0,1.0,p-5,Truck,SMALL,
+v-5,1,1000.0,10.0,10.0,p-1,Truck,SMALL,

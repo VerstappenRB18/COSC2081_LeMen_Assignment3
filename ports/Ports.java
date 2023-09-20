@@ -21,7 +21,7 @@ public class Ports {
     private List<Container> containersList;
     private List<Vehicle> vehicleList;
     private List<Trip> trafficHistory;
-    static final String filename = "ports.txt";
+    static final String filename = "ports.csv";
 
 
     // Default Constructor
@@ -168,22 +168,6 @@ public class Ports {
         return R * c; // The distance in kilometers
     }
 
-    // Add a container to the containers list
-    public void addContainer(Container container) {
-        if (container != null) {
-            containersList.add(container);
-        } else {
-            System.out.println("Container cannot be null");
-        }
-    }
-    // Add a vehicle to the vehicle list
-    public void addVehicle(Vehicle vehicle) {
-        if (vehicle != null) {
-            vehicleList.add(vehicle);
-        } else {
-            System.out.println("Vehicle cannot be null");
-        }
-    }
     // Add a new trip to the trip list
     public void addTrip(Trip trip) {
         if (trip != null) {
@@ -192,6 +176,8 @@ public class Ports {
             System.out.println("Trip cannot be null");
         }
     }
+
+
 
     public double getAvailableStorage() {
         double totalWeight = 0.0;
@@ -317,63 +303,58 @@ public class Ports {
                 continue;
             }
 
-            System.out.print("Enter new name: ");
+            System.out.print("Enter new name (press enter to keep current): ");
             String name = reader.readLine();
+            if (!name.isBlank()) {
+                existingPort.setName(name);
+            }
 
-            double latitude = -1;
-            do {
-                System.out.print("Enter new latitude (between -90 and 90): ");
-                try {
-                    latitude = Double.parseDouble(reader.readLine());
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input. Please enter a number.");
-                }
-            } while (latitude < -90 || latitude > 90);
+            double latitude = getDoubleInput(reader, "Enter new latitude (between -90 and 90, press enter to keep current): ", existingPort.getLatitude(), -90, 90);
             existingPort.setLatitude(latitude);
 
-            double longitude = -1;
-            do {
-                System.out.print("Enter new longitude (between -180 and 180): ");
-                try {
-                    longitude = Double.parseDouble(reader.readLine());
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input. Please enter a number.");
-                }
-            } while (longitude < -180 || longitude > 180);
+            double longitude = getDoubleInput(reader, "Enter new longitude (between -180 and 180, press enter to keep current): ", existingPort.getLongitude(), -180, 180);
             existingPort.setLongitude(longitude);
 
-            double storingCapacity = -1;
-            do {
-                System.out.print("Enter new storing capacity (greater than 0): ");
-                try {
-                    storingCapacity = Double.parseDouble(reader.readLine());
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input. Please enter a number.");
-                }
-            } while (storingCapacity <= 0);
+            double storingCapacity = getDoubleInput(reader, "Enter new storing capacity (greater than 0, press enter to keep current): ", existingPort.getStoringCapacity(), 0, Double.MAX_VALUE);
             existingPort.setStoringCapacity(storingCapacity);
 
-            Boolean landingAbility = null;
-            do {
-                System.out.print("Update landing ability? (true/false): ");
-                String landingAbilityStr = reader.readLine().trim().toLowerCase();
-                if (landingAbilityStr.equals("true")) {
-                    landingAbility = true;
-                } else if (landingAbilityStr.equals("false")) {
-                    landingAbility = false;
+            System.out.print("Update landing ability? (true/false, press enter to keep current): ");
+            String landingAbilityStr;
+            while (true) {
+                landingAbilityStr = reader.readLine().trim().toLowerCase();
+                if (landingAbilityStr.isBlank()) {
+                    break;
+                } else if (landingAbilityStr.equals("true") || landingAbilityStr.equals("false")) {
+                    existingPort.setLandingAbility(Boolean.parseBoolean(landingAbilityStr));
+                    break;
                 } else {
-                    System.out.println("Invalid input. Please enter true or false.");
+                    System.out.println("Invalid input. Please enter true, false, or press enter to keep the current value.");
                 }
-            } while (landingAbility == null);
-            existingPort.setLandingAbility(landingAbility);
-
-            existingPort.setName(name);
+            }
 
             saveAllToFile(filename, portsList);
             System.out.println("Port updated successfully.");
             return;
         }
     }
+
+    private static double getDoubleInput(BufferedReader reader, String prompt, double currentValue, double minValue, double maxValue) throws IOException {
+        Double newValue = null;
+        do {
+            System.out.print(prompt);
+            String input = reader.readLine();
+            if (input.isBlank()) {
+                return currentValue;
+            }
+            try {
+                newValue = Double.parseDouble(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        } while (newValue == null || newValue < minValue || newValue > maxValue);
+        return newValue;
+    }
+
 
 
     // Method to delete a port from the list and save the updated list to the file

@@ -1,6 +1,5 @@
 package vehicle;
 
-import vehicle.*;
 import ports.Ports;
 import container.Container;
 
@@ -17,7 +16,7 @@ public class Main {
         List<Container> containerList = new ArrayList<>();
 
         try {
-            portsList = Ports.readFromFile("ports.txt");
+            portsList = Ports.readFromFile("ports.csv");
         } catch (IOException e) {
             System.err.println("Error loading ports from file: " + e.getMessage());
         }
@@ -40,8 +39,9 @@ public class Main {
             System.out.println("4. Move a Vehicle to a different Port");
             System.out.println("5. Display all Vehicles");
             System.out.println("6. Display all Containers");
-            System.out.println("7. Exit");
-            System.out.print("Choose an option (1-7): ");
+            System.out.println("7. Calculate daily fuel consumption for a vehicle");
+            System.out.println("8. Exit");
+            System.out.print("Choose an option (1-8): ");
             int choice = scanner.nextInt();
 
             switch (choice) {
@@ -119,6 +119,19 @@ public class Main {
                     }
                     break;
                 case 7:
+                    System.out.print("Enter Vehicle ID to calculate daily fuel consumption for: ");
+                    String vehicleIdToCalculateFuel = scanner.next();
+                    Vehicle vehicleToCalculateFuel = findVehicleById(vehicleList, vehicleIdToCalculateFuel);
+                    if (vehicleToCalculateFuel == null) {
+                        System.out.println("Vehicle not found.");
+                        break;
+                    }
+                    System.out.print("Enter the daily distance traveled by the vehicle (in km): ");
+                    double dailyDistance = scanner.nextDouble();
+                    double dailyFuelConsumption = vehicleToCalculateFuel.calculateDailyFuelConsumption(dailyDistance);
+                    System.out.println("The daily fuel consumption for the vehicle is: " + dailyFuelConsumption + " liters");
+                    break;
+                case 8:
                     System.out.println("Saving data...");
                     saveAllData(vehicleList, "vehicles.csv");
                     System.out.println("Exiting...");

@@ -109,6 +109,7 @@ public class Container {
         return type != null ? type.getTruckConsumption() * weight : 0.0;
     }
 
+
     public String getContainer() {
         return id + "," + weight + "," + type;
     }
