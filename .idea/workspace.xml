@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Vehicle.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Vehicle.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trip/Trip.java" beforeDir="false" afterPath="$PROJECT_DIR$/trip/Trip.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trips.csv" beforeDir="false" afterPath="$PROJECT_DIR$/trips.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Vehicle.java" afterDir="false" />
-    </list>
+    <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="" />
     <list id="73615d9d-a151-4bd4-899d-c6f400a00c00" name="Changes by Hoang" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,6 +147,7 @@
       <workItem from="1695134112175" duration="4525000" />
       <workItem from="1695140901756" duration="7007000" />
       <workItem from="1695173543924" duration="19275000" />
+      <workItem from="1695206490204" duration="64000" />
     </task>
     <task id="LOCAL-00001" summary="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
       <option name="closed" value="true" />
