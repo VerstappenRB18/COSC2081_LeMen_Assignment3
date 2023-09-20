@@ -195,6 +195,7 @@ public class Trip {
             }
 
             // Update departure port
+            // Update departure port
             System.out.println("Available departure ports:");
             for (int i = 0; i < portsList.size(); i++) {
                 System.out.println((i + 1) + ". " + portsList.get(i).getId()); // Assuming Ports class has getId() method
@@ -206,10 +207,9 @@ public class Trip {
                 tripToUpdate.setDeparturePort(portsList.get(departurePortIndex));
             }
 
-            // Update arrival port
             System.out.println("Available arrival ports:");
             for (int i = 0; i < portsList.size(); i++) {
-                if (i != (Integer.parseInt(departurePortInput) - 1)) { // Exclude the selected departure port
+                if (departurePortInput.isEmpty() || i != (Integer.parseInt(departurePortInput) - 1)) { // Exclude the selected departure port
                     System.out.println((i + 1) + ". " + portsList.get(i).getId());
                 }
             }
@@ -219,6 +219,7 @@ public class Trip {
                 int arrivalPortIndex = Integer.parseInt(arrivalPortInput) - 1;
                 tripToUpdate.setArrivalPort(portsList.get(arrivalPortIndex));
             }
+
 
             // Update departure date
             System.out.print("Enter a new departure date in the format yyyy-MM-dd HH:mm (or press Enter to keep the current date): ");
@@ -308,6 +309,8 @@ public class Trip {
             }
         }
     }
+
+
 
     @Override
     public String toString() {
