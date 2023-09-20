@@ -8,6 +8,8 @@ import container.Container;
 import ports.Ports;
 import trip.Trip;
 
+import static trip.Trip.findVehicleById;
+
 public abstract class Vehicle {
     protected static int vehicleCounter = 0;
     protected String id;
@@ -33,6 +35,19 @@ public abstract class Vehicle {
     private static final double BASE_SHIP_CONSUMPTION = 1.0;
     private static final double BASE_TRUCK_CONSUMPTION = 0.5;
     protected double baseFuelConsumptionRate;
+
+    public double getFuelCapacity() {
+        return fuelCapacity;
+    }
+
+    public double getCurrentFuel() {
+        return currentFuel;
+    }
+
+    public void setCurrentFuel(double currentFuel) {
+        this.currentFuel = currentFuel;
+    }
+
     public static Vehicle createVehicle(Scanner input, List<Ports> portsList) {
         System.out.print("Please enter the Vehicle's name: ");
         String name = input.next();
@@ -252,6 +267,24 @@ public abstract class Vehicle {
                 throw new IllegalArgumentException("Unknown container type: " + containerType);
         }
     }
+
+    public static void refuel(Scanner input, List<Vehicle> vehicleList) {
+        System.out.print("Enter Vehicle ID to refuel: ");
+        String vehicleId = input.next();
+
+        Vehicle vehicle = findVehicleById(vehicleList, vehicleId);
+        if (vehicle != null) {
+            vehicle.currentFuel = vehicle.fuelCapacity;
+            System.out.println("Vehicle successfully refueled to maximum capacity. Current fuel level: " + vehicle.currentFuel + " gallons.");
+        } else {
+            System.out.println("No vehicle found with the ID: " + vehicleId);
+        }
+    }
+
+
+
+
+
 
 
     public String getId() {

@@ -40,8 +40,9 @@ public class Main {
             System.out.println("5. Display all Vehicles");
             System.out.println("6. Display all Containers");
             System.out.println("7. Calculate daily fuel consumption for a vehicle");
-            System.out.println("8. Exit");
-            System.out.print("Choose an option (1-8): ");
+            System.out.println("8. Refuel vehicle");
+            System.out.println("9. Exit");
+            System.out.print("Choose an option (1-9): ");
             int choice = scanner.nextInt();
 
             switch (choice) {
@@ -132,6 +133,9 @@ public class Main {
                     System.out.println("The daily fuel consumption for the vehicle is: " + dailyFuelConsumption + " liters");
                     break;
                 case 8:
+                    Vehicle.refuel(scanner, vehicleList);
+                    break;
+                case 9:
                     System.out.println("Saving data...");
                     saveAllData(vehicleList, "vehicles.csv");
                     System.out.println("Exiting...");

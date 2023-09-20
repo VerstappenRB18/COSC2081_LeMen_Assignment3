@@ -305,7 +305,7 @@ public class Trip {
         }
     }
 
-    private static Vehicle findVehicleById(List<Vehicle> vehicleList, String vehicleId) {
+    public static Vehicle findVehicleById(List<Vehicle> vehicleList, String vehicleId) {
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getId().equals(vehicleId)) {
                 return vehicle;

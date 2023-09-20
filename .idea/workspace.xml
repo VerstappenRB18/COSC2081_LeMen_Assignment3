@@ -6,24 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/container/Container.java" beforeDir="false" afterPath="$PROJECT_DIR$/container/Container.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/PortManagementSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/PortManagementSystem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/Ports.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/Ports.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip$TripStatus.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip$TripStatus.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trips.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trips.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Vehicle.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Vehicle.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicles.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicles.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ports.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ports.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ports/PortManagementSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/ports/PortManagementSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ports/Ports.java" beforeDir="false" afterPath="$PROJECT_DIR$/ports/Ports.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trip/Trip.java" beforeDir="false" afterPath="$PROJECT_DIR$/trip/Trip.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trips.csv" beforeDir="false" afterPath="$PROJECT_DIR$/trips.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vehicle/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vehicle/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Vehicle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicles.csv" beforeDir="false" afterPath="$PROJECT_DIR$/vehicles.csv" afterDir="false" />
     </list>
     <list id="73615d9d-a151-4bd4-899d-c6f400a00c00" name="Changes by Hoang" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -100,7 +87,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.PortManagementSystem">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="vehicle.Main" />
       <module name="COSC2081_LeMen_Assignment3" />
@@ -140,8 +127,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.PortManagementSystem" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.PortManagementSystem" />
       </list>
     </recent_temporary>
   </component>
@@ -166,7 +153,7 @@
       <workItem from="1695094836774" duration="8282000" />
       <workItem from="1695134112175" duration="4525000" />
       <workItem from="1695140901756" duration="7007000" />
-      <workItem from="1695173543924" duration="19275000" />
+      <workItem from="1695173543924" duration="20656000" />
     </task>
     <task id="LOCAL-00001" summary="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
       <option name="closed" value="true" />
