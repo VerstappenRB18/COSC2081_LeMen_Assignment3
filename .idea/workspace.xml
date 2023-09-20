@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vehicle/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vehicle/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Truck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vehicle/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Vehicle.java" afterDir="false" />
     </list>
     <list id="73615d9d-a151-4bd4-899d-c6f400a00c00" name="Changes by Hoang" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +42,7 @@
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
-        <option name="accountId" value="a1466f53-1ad6-4cf3-8e83-c3bfc2566261" />
+        <option name="accountId" value="2f29c5b9-c8e9-4e58-aa3b-cfacbf3e8bcd" />
         <option name="url" value="https://github.com/VerstappenRB18/COSC2081_LeMen_Assignment3.git" />
       </UrlAndAccount>
     </option>
