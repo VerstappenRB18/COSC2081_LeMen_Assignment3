@@ -1,358 +1,193 @@
 package vehicle;
 
-import java.io.*;
-import java.util.*;
+import vehicle.*;
 import ports.Ports;
 import container.Container;
 
-public class Main {
-    public static String filename = "vehicles.csv";  // Adjust the file name/path as necessary
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-    public static void main(String[] args) {
+public class Main {
+    public static void main(String[] args) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        List<Ports> portsList = new ArrayList<>();
         List<Vehicle> vehicleList = new ArrayList<>();
+        List<Container> containerList = new ArrayList<>();
 
         try {
-            initializeVehicleCounter(filename, vehicleList);
+            portsList = Ports.readFromFile("ports.txt");
         } catch (IOException e) {
-            System.out.println("An error occurred while initializing the vehicle counter.");
+            System.err.println("Error loading ports from file: " + e.getMessage());
         }
-    }
-    public static void initializeVehicleCounter(String filename, List<Vehicle> vehicleList) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-
-                String id = parts[0];
-                String name = parts[1];
-                double carryingCapacity = Double.parseDouble(parts[3]);
-                double currentFuel = Double.parseDouble(parts[4]);
-                double fuelCapacity = Double.parseDouble(parts[5]);
-                String vehicleType = id.split("-")[0];  // Determining the vehicle type based on the ID prefix
-
-                Vehicle vehicle = null;
-
-                if (vehicleType.equals("tr")) {
-                    Truck.TruckType truckType = Truck.TruckType.valueOf(parts[2].toUpperCase());
-                    vehicle = new Truck(name, truckType, carryingCapacity, fuelCapacity, currentFuel, new ArrayList<>() );
-                }
-                else if(vehicleType.equals("sh")) {
-                    // For now, setting currentPort to null. Replace it with actual logic later
-                    Ports currentPort = null;
-                    vehicle = new Ship(name, carryingCapacity, fuelCapacity, currentFuel, currentPort);
-                }
-                else {
-                    System.out.println("Unsupported vehicle type in data file: " + vehicleType);
-                    continue;
-                }
-
-                vehicleList.add(vehicle);
-
-                // Update vehicle counter
-                String[] idParts = id.split("-");
-                if (idParts.length < 2) {
-                    System.err.println("Invalid ID format in file: " + id);
-                    continue;
-                }
-                int idNumber = Integer.parseInt(idParts[1]);
-                Vehicle.setVehicleCounter(Math.max(Vehicle.getVehicleCounter(), idNumber + 1));
-            }
+        try {
+            containerList = Container.readFromFile("containers.txt");
         } catch (IOException e) {
-            // File might not exist yet, which is fine
+            System.err.println("Error loading containers from file: " + e.getMessage());
         }
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            vehicleList = loadVehiclesFromFile("vehicles.csv", portsList);
+        } catch (IOException e) {
+            System.err.println("Error loading vehicle from file: " + e.getMessage());
+        }
 
         while (true) {
-            System.out.println("Choose an option:");
-            System.out.println("1. Create a new vehicle");
-            System.out.println("2. Update an existing vehicle");
-            System.out.println("3. Delete an existing vehicle");
-            System.out.println("4. Display all vehicle data");
-            System.out.println("5. Add container to a vehicle");
-            System.out.println("6. Exit");
-
-            String choice = reader.readLine().trim();
+            System.out.println("Menu:");
+            System.out.println("1. Create a new Truck");
+            System.out.println("2. Create a new Ship");
+            System.out.println("3. Add a Container to a Vehicle");
+            System.out.println("4. Move a Vehicle to a different Port");
+            System.out.println("5. Display all Vehicles");
+            System.out.println("6. Display all Containers");
+            System.out.println("7. Exit");
+            System.out.print("Choose an option (1-7): ");
+            int choice = scanner.nextInt();
 
             switch (choice) {
-                case "1":
-                    createVehicle(vehicleList, filename);
+                case 1:
+                    System.out.println("Available ports:");
+                    for (int i = 0; i < portsList.size(); i++) {
+                        System.out.println((i + 1) + ". " + portsList.get(i).getId());
+                    }
+                    System.out.print("Select a port by entering its number: ");
+                    int portIndexForTruck = scanner.nextInt() - 1;
+                    if (portIndexForTruck < 0 || portIndexForTruck >= portsList.size()) {
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                    }
+                    Ports currentPortForTruck = portsList.get(portIndexForTruck);
+                    Vehicle newTruck = Truck.createVehicle(scanner, currentPortForTruck, portsList);
+                    if (newTruck != null) {
+                        vehicleList.add(newTruck);
+                    } else {
+                        System.out.println("Failed to create a new truck.");
+                    }
                     break;
-                case "2":
-                    updateVehicle(vehicleList);
-                    // Save the updated list to the file
-                    saveVehicleToFile(vehicleList, filename);
+                case 2:
+                    System.out.println("Available ports:");
+                    for (int i = 0; i < portsList.size(); i++) {
+                        System.out.println((i + 1) + ". " + portsList.get(i).getId());
+                    }
+                    System.out.print("Select a port by entering its number: ");
+                    int portIndexForShip = scanner.nextInt() - 1;
+                    if (portIndexForShip < 0 || portIndexForShip >= portsList.size()) {
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                    }
+                    Ports currentPortForShip = portsList.get(portIndexForShip);
+                    Vehicle newShip = Ship.createVehicle(scanner, currentPortForShip, portsList);
+                    if (newShip != null) {
+                        vehicleList.add(newShip);
+                    } else {
+                        System.out.println("Failed to create a new ship.");
+                    }
                     break;
-                case "3":
-                    deleteVehicle(vehicleList, filename);
+                case 3:
+                    System.out.print("Enter Vehicle ID to add container to: ");
+                    String vehicleId = scanner.next();
+                    Vehicle vehicle = findVehicleById(vehicleList, vehicleId);
+                    if (vehicle == null) {
+                        System.out.println("Vehicle not found.");
+                        break;
+                    }
+                    System.out.println("Available Containers:");
+                    for (int i = 0; i < containerList.size(); i++) {
+                        System.out.println((i + 1) + ". " + containerList.get(i).toString());
+                    }
+                    System.out.print("Enter the ID of the Container to add: ");
+                    scanner.nextLine();
+                    String containerId = scanner.nextLine();
+                    Container container = findContainerById(containerList, containerId);
+                    if (container != null) {
+                        vehicle.addContainer(container);
+                        System.out.println("Container added to vehicle.");
+                    } else {
+                        System.out.println("Invalid container ID. Please try again.");
+                    }
                     break;
-                case "4":
-                    displayAllVehicleData(vehicleList);
+                case 4:
                     break;
-                case "5":
-                    addContainerToVehicle(vehicleList, new Scanner(System.in));
+                case 5:
+                    for (Vehicle v : vehicleList) {
+                        System.out.println(v);
+                    }
                     break;
-                case "6":
-                    System.out.println("Goodbye!");
+                case 6:
+                    for (Container c : containerList) {
+                        System.out.println(c);
+                    }
+                    break;
+                case 7:
+                    System.out.println("Saving data...");
+                    saveAllData(vehicleList, "vehicles.csv");
+                    System.out.println("Exiting...");
                     return;
                 default:
-                    System.out.println("Invalid choice. Try again.");
-                    break;
+                    System.out.println("Invalid choice. Please try again.");
             }
         }
     }
-    public static void createVehicle(List<Vehicle> vehicleList, String filename) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        while (true) {
-            try {
-                System.out.print("Enter vehicle name: ");
-                String name = reader.readLine().trim();
-
-                double carryingCapacity = -1;
-                do {
-                    try {
-                        System.out.print("Enter carrying capacity: ");
-                        carryingCapacity = Double.parseDouble(reader.readLine());
-                        if (carryingCapacity < 0) {
-                            System.err.println("Carrying capacity must be a positive number.");
-                        }
-                    } catch (NumberFormatException e) {
-                        System.err.println("Invalid input. Please enter a valid number.");
-                    }
-                } while (carryingCapacity < 0);
-
-                double fuelCapacity = -1;
-                do {
-                    try {
-                        System.out.print("Enter fuel capacity: ");
-                        fuelCapacity = Double.parseDouble(reader.readLine());
-                        if (fuelCapacity < 0) {
-                            System.err.println("Fuel capacity must be a positive number.");
-                        }
-                    } catch (NumberFormatException e) {
-                        System.err.println("Invalid input. Please enter a valid number.");
-                    }
-                } while (fuelCapacity < 0);
-
-                double currentFuel = -1;
-                do {
-                    try {
-                        System.out.print("Enter current fuel: ");
-                        currentFuel = Double.parseDouble(reader.readLine());
-                        if (currentFuel < 0) {
-                            System.err.println("Current fuel must be a positive number.");
-                        }
-                    } catch (NumberFormatException e) {
-                        System.err.println("Invalid input. Please enter a valid number.");
-                    }
-                } while (currentFuel < 0);
-
-                String vehicleType = "";
-                do {
-                    System.out.print("Enter vehicle type (truck/ship): ");
-                    vehicleType = reader.readLine().trim().toLowerCase();
-                    if (!vehicleType.equals("truck") && !vehicleType.equals("ship")) {
-                        System.err.println("Invalid vehicle type.");
-                    }
-                } while (!vehicleType.equals("truck") && !vehicleType.equals("ship"));
-
-                Vehicle vehicle = null;
-
-                if (vehicleType.equals("truck")) {
-                    String truckTypeStr = "";
-                    do {
-                        System.out.print("Enter truck type (basic/reefer/tanker): ");
-                        truckTypeStr = reader.readLine().trim().toLowerCase();
-                        if (!truckTypeStr.equals("basic") && !truckTypeStr.equals("reefer") && !truckTypeStr.equals("tanker")) {
-                            System.err.println("Invalid truck type.");
-                        }
-                    } while (!truckTypeStr.equals("basic") && !truckTypeStr.equals("reefer") && !truckTypeStr.equals("tanker"));
-
-                    Truck.TruckType truckType = Truck.TruckType.valueOf(truckTypeStr.toUpperCase());
-
-                    vehicle = new Truck(name, truckType, carryingCapacity, fuelCapacity, currentFuel, new ArrayList<>());
-                } else if (vehicleType.equals("ship")) {
-                    // You will need to add proper handling for creating a Ship object here
-                    System.out.println("Ship creation not supported at the moment.");
-                    return;
+    public static void saveAllData(List<Vehicle> vehicleList, String filePath) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (Vehicle vehicle : vehicleList) {
+                if (vehicle != null) {
+                    writer.write(vehicle.toCSVFormat());
+                    writer.newLine();
                 }
-
-                vehicleList.add(vehicle);
-                saveVehicleToFile(vehicleList, filename);
-
-                System.out.println("Vehicle created successfully.");
-                break; // Exit the loop when all input is valid
-            } catch (IOException e) {
-                System.out.println("An error occurred while creating the vehicle. Please check your input and try again.");
-                // Re-prompt the user for input
             }
         }
     }
 
-    public static void addContainerToVehicle(List<Vehicle> vehicleList, Scanner input) {
-        System.out.println("Enter the Vehicle ID to which you want to add a container:");
-        String vehicleId = input.next();
-
-        // Find the vehicle with the given ID
-        Vehicle vehicle = null;
-        for (Vehicle v : vehicleList) {
-            if (v.getId().equals(vehicleId)) {
-                vehicle = v;
-                break;
+    public static Vehicle findVehicleById(List<Vehicle> vehicleList, String id) {
+        for (Vehicle vehicle : vehicleList) {
+            if (vehicle.getId().equals(id)) {
+                return vehicle;
             }
         }
+        return null;
+    }
 
-        if (vehicle == null) {
-            System.out.println("No vehicle found with the ID: " + vehicleId);
-            return;
+    public static Container findContainerById(List<Container> containerList, String id) {
+        for (Container container : containerList) {
+            if (container.getId().equals(id)) {
+                return container;
+            }
         }
+        return null;
+    }
 
-        // Read all containers from the file
-        List<Container> containers = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(Container.filename))) {
+    public static List<Vehicle> loadVehiclesFromFile(String filePath, List<Ports> portsList) throws IOException {
+        List<Vehicle> vehicleList = new ArrayList<>();
+        int maxVehicleId = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                double weight = Double.parseDouble(parts[1]);
-                Container.ContainerType type = Container.ContainerType.valueOf(parts[2]);
-                containers.add(new Container(weight, type));
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred while reading the file: " + e.getMessage());
-            return;
-        }
-
-        // Display all containers and prompt the user to select one
-        for (int i = 0; i < containers.size(); i++) {
-            System.out.println((i + 1) + ". " + containers.get(i).getContainer());
-        }
-
-        String containerId;
-        Container selectedContainer = null;
-        while (true) {
-            System.out.print("Enter the ID of the container to add to the vehicle: ");
-            containerId = input.next();
-
-            // Find the container with the given ID in the list
-            for (Container container : containers) {
-                if (container.getId().equals(containerId)) {
-                    selectedContainer = container;
-                    break;
+                String[] data = line.split(",");
+                Vehicle vehicle;
+                Ports currentPort = findPortById(portsList, data[5]);
+                if ("Truck".equals(data[6])) {
+                    vehicle = new Truck(data, currentPort);
+                } else {
+                    vehicle = new Ship(data, currentPort);
                 }
+                vehicleList.add(vehicle);
+                int vehicleIdNumber = Integer.parseInt(data[0].substring(2));
+                maxVehicleId = Math.max(maxVehicleId, vehicleIdNumber);
             }
-
-            if (selectedContainer != null) {
-                break;
-            }
-
-            System.out.println("Invalid ID. Please try again.");
         }
-
-// Add the selected container to the vehicle
-        boolean wasAdded = vehicle.addContainer(selectedContainer);
-        if (wasAdded) {
-            System.out.println("Container added successfully to the vehicle.");
-        } else {
-            System.out.println("Failed to add the container. It might not be compatible with the vehicle type.");
-        }
+        Vehicle.setVehicleCounter(maxVehicleId);
+        return vehicleList;
     }
 
-    public static void updateVehicle(List<Vehicle> vehicleList) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-        while (true) {
-            System.out.print("Enter vehicle ID to update: ");
-            String id = reader.readLine();
-
-            Vehicle existingVehicle = null;
-
-            for (Vehicle vehicle : vehicleList) {
-                if (vehicle.getId().equals(id)) {
-                    existingVehicle = vehicle;
-                    break;
-                }
-            }
-
-            if (existingVehicle == null) {
-                System.err.println("No vehicle found with ID: " + id);
-                continue; // Re-prompt the user for input
-            }
-
-            System.out.print("Enter new name for the vehicle: ");
-            String name = reader.readLine();
-            existingVehicle.name = name;
-
-            double newCarryingCapacity = -1;
-            while (newCarryingCapacity < 0) {
-                try {
-                    System.out.print("Enter new carrying capacity for the vehicle (a positive number): ");
-                    newCarryingCapacity = Double.parseDouble(reader.readLine());
-                    if (newCarryingCapacity < 0) {
-                        System.err.println("Carrying capacity must be a positive number.");
-                    }
-                } catch (NumberFormatException e) {
-                    System.err.println("Invalid input. Please enter a valid number.");
-                }
-            }
-            existingVehicle.carryingCapacity = newCarryingCapacity;
-
-            double newFuelCapacity = -1;
-            while (newFuelCapacity < 0) {
-                try {
-                    System.out.print("Enter new fuel capacity for the vehicle (a positive number): ");
-                    newFuelCapacity = Double.parseDouble(reader.readLine());
-                    if (newFuelCapacity < 0) {
-                        System.err.println("Fuel capacity must be a positive number.");
-                    }
-                } catch (NumberFormatException e) {
-                    System.err.println("Invalid input. Please enter a valid number.");
-                }
-            }
-            existingVehicle.fuelCapacity = newFuelCapacity;
-
-            System.out.println("Vehicle updated successfully.");
-            break; // Exit the loop when all input is valid
-        }
-    }
-
-    public static void saveVehicleToFile(List<Vehicle> vehicleList, String filename) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false))) {
-            for (Vehicle vehicle : vehicleList) {
-                writer.write(vehicle.toCSVFormat());
-                writer.newLine();
-                writer.write(vehicle.containersToCSV());
+    public static Ports findPortById(List<Ports> portsList, String id) {
+        for (Ports port : portsList) {
+            if (port.getId().equals(id)) {
+                return port;
             }
         }
+        return null;
     }
-
-    public static void deleteVehicle(List<Vehicle> vehicleList, String filename) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-        System.out.print("Enter vehicle ID to delete: ");
-        String id = reader.readLine();
-
-        Iterator<Vehicle> iterator = vehicleList.iterator();
-        while (iterator.hasNext()) {
-            Vehicle vehicle = iterator.next();
-            if (vehicle.getId().equals(id)) {
-                iterator.remove();
-                saveVehicleToFile(vehicleList, filename);
-                System.out.println("Vehicle deleted successfully.");
-                return;
-            }
-        }
-        System.err.println("No vehicle found with ID: " + id);
-    }
-
-    public static void displayAllVehicleData(List<Vehicle> vehicleList) {
-        for (Vehicle vehicle : vehicleList) {
-            System.out.println(vehicle.toString());
-            for (Container container : vehicle.getContainers()) {
-                System.out.println(container.toString()); // Assuming Container class has a proper toString method
-            }
-        }
-    }
-
-
 }
