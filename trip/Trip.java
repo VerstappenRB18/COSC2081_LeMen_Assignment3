@@ -21,7 +21,7 @@ public class Trip {
     private LocalDateTime arrivalDate;
     private TripStatus status;
 
-    public static final String filename = "trips.txt";
+    public static final String filename = "trips.csv";
 
     // Default constructor
     public Trip() {
@@ -159,7 +159,7 @@ public class Trip {
 
         Trip trip = new Trip(vehicle, departurePort, arrivalPort, departureDate, arrivalDate, status);
         tripList.add(trip);
-        trip.saveToFile(filename);
+        trip.saveToFile(filename,vehicleList, portsList);
 
         System.out.println("Trip created successfully.");
     }
@@ -266,12 +266,39 @@ public class Trip {
     }
 
     // Method to save a trip to a file
-    public void saveToFile(String filename) throws IOException {
+    public void saveToFile(String filename, List<Vehicle> vehicleList, List<Ports> portsList) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             writer.write(String.format("%s,%s,%s,%s,%s,%s%n", vehicle.getId(), departurePort.getId(), arrivalPort.getId(), departureDate.format(formatter), arrivalDate.format(formatter), status));
         }
+
+        // Get the latest list of trips and update vehicle ports
+        List<Trip> tripList = readFromFile(filename, vehicleList, portsList);
+}
+
+    public static void updateVehiclePortsAfterTripCompletion(List<Trip> tripList, List<Vehicle> vehicleList) {
+        for (Trip trip : tripList) {
+            if (trip.getStatus() == TripStatus.COMPLETED) {
+                // Find the vehicle involved in this trip
+                Vehicle vehicle = findVehicleById(vehicleList, trip.getVehicle().getId());
+                if (vehicle != null) {
+                    // Update the current port of the vehicle to the arrival port of the trip
+                    vehicle.setCurrentPort(trip.getArrivalPort());
+                }
+            }
+        }
     }
+
+    private static Vehicle findVehicleById(List<Vehicle> vehicleList, String vehicleId) {
+        for (Vehicle vehicle : vehicleList) {
+            if (vehicle.getId().equals(vehicleId)) {
+                return vehicle;
+            }
+        }
+        return null;
+    }
+
+
 
     // Method to read all trips from a file
     public static List<Trip> readFromFile(String filename, List<Vehicle> vehicleList, List<Ports> portsList) throws IOException {
@@ -292,6 +319,8 @@ public class Trip {
 
                 Trip trip = new Trip(vehicle, departurePort, arrivalPort, departureDate, arrivalDate, status);
                 tripList.add(trip);
+                updateVehiclePortsAfterTripCompletion(tripList);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -304,12 +333,21 @@ public class Trip {
     public static void saveAllToFile(String filename, List<Trip> tripList) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
             for (Trip trip : tripList) {
                 writer.write(String.format("%s,%s,%s,%s,%s,%s%n", trip.getVehicle().getId(), trip.getDeparturePort().getId(), trip.getArrivalPort().getId(), trip.getDepartureDate().format(formatter), trip.getArrivalDate().format(formatter), trip.getStatus()));
             }
         }
     }
 
+    public static void updateVehiclePortsAfterTripCompletion(List<Trip> tripList) {
+        for (Trip trip : tripList) {
+            if (trip.getStatus() == Trip.TripStatus.COMPLETED) {
+                Vehicle vehicle = trip.getVehicle();
+                vehicle.setCurrentPort(trip.getArrivalPort());
+            }
+        }
+    }
 
 
     @Override

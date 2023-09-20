@@ -41,7 +41,7 @@ public class PortManagementSystem {
         }
 
         try {
-            tripList = Trip.readFromFile("trips.txt", vehicleList, portsList);
+            tripList = Trip.readFromFile("trips.csv", vehicleList, portsList);
         } catch (IOException e) {
             System.err.println("Error loading trips from file: " + e.getMessage());
         }

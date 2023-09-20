@@ -70,6 +70,11 @@ public abstract class Vehicle {
         }
         return false;
     }
+    public void setCurrentPort(Ports currentPort) {
+        this.currentPort = currentPort;
+    }
+
+
 
     public Map<Container.ContainerType, Integer> getContainerByType() {
         return containerByType;
@@ -173,7 +178,6 @@ public abstract class Vehicle {
         }
         return sb.toString();
     }
-
 
 
 
