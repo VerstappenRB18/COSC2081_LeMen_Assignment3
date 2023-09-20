@@ -6,6 +6,7 @@ import vehicle.Truck;
 import vehicle.Vehicle;
 import container.Container;
 
+import javax.sound.sampled.Port;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +57,11 @@ public class PortManagementSystem {
             System.out.println("6. View all trips");
             System.out.println("7. Update existing trip");
             System.out.println("8. Delete existing trip");
-            System.out.println("9. Exit");
-            System.out.print("Choose an option (1-9): ");
+            System.out.println("9. List all ship from port");
+            System.out.println("10. List all trip in a day");
+            System.out.println("11. List all trip in a span of time");
+            System.out.println("12. Exit");
+            System.out.print("Choose an option (1-12): ");
             int choice = scanner.nextInt();
 
             switch (choice) {
@@ -73,7 +77,10 @@ public class PortManagementSystem {
                 case 6 -> Trip.viewAllTrips(tripList);
                 case 7 -> Trip.updateTrip(tripList, vehicleList, portsList, Trip.filename);
                 case 8 -> Trip.deleteTrip(tripList, Trip.filename);
-                case 9 -> {
+                case 9 -> Ports.listAllShips(portsList, vehicleList);
+                case 10 -> Trip.listTripsOnGivenDay(tripList);
+                case 11 -> Trip.listTripsFromDayAToDayB(tripList);
+                case 12 -> {
                     System.out.println("Exiting...");
                     return;
                 }

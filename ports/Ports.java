@@ -2,6 +2,7 @@ package ports;
 
 import container.Container;
 import trip.Trip;
+import vehicle.Ship;
 import vehicle.Vehicle;
 
 import java.io.*;
@@ -32,9 +33,9 @@ public class Ports {
         this.longitude = 0.0;
         this.storingCapacity = 0.0;
         this.landingAbility = false;
-        this.containersList = null ;
-        this.vehicleList = null;
-        this.trafficHistory = null;
+        this.containersList = new ArrayList<>(); // Initialize to an empty list
+        this.vehicleList = new ArrayList<>(); // Initialize to an empty list
+        this.trafficHistory = new ArrayList<>(); // Initialize to an empty list
     }
 
     // Parameter Constructor
@@ -374,6 +375,50 @@ public class Ports {
         }
         System.err.println("No port found with ID: " + id);
     }
+
+    public static void listAllShips(List<Ports> portsList, List<Vehicle> vehicleList) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.print("Please enter the ID of the port: ");
+        String portId;
+        try {
+            portId = reader.readLine();
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading the input: " + e.getMessage());
+            return;
+        }
+
+        Ports selectedPort = null;
+        for (Ports port : portsList) {
+            if (port.getId().equals(portId)) {
+                selectedPort = port;
+                break;
+            }
+        }
+
+        if (selectedPort == null) {
+            System.out.println("No port found with the ID: " + portId);
+            return;
+        }
+
+        System.out.println("Listing all ships at the port:");
+        boolean found = false;
+        for (Vehicle vehicle : vehicleList) {
+            if (vehicle.getCurrentPort() != null && vehicle.getCurrentPort().getId().equals(portId) && vehicle instanceof Ship) {
+                System.out.println(vehicle.toString());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No ships found at this port.");
+        }
+    }
+
+
+
+
+
 
 
     public static void saveAllToFile(String filename, List<Ports> portsList) throws IOException {
