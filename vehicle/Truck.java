@@ -87,7 +87,7 @@ public class Truck extends Vehicle {
     }
 
 
-    public static Truck createVehicle(Scanner input, Ports currentPort) {
+    public static Truck createVehicle(Scanner input, Ports currentPortForTruck, List<Ports> portsList) {
         System.out.print("Please enter the Truck's name: ");
         String name = input.next();
 
@@ -110,6 +110,8 @@ public class Truck extends Vehicle {
             }
         }
 
-        return new Truck(name, carryingCapacity, fuelCapacity, currentFuel, currentPort, truckType);
+        return new Truck(name, carryingCapacity, fuelCapacity, currentFuel, currentPortForTruck, truckType);
     }
+
+
 }

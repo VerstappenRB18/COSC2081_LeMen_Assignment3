@@ -31,7 +31,7 @@ public abstract class Vehicle {
         Vehicle.vehicleCounter = vehicleCounter;
     }
 
-    public static Vehicle createVehicle(Scanner input, Ports currentPort) {
+    public static Vehicle createVehicle(Scanner input, List<Ports> portsList) {
         System.out.print("Please enter the Vehicle's name: ");
         String name = input.next();
 
@@ -44,10 +44,20 @@ public abstract class Vehicle {
         System.out.print("Please enter the Vehicle's current fuel level: ");
         double currentFuel = input.nextDouble();
 
+        // Select a current port
+        System.out.println("Available ports:");
+        for (int i = 0; i < portsList.size(); i++) {
+            System.out.println((i + 1) + ". " + portsList.get(i).getId()); // Assuming Ports class has getId() method
+        }
+        System.out.print("Select a port by entering its number: ");
+        int portIndex = input.nextInt() - 1; // Subtract 1 to convert from 1-based to 0-based index
+        Ports currentPort = portsList.get(portIndex);
+
         // Here we return null because we cannot instantiate an abstract class
         // This method should be overridden in the subclasses (Ship and Truck) to return a new instance of them
         return null;
     }
+
 
     public boolean addContainer(Container container) {
         if (container != null) {

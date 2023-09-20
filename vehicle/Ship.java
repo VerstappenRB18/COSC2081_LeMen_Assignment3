@@ -71,7 +71,7 @@ public class Ship extends Vehicle {
 
 
 
-    public static Ship createVehicle(Scanner input, Ports currentPort) {
+    public static Ship createVehicle(Scanner input, Ports currentPortForShip, List<Ports> portsList) {
         System.out.print("Please enter the Ship's name: ");
         String name = input.next();
 
@@ -94,6 +94,9 @@ public class Ship extends Vehicle {
             }
         }
 
-        return new Ship(name, carryingCapacity, fuelCapacity, currentFuel, currentPort, shipType);
+        return new Ship(name, carryingCapacity, fuelCapacity, currentFuel, currentPortForShip, shipType);
     }
+
+
+
 }
