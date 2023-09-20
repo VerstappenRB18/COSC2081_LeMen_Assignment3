@@ -16,7 +16,12 @@ public class Truck extends Vehicle {
         this.currentFuel = Double.parseDouble(data[4]);
         this.currentPort = currentPort;
         this.truckType = TruckType.valueOf(data[7].toUpperCase());
-        // You will also need to add code here to handle the container data
+        try {
+            this.truckType = TruckType.valueOf(data[7].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            this.truckType = TruckType.SMALL; // Set a default value
+            System.err.println("Invalid truck type in data file, setting to default (SMALL).");
+        }
     }
 
     private Ports findPortById(List<Ports> portsList, String id) {
@@ -69,7 +74,7 @@ public class Truck extends Vehicle {
     }
 
 
-    private String getContainersCSV() {
+    String getContainersCSV() {
         StringBuilder sb = new StringBuilder();
         for (Container container : containers) {
             sb.append(container.getId()).append(";");

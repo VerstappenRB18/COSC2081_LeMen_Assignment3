@@ -152,7 +152,7 @@ public abstract class Vehicle {
         return sb.toString();
     }
 
-    private String getContainersCSV() {
+    String getContainersCSV() {
         StringBuilder sb = new StringBuilder();
         for (Container container : containers) {
             sb.append(container.getId()).append(";");

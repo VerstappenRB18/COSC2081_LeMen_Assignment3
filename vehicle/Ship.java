@@ -15,6 +15,7 @@ public class Ship extends Vehicle {
         this.currentFuel = Double.parseDouble(data[4]);
         this.currentPort = currentPort;
         this.shipType = ShipType.valueOf(data[7].toUpperCase());
+
         // You will also need to add code here to handle the container data
     }
 
@@ -51,10 +52,24 @@ public class Ship extends Vehicle {
         this.shipType = shipType;
     }
 
+
     @Override
     public String toCSVFormat() {
-        return id + "," + name + "," + carryingCapacity + "," + fuelCapacity + "," + currentFuel + "," + currentPort.getId() + "," + shipType;
+        StringBuilder sb = new StringBuilder();
+        sb.append(id).append(",")
+                .append(name).append(",")
+                .append(carryingCapacity).append(",")
+                .append(fuelCapacity).append(",")
+                .append(currentFuel).append(",")
+                .append(currentPort.getId()).append(",")
+                .append(this.getClass().getSimpleName()).append(",") // Add vehicle type
+                .append(shipType.name()).append(",") // Add ship type
+                .append(getContainersCSV()); // Add containers CSV
+
+        return sb.toString();
     }
+
+
 
     public static Ship createVehicle(Scanner input, Ports currentPort) {
         System.out.print("Please enter the Ship's name: ");
