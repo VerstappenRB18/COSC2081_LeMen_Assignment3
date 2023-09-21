@@ -9,30 +9,48 @@ import ports.Ports;
 
 public class Truck extends Vehicle {
     public Truck(String[] data, Ports currentPort) {
-        super();
-        this.id = data[0];
-        this.name = data[1];
-        this.carryingCapacity = Double.parseDouble(data[2]);
-        this.fuelCapacity = Double.parseDouble(data[3]);
-        this.currentFuel = Double.parseDouble(data[4]);
-        this.currentPort = currentPort;
-        this.truckType = TruckType.valueOf(data[7].toUpperCase());
+        // Validate the length of the data array to prevent ArrayIndexOutOfBoundsException
+        if (data.length < 8) {
+            throw new IllegalArgumentException("Insufficient data elements");
+        }
+
+        // Try to parse truckType, providing a default value in case of invalid data
+        this.truckType = TruckType.BASIC; // Set a default value
         try {
             this.truckType = TruckType.valueOf(data[7].toUpperCase());
         } catch (IllegalArgumentException e) {
-            this.truckType = TruckType.BASIC; // Set a default value
             System.err.println("Invalid truck type in data file, setting to default (BASIC).");
         }
+
+        // Validate and parse other fields, providing default values or throwing exceptions as appropriate
+        this.id = data[0];
+        this.name = data[1];
+
+        try {
+            this.carryingCapacity = Double.parseDouble(data[2]);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid carrying capacity in data file, setting to default (0.0).");
+            this.carryingCapacity = 0.0;
+        }
+
+        try {
+            this.fuelCapacity = Double.parseDouble(data[3]);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid fuel capacity in data file, setting to default (0.0).");
+            this.fuelCapacity = 0.0;
+        }
+
+        try {
+            this.currentFuel = Double.parseDouble(data[4]);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid current fuel level in data file, setting to default (0.0).");
+            this.currentFuel = 0.0;
+        }
+
+        this.currentPort = currentPort;
     }
 
-    private Ports findPortById(List<Ports> portsList, String id) {
-        for (Ports port : portsList) {
-            if (port.getId().equals(id)) {
-                return port;
-            }
-        }
-        return null;
-    }
+
 
 
     public enum TruckType {
@@ -55,9 +73,6 @@ public class Truck extends Vehicle {
         return truckType;
     }
 
-    public void setTruckType(TruckType truckType) {
-        this.truckType = truckType;
-    }
 
     public String toCSVFormat() {
         StringBuilder sb = new StringBuilder();
