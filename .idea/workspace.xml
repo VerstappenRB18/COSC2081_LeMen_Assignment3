@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="Finished the CRUD and connect containers for vehicles">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/container/Container.java" beforeDir="false" afterPath="$PROJECT_DIR$/container/Container.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Ship.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Ship.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Truck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Vehicle.java" afterDir="false" />
-    </list>
+    <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="Implement User login and changes to class attributes" />
     <list id="73615d9d-a151-4bd4-899d-c6f400a00c00" name="Changes by Hoang" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +26,7 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/User" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -88,7 +81,25 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ADMIN\IdeaProjects\Final assignment\src\COSC2081_LeMen_Assignment3" />
+    </key>
+  </component>
   <component name="RunManager">
+    <configuration name="User" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="User.User" />
+      <module name="COSC2081_LeMen_Assignment3" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="User.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />
@@ -100,6 +111,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.User" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -124,6 +140,8 @@
       <workItem from="1695140901756" duration="7007000" />
       <workItem from="1695173543924" duration="19275000" />
       <workItem from="1695260758821" duration="52000" />
+      <workItem from="1695276068032" duration="3899000" />
+      <workItem from="1695280751536" duration="2249000" />
     </task>
     <task id="LOCAL-00001" summary="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
       <option name="closed" value="true" />
@@ -173,7 +191,23 @@
       <option name="project" value="LOCAL" />
       <updated>1695183367612</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Implement User login and changes to class attributes">
+      <option name="closed" value="true" />
+      <created>1695282804811</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1695282804811</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Implement User login and changes to class attributes">
+      <option name="closed" value="true" />
+      <created>1695282982781</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1695282982781</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,7 +218,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/User-Class-Test-1" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -195,6 +241,18 @@
     <MESSAGE value="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java" />
     <MESSAGE value="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java&#10;&#10;This is the newest code, force pull this before doing anything else!" />
     <MESSAGE value="Finished the CRUD and connect containers for vehicles" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished the CRUD and connect containers for vehicles" />
+    <MESSAGE value="Implement User login and changes to class attributes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement User login and changes to class attributes" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ports/Ports.java</url>
+          <line>198</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
