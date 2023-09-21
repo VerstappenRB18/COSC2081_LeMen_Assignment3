@@ -209,39 +209,6 @@ public abstract class Vehicle {
 
 
 
-    public boolean moveToPort(Ports currentPort, Ports targetPort, String departureDate, String arrivalDate) {
-        // First, check if it's possible to move to the target port
-        if (!canMoveToPort(currentPort,targetPort)) {
-            System.out.println("The vehicle cannot move to the target port due to landing restrictions.");
-            return false;
-        }
-
-        // Calculate the distance to the target port
-        double distanceToTarget = currentPort.calculateDistance(targetPort);
-
-        // Calculate the required fuel for the trip and check if the vehicle has enough fuel
-        double requiredFuel = calculateFuelConsumption(distanceToTarget);
-        if (requiredFuel > currentFuel) {
-            System.out.println("The vehicle does not have enough fuel to complete the trip.");
-            return false;
-        }
-
-        // Update the vehicle's fuel level
-        currentFuel -= requiredFuel;
-
-        // Update the lists of vehicles at the current and target ports
-        currentPort.getVehicleList().remove(this);
-        targetPort.getVehicleList().add(this);
-
-        // Create a new Trip object to record this journey and add it to the target port's traffic history
-        Trip newTrip = new Trip(this, currentPort, targetPort, departureDate, arrivalDate, Trip.TripStatus.COMPLETED);
-        targetPort.addTrip(newTrip);
-
-        // Update the vehicle's current location
-        this.currentPort = targetPort;
-
-        return true;
-    }
 
     public List<Container> getContainers() {
         return containers;

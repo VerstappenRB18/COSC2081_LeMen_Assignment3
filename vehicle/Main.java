@@ -63,7 +63,25 @@ public class Main {
                     System.out.println(vehicleList);
                     break;
                 case 4:
-                    Vehicle.handleUnloadContainer(scanner, vehicleList, "vehicles.csv");
+                    System.out.print("Enter Vehicle ID to unload a container from: ");
+                    String unloadVehicleId = scanner.next();
+                    Vehicle unloadVehicle = findVehicleById(vehicleList, unloadVehicleId);
+                    if (unloadVehicle == null) {
+                        System.out.println("Vehicle not found.");
+                        break;
+                    }
+
+                    if (unloadVehicle.getContainers().isEmpty()) {
+                        System.out.println("No container to unload.");
+                        break;
+                    }
+
+                    Container unloadContainer = unloadVehicle.getContainers().get(0);
+                    if (unloadVehicle.unloadContainer(unloadContainer, unloadVehicle.getCurrentPort())) {
+                        System.out.println("Container unloaded successfully.");
+                    } else {
+                        System.out.println("Failed to unload container.");
+                    }
                     break;
                 case 5:
                     break;
@@ -95,7 +113,7 @@ public class Main {
                     break;
                 case 10:
                     System.out.println("Saving data...");
-                    Vehicle.saveAllData(vehicleList, "vehicles.csv");
+                    saveAllData(vehicleList, "vehicles.csv");
                     System.out.println("Exiting...");
                     return;
                 default:
@@ -104,7 +122,16 @@ public class Main {
         }
     }
 
-
+    public static void saveAllData(List<Vehicle> vehicleList, String filePath) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (Vehicle vehicle : vehicleList) {
+                if (vehicle != null) {
+                    writer.write(vehicle.toCSVFormat());
+                    writer.newLine();
+                }
+            }
+        }
+    }
 
     public static Vehicle findVehicleById(List<Vehicle> vehicleList, String id) {
         for (Vehicle vehicle : vehicleList) {
