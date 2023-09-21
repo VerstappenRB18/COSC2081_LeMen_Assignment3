@@ -1,1 +1,3 @@
 username,password,MANAGER
+admin,password,ADMIN
+username,password,ADMIN

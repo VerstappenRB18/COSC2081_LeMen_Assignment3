@@ -129,6 +129,7 @@ public abstract class Vehicle {
                     vehicle.getContainerByType().getOrDefault(container.getType(), 0) + 1
             );
             System.out.println("Container added to vehicle.");
+            System.out.println("Added container " + container.getId() + " to vehicle " + vehicle.getId());
             return true;
         } else {
             System.out.println("Invalid container ID. Please try again.");
@@ -261,11 +262,20 @@ public abstract class Vehicle {
                 .append(fuelCapacity).append(",")
                 .append(currentFuel).append(",")
                 .append(currentPort.getId()).append(",")
-                .append(this.getClass().getSimpleName()).append(",") // Add vehicle type
-                .append(getContainersCSV()); // Add containers CSV
+                .append(this.getClass().getSimpleName()); // Add vehicle type
+
+        // Add container IDs
+        sb.append(",");
+        for (Container container : containers) {
+            sb.append(container.getId()).append(";");
+        }
+        if (containers.size() > 0) {
+            sb.setLength(sb.length() - 1); // Remove the last semicolon
+        }
 
         return sb.toString();
     }
+
 
     String getContainersCSV() {
         StringBuilder sb = new StringBuilder();
@@ -356,12 +366,15 @@ public abstract class Vehicle {
         return sb.toString();
     }
 
-    private static Container findContainerById(List<Container> containerList, String id) {
+    public static Container findContainerById(List<Container> containerList, String id) {
+        System.out.println("Searching for container ID: " + id);
         for (Container container : containerList) {
+            System.out.println("Checking container ID: " + container.getId());
             if (container.getId().equals(id)) {
                 return container;
             }
         }
         return null;
     }
+
 }

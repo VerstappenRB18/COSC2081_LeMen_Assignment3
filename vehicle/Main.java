@@ -5,6 +5,7 @@ import container.Container;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,11 +23,14 @@ public class Main {
         }
         try {
             containerList = Container.readFromFile("containers.txt");
+            System.out.println("Available containers: " + containerList);
         } catch (IOException e) {
             System.err.println("Error loading containers from file: " + e.getMessage());
         }
         try {
-            vehicleList = loadVehiclesFromFile("vehicles.csv", portsList);
+            vehicleList = loadVehiclesFromFile("vehicles.csv", portsList, containerList);
+        for (Vehicle vehicle : vehicleList) {
+            System.out.println("Loaded containers for vehicle " + vehicle.getId() + ": " + vehicle.getContainers());}
         } catch (IOException e) {
             System.err.println("Error loading vehicle from file: " + e.getMessage());
         }
@@ -55,6 +59,8 @@ public class Main {
                     break;
                 case 3:
                     Vehicle.addContainer(scanner, vehicleList, containerList);
+                    System.out.println(containerList);
+                    System.out.println(vehicleList);
                     break;
                 case 4:
                     System.out.print("Enter Vehicle ID to unload a container from: ");
@@ -136,7 +142,7 @@ public class Main {
         return null;
     }
 
-    public static List<Vehicle> loadVehiclesFromFile(String filePath, List<Ports> portsList) throws IOException {
+    public static List<Vehicle> loadVehiclesFromFile(String filePath, List<Ports> portsList, List<Container> containerList) throws IOException {
         List<Vehicle> vehicleList = new ArrayList<>();
         int maxVehicleId = 0;
 
@@ -151,14 +157,44 @@ public class Main {
                 } else {
                     vehicle = new Ship(data, currentPort);
                 }
+
+                System.out.println(Arrays.toString(data));
+
+                // Check if container IDs exist in the CSV
+                String[] containerIds;
+                if ("Truck".equals(data[6])) {
+                    if (data.length > 8) {
+                        containerIds = data[8].split(";");
+                    } else {
+                        containerIds = new String[0]; // No containers
+                    }
+                } else { // It's a Ship
+                    if (data.length > 7) {
+                        containerIds = data[7].split(";");
+                    } else {
+                        containerIds = new String[0]; // No containers
+                    }
+                }
+
+                for (String id : containerIds) {
+                    Container container = Vehicle.findContainerById(containerList, id);
+                    System.out.println("Here's the containers " + container + " for vehicle " + vehicle);
+                    if (container != null) {
+                        vehicle.getContainers().add(container);
+                    }
+                }
+
                 vehicleList.add(vehicle);
                 int vehicleIdNumber = Integer.parseInt(data[0].substring(2));
                 maxVehicleId = Math.max(maxVehicleId, vehicleIdNumber);
             }
         }
         Vehicle.setVehicleCounter(maxVehicleId);
+
         return vehicleList;
     }
+
+
 
     public static Ports findPortById(List<Ports> portsList, String id) {
         for (Ports port : portsList) {
