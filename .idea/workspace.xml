@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="Finished the CRUD and connect containers for vehicles">
-      <change afterPath="$PROJECT_DIR$/user.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/COSC2081_LeMen_Assignment3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/COSC2081_LeMen_Assignment3.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/User/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/COSC2081_LeMen_Assignment3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/COSC2081_LeMen_Assignment3.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trips.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trips.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicles.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicles.csv" afterDir="false" />
-    </list>
+    <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="Implement User login and changes to class attributes" />
     <list id="73615d9d-a151-4bd4-899d-c6f400a00c00" name="Changes by Hoang" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +141,7 @@
       <workItem from="1695173543924" duration="19275000" />
       <workItem from="1695260758821" duration="52000" />
       <workItem from="1695276068032" duration="3899000" />
-      <workItem from="1695280751536" duration="1908000" />
+      <workItem from="1695280751536" duration="2249000" />
     </task>
     <task id="LOCAL-00001" summary="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
       <option name="closed" value="true" />
@@ -202,7 +191,23 @@
       <option name="project" value="LOCAL" />
       <updated>1695183367612</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Implement User login and changes to class attributes">
+      <option name="closed" value="true" />
+      <created>1695282804811</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1695282804811</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Implement User login and changes to class attributes">
+      <option name="closed" value="true" />
+      <created>1695282982781</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1695282982781</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -213,7 +218,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/User-Class-Test-1" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -224,7 +241,8 @@
     <MESSAGE value="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java" />
     <MESSAGE value="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java&#10;&#10;This is the newest code, force pull this before doing anything else!" />
     <MESSAGE value="Finished the CRUD and connect containers for vehicles" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished the CRUD and connect containers for vehicles" />
+    <MESSAGE value="Implement User login and changes to class attributes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement User login and changes to class attributes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
