@@ -19,9 +19,9 @@ public class Ports {
     private double longitude;
     private double storingCapacity;
     private boolean landingAbility;
-    private List<Container> containersList;
-    private List<Vehicle> vehicleList;
-    private List<Trip> trafficHistory;
+    private final List<Container> containersList;
+    private final List<Vehicle> vehicleList;
+    private final List<Trip> trafficHistory;
     static final String filename = "ports.csv";
 
 
@@ -39,7 +39,7 @@ public class Ports {
     }
 
     // Parameter Constructor
-    public Ports(String name, double latitude, double longitude, double storingCapacity, boolean landingAbility, List<Container> containersList, List<Vehicle> vehicleList, List<Trip> trafficHistory) throws IOException {
+    public Ports(String name, double latitude, double longitude, double storingCapacity, boolean landingAbility, List<Container> containersList, List<Vehicle> vehicleList, List<Trip> trafficHistory) {
         this.id = generatePortId();
         this.name = name;
         this.latitude = latitude;
@@ -52,7 +52,7 @@ public class Ports {
     }
 
 
-    private String generatePortId() throws IOException {
+    private String generatePortId() {
         Set<String> existingIds = getExistingIds();
         String newId;
         do {
@@ -133,26 +133,6 @@ public class Ports {
         return containersList;
     }
 
-    public void setContainersList(List<Container> containersList) {
-        this.containersList = containersList;
-    }
-
-    public List<Vehicle> getVehicleList() {
-        return vehicleList;
-    }
-
-    public void setVehicleList(List<Vehicle> vehicleList) {
-        this.vehicleList = vehicleList;
-    }
-
-    public List<Trip> getTrafficHistory() {
-        return trafficHistory;
-    }
-
-    public void setTrafficHistory(List<Trip> trafficHistory) {
-        this.trafficHistory = trafficHistory;
-    }
-
     // calculateDistance
     public double calculateDistance(Ports otherPort) {
         final int R = 6371; // Radius of the Earth in kilometers
@@ -167,30 +147,6 @@ public class Ports {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return R * c; // The distance in kilometers
-    }
-
-    // Add a new trip to the trip list
-    public void addTrip(Trip trip) {
-        if (trip != null) {
-            trafficHistory.add(trip);
-        } else {
-            System.out.println("Trip cannot be null");
-        }
-    }
-
-
-
-    public double getAvailableStorage() {
-        double totalWeight = 0.0;
-
-        // Sum the weight of all containers
-        for (Container container : containersList) {
-            totalWeight += container.getWeight();
-        }
-
-        // Subtract the total weight from the storing capacity
-
-        return storingCapacity - totalWeight;
     }
 
 
@@ -405,7 +361,7 @@ public class Ports {
         boolean found = false;
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getCurrentPort() != null && vehicle.getCurrentPort().getId().equals(portId) && vehicle instanceof Ship) {
-                System.out.println(vehicle.toString());
+                System.out.println(vehicle);
                 found = true;
             }
         }
@@ -425,7 +381,6 @@ public class Ports {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (Ports port : portsList) {
                 writer.write(String.format("%s,%s,%.2f,%.2f,%.2f,%b%n", port.getId(), port.getName(), port.getLatitude(), port.getLongitude(), port.getStoringCapacity(), port.isLandingAbility()));
-                // You'll want to extend this to include the other attributes of a Port
             }
         }
     }

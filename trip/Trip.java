@@ -22,7 +22,7 @@ public class Trip {
     public static final String filename = "trips.csv";
 
     // Default constructor
-    public Trip(Vehicle vehicle, Ports currentPort, Ports targetPort, String departureDate, String arrivalDate, TripStatus completed) {
+    public Trip() {
         this.vehicle = null;
         this.departurePort = null;
         this.arrivalPort = null;

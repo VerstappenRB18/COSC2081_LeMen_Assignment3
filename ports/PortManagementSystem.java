@@ -1,18 +1,15 @@
 package ports;
 
 import trip.Trip;
-import vehicle.Ship;
-import vehicle.Truck;
-import vehicle.Vehicle;
+import vehicle.*;
 import container.Container;
 
-import javax.sound.sampled.Port;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static vehicle.Main.findPortById;
 
 public class PortManagementSystem {
     public static void main(String[] args) throws IOException {
@@ -36,7 +33,7 @@ public class PortManagementSystem {
         }
 
         try {
-            vehicleList = loadVehiclesFromFile("vehicles.csv", portsList);
+            vehicleList = Vehicle.loadVehiclesFromFile("vehicles.csv", portsList);
         } catch (IOException e) {
             System.err.println("Error loading vehicles from file: " + e.getMessage());
         }
@@ -87,33 +84,5 @@ public class PortManagementSystem {
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         }
-    }
-    public static List<Vehicle> loadVehiclesFromFile(String filePath, List<Ports> portsList) throws IOException {
-        List<Vehicle> vehicleList = new ArrayList<>();
-        int maxVehicleId = 0;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                Vehicle vehicle;
-                Ports currentPort = findPortById(portsList, data[5]);
-                if ("Truck".equals(data[6])) {
-                    vehicle = new Truck(data, currentPort);
-                } else {
-                    vehicle = new Ship(data, currentPort);
-                }
-                vehicleList.add(vehicle);
-
-                // Extract the vehicle ID number and find the maximum ID number
-                int vehicleIdNumber = Integer.parseInt(data[0].substring(2));
-                maxVehicleId = Math.max(maxVehicleId, vehicleIdNumber);
-            }
-        }
-
-        // Set the vehicleCounter in the Vehicle class to the highest ID number found
-        Vehicle.setVehicleCounter(maxVehicleId);
-
-        return vehicleList;
     }
 }

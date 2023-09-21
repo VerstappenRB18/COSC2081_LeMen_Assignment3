@@ -231,10 +231,6 @@ public class Container {
         }
     }
 
-    public String toCSVFormat() {
-        // Assuming Container has fields id, weight, and type
-        return id + "," + weight + "," + type;
-    }
     public static void updateContainer(ArrayList<String> arrayList, Scanner input) {
         arrayList.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -349,10 +345,6 @@ public class Container {
         }
         return containerList;
     }
-
-
-
-
 
     @Override
     public String toString() {

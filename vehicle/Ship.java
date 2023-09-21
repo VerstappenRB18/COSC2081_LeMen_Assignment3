@@ -16,16 +16,6 @@ public class Ship extends Vehicle {
         this.currentPort = currentPort;
     }
 
-    private Ports findPortById(List<Ports> portsList, String id) {
-        for (Ports port : portsList) {
-            if (port.getId().equals(id)) {
-                return port;
-            }
-        }
-        return null;
-    }
-
-
 
     public Ship(String name, double carryingCapacity, double fuelCapacity, double currentFuel, Ports currentPort) {
         this.id = generateVehicleId();
@@ -37,26 +27,7 @@ public class Ship extends Vehicle {
     }
 
 
-
-
-    @Override
-    public String toCSVFormat() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(id).append(",")
-                .append(name).append(",")
-                .append(carryingCapacity).append(",")
-                .append(fuelCapacity).append(",")
-                .append(currentFuel).append(",")
-                .append(currentPort.getId()).append(",")
-                .append(this.getClass().getSimpleName()).append(",") // Add vehicle type
-                .append(getContainersCSV()); // Add containers CSV
-
-        return sb.toString();
-    }
-
-
-
-    public static Ship createVehicle(Scanner input, Ports currentPortForShip, List<Ports> portsList) {
+    public static Ship createVehicle(Scanner input, Ports currentPortForShip) {
         System.out.print("Please enter the Ship's name: ");
         String name = input.next();
 
@@ -87,7 +58,7 @@ public class Ship extends Vehicle {
             return null;
         }
         Ports currentPortForShip = portsList.get(portIndexForShip);
-        Vehicle newShip = Ship.createVehicle(input, currentPortForShip, portsList);
+        Vehicle newShip = Ship.createVehicle(input, currentPortForShip);
 
         // Save the new truck details to the vehicles.csv file
         try {

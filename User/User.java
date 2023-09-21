@@ -12,7 +12,7 @@ public class User {
         private UserRole userRole;
 
         private static List<User> userList;
-    enum UserRole {
+    public enum UserRole {
         ADMIN,
         MANAGER,
     }
@@ -37,7 +37,7 @@ public class User {
         this.password = password;
     }
 
-    public Enum getUserRole() {
+    public UserRole getUserRole() {
         return userRole;
     }
 
@@ -52,6 +52,7 @@ public class User {
     public void setUserList(List<User> userList) {
         this.userList = userList;
     }
+    private static String currentUserRole;
 
 
     public static boolean findUserByUsername(String username, List<User> userList) {
@@ -73,6 +74,9 @@ public class User {
         return false;
     }
 
+    public static void debugger(String currentUserRole){
+        System.out.println("cUserRole is " + currentUserRole);
+    }
 
     private static void login(Scanner scanner, List<User> userList) {
         System.out.println("\nPlease enter your username:");
@@ -94,7 +98,8 @@ public class User {
         if (user != null) {
             // Successful login
             System.out.println("Login successful! Welcome, " + user.getUsername() + " (" + user.getUserRole() + ")\n");
-//        menu(scanner);
+            currentUserRole = user.getUserRole().toString();
+//          menu(scanner);
         } else {
             // Invalid credentials
             System.out.println("Incorrect username or password. Please try again.");
@@ -119,18 +124,6 @@ public class User {
     }
 
 
-
-
-    private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "admin123";
-
-    private static final String PORT_MANAGER_USERNAME = "manager";
-    private static final String PORT_MANAGER_PASSWORD = "manager123";
-
-    private static final String[] PORTS = {"Port A", "Port B", "Port C", "Port D"};
-    private static final String[] VEHICLES = {"Vehicle 1", "Vehicle 2", "Vehicle 3", "Vehicle 4"};
-    private static final String[] CONTAINERS = {"Container 1", "Container 2", "Container 3", "Container 4"};
-
     public static void main(String[] args) {
         try {
             userList = User.readFromFile("user.txt");
@@ -142,7 +135,7 @@ public class User {
         System.out.println("Welcome to the user system!");
 
         int choice;
-        do {
+         {
             System.out.println("\nPlease choose an option:");
             System.out.println("1. Login");
             System.out.println("2. Exit");
@@ -159,9 +152,10 @@ public class User {
                     System.out.println("Invalid choice. Please try again.");
                     break;
             }
-        } while(choice != 2);
+        }
 
         scanner.close();
+        debugger(currentUserRole);
     }
 
 
