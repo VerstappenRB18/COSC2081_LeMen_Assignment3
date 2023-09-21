@@ -12,7 +12,7 @@ public class User {
         private UserRole userRole;
 
         private static List<User> userList;
-    enum UserRole {
+    public enum UserRole {
         ADMIN,
         MANAGER,
     }
@@ -37,7 +37,7 @@ public class User {
         this.password = password;
     }
 
-    public Enum getUserRole() {
+    public UserRole getUserRole() {
         return userRole;
     }
 

@@ -1,14 +1,13 @@
 package vehicle;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import container.Container;
 import ports.Ports;
 import trip.Trip;
 
 import static trip.Trip.findVehicleById;
+import static vehicle.Main.findPortById;
 
 public abstract class Vehicle {
     protected static int vehicleCounter = 0;
@@ -305,5 +304,34 @@ public abstract class Vehicle {
                 }
             }
         }
+    }
+
+    public static List<Vehicle> loadVehiclesFromFile(String filePath, List<Ports> portsList) throws IOException {
+        List<Vehicle> vehicleList = new ArrayList<>();
+        int maxVehicleId = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                Vehicle vehicle;
+                Ports currentPort = findPortById(portsList, data[5]);
+                if ("Truck".equals(data[6])) {
+                    vehicle = new Truck(data, currentPort);
+                } else {
+                    vehicle = new Ship(data, currentPort);
+                }
+                vehicleList.add(vehicle);
+
+                // Extract the vehicle ID number and find the maximum ID number
+                int vehicleIdNumber = Integer.parseInt(data[0].substring(2));
+                maxVehicleId = Math.max(maxVehicleId, vehicleIdNumber);
+            }
+        }
+
+        // Set the vehicleCounter in the Vehicle class to the highest ID number found
+        Vehicle.setVehicleCounter(maxVehicleId);
+
+        return vehicleList;
     }
 }

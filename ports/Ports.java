@@ -381,7 +381,6 @@ public class Ports {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (Ports port : portsList) {
                 writer.write(String.format("%s,%s,%.2f,%.2f,%.2f,%b%n", port.getId(), port.getName(), port.getLatitude(), port.getLongitude(), port.getStoringCapacity(), port.isLandingAbility()));
-                // You'll want to extend this to include the other attributes of a Port
             }
         }
     }
