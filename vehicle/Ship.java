@@ -27,7 +27,7 @@ public class Ship extends Vehicle {
     }
 
 
-    public static Ship createVehicle(Scanner input, Ports currentPortForShip, List<Ports> portsList) {
+    public static Ship createVehicle(Scanner input, Ports currentPortForShip) {
         System.out.print("Please enter the Ship's name: ");
         String name = input.next();
 
@@ -58,7 +58,7 @@ public class Ship extends Vehicle {
             return null;
         }
         Ports currentPortForShip = portsList.get(portIndexForShip);
-        Vehicle newShip = Ship.createVehicle(input, currentPortForShip, portsList);
+        Vehicle newShip = Ship.createVehicle(input, currentPortForShip);
 
         // Save the new truck details to the vehicles.csv file
         try {

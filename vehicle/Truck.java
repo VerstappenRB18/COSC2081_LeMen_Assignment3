@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.io.*;
 
-import container.Container;
 import ports.Ports;
 
 public class Truck extends Vehicle {
@@ -75,35 +74,20 @@ public class Truck extends Vehicle {
 
 
     public String toCSVFormat() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(id).append(",")
-                .append(name).append(",")
-                .append(carryingCapacity).append(",")
-                .append(fuelCapacity).append(",")
-                .append(currentFuel).append(",")
-                .append(currentPort.getId()).append(",")
-                .append(this.getClass().getSimpleName()).append(",") // Add vehicle type
-                .append(truckType.name()).append(",") // Add truck type
-                .append(getContainersCSV()); // Add containers CSV
 
-        return sb.toString();
+        return id + "," +
+                name + "," +
+                carryingCapacity + "," +
+                fuelCapacity + "," +
+                currentFuel + "," +
+                currentPort.getId() + "," +
+                this.getClass().getSimpleName() + "," + // Add vehicle type
+                truckType.name() + "," + // Add truck type
+                getContainersCSV();
     }
 
 
-    String getContainersCSV() {
-        StringBuilder sb = new StringBuilder();
-        for (Container container : containers) {
-            sb.append(container.getId()).append(";");
-        }
-        // Remove the last semicolon to avoid having an extra semicolon at the end
-        if (sb.length() > 0) {
-            sb.setLength(sb.length() - 1);
-        }
-        return sb.toString();
-    }
-
-
-    public static Truck createVehicle(Scanner input, Ports currentPortForTruck, List<Ports> portsList) {
+    public static Truck createVehicle(Scanner input, Ports currentPortForTruck) {
         System.out.print("Please enter the Truck's name: ");
         String name = input.next();
 
@@ -142,7 +126,7 @@ public class Truck extends Vehicle {
             return null;
         }
         Ports currentPortForTruck = portsList.get(portIndexForTruck);
-        Vehicle newTruck = Truck.createVehicle(input, currentPortForTruck, portsList);
+        Vehicle newTruck = Truck.createVehicle(input, currentPortForTruck);
 
         // Save the new truck details to the vehicles.csv file
         try {
