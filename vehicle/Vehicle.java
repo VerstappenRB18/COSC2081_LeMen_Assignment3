@@ -197,39 +197,27 @@ public abstract class Vehicle {
 
 
     public String toCSVFormat() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(id).append(",")
-                .append(name).append(",")
-                .append(carryingCapacity).append(",")
-                .append(fuelCapacity).append(",")
-                .append(currentFuel).append(",")
-                .append(currentPort.getId()).append(",")
-                .append(this.getClass().getSimpleName()); // Add vehicle type
 
-        // Add container IDs
-        sb.append(",");
+        return id + "," +
+                name + "," +
+                carryingCapacity + "," +
+                fuelCapacity + "," +
+                currentFuel + "," +
+                currentPort.getId() + "," +
+                this.getClass().getSimpleName();
+    }
+
+    public String getContainersCSV() {
+        StringBuilder sb = new StringBuilder();
         for (Container container : containers) {
             sb.append(container.getId()).append(";");
         }
         if (!containers.isEmpty()) {
             sb.setLength(sb.length() - 1); // Remove the last semicolon
         }
-
         return sb.toString();
     }
 
-
-    String getContainersCSV() {
-        StringBuilder sb = new StringBuilder();
-        for (Container container : containers) {
-            sb.append(container.getId()).append(";");
-        }
-        // Remove the last semicolon to avoid having an extra semicolon at the end
-        if (!sb.isEmpty()) {
-            sb.setLength(sb.length() - 1);
-        }
-        return sb.toString();
-    }
 
 
     public double calculateDailyFuelConsumption(double dailyDistance) {

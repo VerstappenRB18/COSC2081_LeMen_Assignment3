@@ -171,4 +171,22 @@ public class Truck extends Vehicle {
         }
         return null;
     }
+
+    @Override
+    public String toCSVFormat() {
+        StringBuilder sb = new StringBuilder(super.toCSVFormat()); // Call the parent class's toCSVFormat method
+        sb.append(",").append(this.truckType); // Append the truckType
+
+        String containersCSV = super.getContainersCSV();
+
+        if (containersCSV.isEmpty()) {
+            sb.append(","); // Add a comma at the end if there are no containers
+        } else {
+            sb.append(",").append(containersCSV); // Add the containers at the end
+        }
+
+        return sb.toString();
+    }
+
+
 }

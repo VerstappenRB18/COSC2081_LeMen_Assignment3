@@ -8,16 +8,18 @@ import java.io.IOException;
 import java.util.*;
 
 public class User {
-        private String username;
-        private String password;
-        private UserRole userRole;
-        private Ports portId;
+    private String username;
+    private String password;
+    private UserRole userRole;
+    private Ports portId;
 
-        private static List<User> userList;
+    private static List<User> userList;
+
     public enum UserRole {
         ADMIN,
         MANAGER,
     }
+
     public User(String username, String password, UserRole userRole, Ports portId) {
         this.username = username;
         this.password = password;
@@ -36,13 +38,14 @@ public class User {
     public UserRole getUserRole() {
         return userRole;
     }
+
     private static String currentUserRole;
 
     public static User attemptLogin(Scanner scanner, List<User> userList) {
-        System.out.print("\nPlease enter your username:");
+        System.out.print("\nPlease enter your username: ");
         String username = scanner.next();
 
-        System.out.print("Please enter your password:");
+        System.out.print("Please enter your password: ");
         String password = scanner.next();
 
         // Find user by username and password
@@ -58,8 +61,6 @@ public class User {
         System.out.println("Incorrect username or password. Please try again.");
         return null;
     }
-
-
 
 
     public static List<User> readFromFile(String filename, List<Ports> portsList) throws IOException {
@@ -98,7 +99,7 @@ public class User {
         }
         return userList;
     }
-<<<<<<< Updated upstream
+
 
     public static Ports findPortById(List<Ports> portsList, String portId) {
         for (Ports port : portsList) {
@@ -112,9 +113,4 @@ public class User {
     public Ports getPortId() {
         return portId;
     }
-
-
-=======
->>>>>>> Stashed changes
 }
-

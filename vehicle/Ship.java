@@ -143,4 +143,20 @@ public class Ship extends Vehicle {
             System.out.println("Ship not found.");
         }
     }
+
+    @Override
+    public String toCSVFormat() {
+        StringBuilder sb = new StringBuilder(super.toCSVFormat());
+
+        String containersCSV = super.getContainersCSV();
+
+        if (containersCSV.isEmpty()) {
+            sb.append(",");
+        } else {
+            sb.append(",").append(containersCSV);
+        }
+
+        return sb.toString();
+    }
+
 }

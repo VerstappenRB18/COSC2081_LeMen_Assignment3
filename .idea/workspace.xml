@@ -5,53 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
-<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trips.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trips.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user.txt" beforeDir="false" afterPath="$PROJECT_DIR$/user.txt" afterDir="false" />
-=======
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/User/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/COSC2081_LeMen_Assignment3.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/container/Container$ContainerType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/container/Container.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/containers.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/PortManagementSystem.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/Ports.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip$TripStatus.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trips.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/user.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Ship.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Truck$TruckType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Truck.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Vehicle$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Vehicle.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/user.txt" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/user.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Truck.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicle/Truck.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicles.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicles.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ports/PortManagementSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/ports/PortManagementSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trip/Trip.java" beforeDir="false" afterPath="$PROJECT_DIR$/trip/Trip.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user.txt" beforeDir="false" afterPath="$PROJECT_DIR$/user.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Menu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Ship.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Ship.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vehicle/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Truck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vehicle/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Vehicle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vehicles.csv" beforeDir="false" afterPath="$PROJECT_DIR$/vehicles.csv" afterDir="false" />
->>>>>>> Stashed changes
     </list>
     <list id="73615d9d-a151-4bd4-899d-c6f400a00c00" name="Changes by Hoang" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -107,29 +70,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "deletionFromPopupRequiresConfirmation": "false",
-    "git-widget-placeholder": "user-test",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/GitHub/COSC2081_LeMen_Assignment3",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;user-test&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/GitHub/COSC2081_LeMen_Assignment3&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\ADMIN\IdeaProjects\Final assignment\src\COSC2081_LeMen_Assignment3" />
@@ -187,12 +150,9 @@
       <workItem from="1695280751536" duration="2249000" />
       <workItem from="1695348485133" duration="2989000" />
       <workItem from="1695373020592" duration="3807000" />
-<<<<<<< Updated upstream
       <workItem from="1695380575914" duration="1869000" />
-=======
       <workItem from="1695380575914" duration="352000" />
       <workItem from="1695381786719" duration="8161000" />
->>>>>>> Stashed changes
     </task>
     <task id="LOCAL-00001" summary="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
       <option name="closed" value="true" />
@@ -289,13 +249,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-<<<<<<< Updated upstream
-=======
     <ignored-roots>
       <path value="$PROJECT_DIR$/User" />
     </ignored-roots>
     <MESSAGE value="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java" />
->>>>>>> Stashed changes
     <MESSAGE value="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java&#10;&#10;This is the newest code, force pull this before doing anything else!" />
     <MESSAGE value="Finished the CRUD and connect containers for vehicles" />
     <MESSAGE value="Implement User login and changes to class attributes" />
