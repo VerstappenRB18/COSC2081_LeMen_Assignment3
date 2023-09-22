@@ -78,7 +78,7 @@ public class User {
         System.out.println("cUserRole is " + currentUserRole);
     }
 
-    private static void login(Scanner scanner, List<User> userList) {
+    public static User attemptLogin(Scanner scanner, List<User> userList) {
         System.out.println("\nPlease enter your username:");
         String username = scanner.next();
 
@@ -86,25 +86,16 @@ public class User {
         String password = scanner.next();
 
         // Find user by username and password
-        User user = null;
         for (User u : userList) {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
-                user = u;
-                System.out.println(user.getUserRole());
-                break;
+                System.out.println("Login successful! Welcome, " + u.getUsername() + " (" + u.getUserRole() + ")\n");
+                return u;
             }
         }
-//hello
-        if (user != null) {
-            // Successful login
-            System.out.println("Login successful! Welcome, " + user.getUsername() + " (" + user.getUserRole() + ")\n");
-            currentUserRole = user.getUserRole().toString();
-//          menu(scanner);
-        } else {
-            // Invalid credentials
-            System.out.println("Incorrect username or password. Please try again.");
-        }
+        System.out.println("Incorrect username or password. Please try again.");
+        return null;
     }
+
 
 
     public static List<User> readFromFile(String filename) throws IOException {
@@ -124,50 +115,38 @@ public class User {
     }
 
 
-    public static void main(String[] args) {
-        try {
-            userList = User.readFromFile("user.txt");
-        } catch (IOException e) {
-            System.err.println("Error loading user from file: " + e.getMessage());
-        }
-        System.out.println(userList);
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Welcome to the user system!");
-
-        int choice;
-         {
-            System.out.println("\nPlease choose an option:");
-            System.out.println("1. Login");
-            System.out.println("2. Exit");
-            choice = scanner.nextInt();
-
-            switch(choice) {
-                case 1:
-                    login(scanner, userList);
-                    break;
-                case 2:
-                    System.out.println("Goodbye!");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-                    break;
-            }
-        }
-
-        scanner.close();
-        debugger(currentUserRole);
-    }
-
-
-//    private static void menu(Scanner scanner) {
+//    public static void main(String[] args) {
+//        try {
+//            userList = User.readFromFile("user.txt");
+//        } catch (IOException e) {
+//            System.err.println("Error loading user from file: " + e.getMessage());
+//        }
+//        System.out.println(userList);
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Welcome to the user system!");
+//
 //        int choice;
-//        while (true){
-//            System.out.println("Please choose an option:");
-//            System.out.println("1. Add entity");
-//            System.out.println("2. Remove entity");
-//            System.out.println("3. View information");
-//            System.out.println("4. Modify information");
-//            System.out.println("5. Logout");
-//}
+//         {
+//            System.out.println("\nPlease choose an option:");
+//            System.out.println("1. Login");
+//            System.out.println("2. Exit");
+//            choice = scanner.nextInt();
+//
+//            switch(choice) {
+//                case 1:
+//                    login(scanner, userList);
+//                    break;
+//                case 2:
+//                    System.out.println("Goodbye!");
+//                    break;
+//                default:
+//                    System.out.println("Invalid choice. Please try again.");
+//                    break;
+//            }
+//        }
+//
+//        scanner.close();
+//        debugger(currentUserRole);
+//    }
 }
 
