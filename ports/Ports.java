@@ -372,11 +372,6 @@ public class Ports {
     }
 
 
-
-
-
-
-
     public static void saveAllToFile(String filename, List<Ports> portsList) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (Ports port : portsList) {

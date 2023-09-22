@@ -4,10 +4,7 @@ import ports.Ports;
 import container.Container;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Menu {
     public static void main(String[] args) throws IOException {
@@ -37,7 +34,8 @@ public class Menu {
         }
 
         while (true) {
-            System.out.println("Menu:");
+            try {
+                System.out.println("Menu:");
             System.out.println("1. Create a new Truck");
             System.out.println("2. Create a new Ship");
             System.out.println("3. Add a Container to a Vehicle");
@@ -120,6 +118,12 @@ public class Menu {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 10.");
+                scanner.next(); // Clear the invalid input
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred: " + e.getMessage());
+            }
         }
     }
 
@@ -151,37 +155,35 @@ public class Menu {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
-                Vehicle vehicle;
+                if (data.length < 7) {
+                    System.err.println("Insufficient data in line: " + line);
+                    continue;
+                }
                 Ports currentPort = findPortById(portsList, data[5]);
+                if (currentPort == null) {
+                    System.err.println("Invalid port ID in line: " + line);
+                    continue;
+                }
+                Vehicle vehicle = null;
                 if ("Truck".equals(data[6])) {
                     vehicle = new Truck(data, currentPort);
-                } else {
+                } else if ("Ship".equals(data[6])) {
                     vehicle = new Ship(data, currentPort);
+                } else {
+                    System.err.println("Invalid vehicle type in line: " + line);
+                    continue;
                 }
 
-                System.out.println(Arrays.toString(data));
-
-                // Check if container IDs exist in the CSV
+                // Load containers
                 String[] containerIds;
-                if ("Truck".equals(data[6])) {
-                    if (data.length > 8) {
-                        containerIds = data[8].split(";");
-                    } else {
-                        containerIds = new String[0]; // No containers
-                    }
-                } else { // It's a Ship
-                    if (data.length > 7) {
-                        containerIds = data[7].split(";");
-                    } else {
-                        containerIds = new String[0]; // No containers
-                    }
-                }
-
-                for (String id : containerIds) {
-                    Container container = Vehicle.findContainerById(containerList, id);
-                    System.out.println("Here's the containers " + container + " for vehicle " + vehicle);
-                    if (container != null) {
-                        vehicle.getContainers().add(container);
+                int containerIndex = "Truck".equals(data[6]) ? 8 : 7;
+                if (data.length > containerIndex) {
+                    containerIds = data[containerIndex].split(";");
+                    for (String id : containerIds) {
+                        Container container = Vehicle.findContainerById(containerList, id);
+                        if (container != null) {
+                            vehicle.getContainers().add(container);
+                        }
                     }
                 }
 
@@ -194,6 +196,7 @@ public class Menu {
 
         return vehicleList;
     }
+
 
 
 
