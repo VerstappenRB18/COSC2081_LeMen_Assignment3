@@ -29,6 +29,7 @@ public class Menu {
         }
         try {
             vehicleList = loadVehiclesFromFile("vehicles.csv", portsList, containerList);
+            Vehicle.updateVehicleCounters(vehicleList);
         for (Vehicle vehicle : vehicleList) {
             System.out.println("Loaded containers for vehicle " + vehicle.getId() + ": " + vehicle.getContainers());}
         } catch (IOException e) {
@@ -47,7 +48,7 @@ public class Menu {
             System.out.println("8. Calculate daily fuel consumption for a vehicle");
             System.out.println("9. Refuel vehicle");
             System.out.println("10. Exit");
-            System.out.print("Choose an option (1-9): ");
+            System.out.print("Choose an option (1-10): ");
             int choice = scanner.nextInt();
 
             switch (choice) {

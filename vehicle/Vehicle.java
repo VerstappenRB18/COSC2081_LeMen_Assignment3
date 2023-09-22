@@ -32,8 +32,27 @@ public abstract class Vehicle {
         return "v-" + (++vehicleCounter); // fallback, should not be reached
     }
 
-    public static int getVehicleCounter() {
-        return vehicleCounter;
+    public static void updateVehicleCounters(List<Vehicle> vehicleList) {
+        int maxShipId = 0;
+        int maxTruckId = 0;
+
+        for (Vehicle vehicle : vehicleList) {
+            String vehicleId = vehicle.getId();
+            if (vehicle instanceof Ship) {
+                int shipIdNumber = Integer.parseInt(vehicleId.replace("sh-", ""));
+                if (shipIdNumber > maxShipId) {
+                    maxShipId = shipIdNumber;
+                }
+            } else if (vehicle instanceof Truck) {
+                int truckIdNumber = Integer.parseInt(vehicleId.replace("tr-", ""));
+                if (truckIdNumber > maxTruckId) {
+                    maxTruckId = truckIdNumber;
+                }
+            }
+        }
+
+        shipCounter = maxShipId;
+        truckCounter = maxTruckId;
     }
 
     public static void setVehicleCounter(int vehicleCounter) {
@@ -41,46 +60,7 @@ public abstract class Vehicle {
     }
     private static final double BASE_SHIP_CONSUMPTION = 1.0;
     private static final double BASE_TRUCK_CONSUMPTION = 0.5;
-    protected double baseFuelConsumptionRate;
 
-    public double getFuelCapacity() {
-        return fuelCapacity;
-    }
-
-    public double getCurrentFuel() {
-        return currentFuel;
-    }
-
-    public void setCurrentFuel(double currentFuel) {
-        this.currentFuel = currentFuel;
-    }
-
-    public static Vehicle createVehicle(Scanner input, List<Ports> portsList) {
-        System.out.print("Please enter the Vehicle's name: ");
-        String name = input.next();
-
-        System.out.print("Please enter the Vehicle's carrying capacity: ");
-        double carryingCapacity = input.nextDouble();
-
-        System.out.print("Please enter the Vehicle's fuel capacity: ");
-        double fuelCapacity = input.nextDouble();
-
-        System.out.print("Please enter the Vehicle's current fuel level: ");
-        double currentFuel = input.nextDouble();
-
-        // Select a current port
-        System.out.println("Available ports:");
-        for (int i = 0; i < portsList.size(); i++) {
-            System.out.println((i + 1) + ". " + portsList.get(i).getId()); // Assuming Ports class has getId() method
-        }
-        System.out.print("Select a port by entering its number: ");
-        int portIndex = input.nextInt() - 1; // Subtract 1 to convert from 1-based to 0-based index
-        Ports currentPort = portsList.get(portIndex);
-
-        // Here we return null because we cannot instantiate an abstract class
-        // This method should be overridden in the subclasses (Ship and Truck) to return a new instance of them
-        return null;
-    }
 
 
     public static boolean addContainer(Scanner scanner, List<Vehicle> vehicleList, List<Container> containerList) {
@@ -137,9 +117,6 @@ public abstract class Vehicle {
         }
     }
 
-    public void setCurrentPort(Ports currentPort) {
-        this.currentPort = currentPort;
-    }
 
     public Ports getCurrentPort() {
         return currentPort;
@@ -149,9 +126,7 @@ public abstract class Vehicle {
         return containerByType;
     }
 
-    public int getTotalContainerCount() {
-        return containers.size();
-    }
+
 
     public boolean unloadContainer(Container container, Ports port) {
         if (containers.remove(container)) {
