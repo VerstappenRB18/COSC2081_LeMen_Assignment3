@@ -25,40 +25,14 @@ public class User {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public UserRole getUserRole() {
         return userRole;
     }
-
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
-
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
     private static String currentUserRole;
-
-
-
-    public static void debugger(String currentUserRole){
-        System.out.println("cUserRole is " + currentUserRole);
-    }
 
     public static User attemptLogin(Scanner scanner, List<User> userList) {
         System.out.println("\nPlease enter your username:");
