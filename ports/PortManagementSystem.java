@@ -3,6 +3,7 @@ package ports;
 import trip.Trip;
 import vehicle.*;
 import container.Container;
+import User.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PortManagementSystem {
-    public static void main(String[] args) {
+    public static void main(String[] args, User loggedInUser) {
         Scanner scanner = new Scanner(System.in);
         List<Ports> portsList = new ArrayList<>();
         List<Vehicle> vehicleList = new ArrayList<>();
@@ -46,14 +47,26 @@ public class PortManagementSystem {
                 int choice = scanner.nextInt();
 
                 switch (choice) {
-                    case 1 -> Ports.createPort(portsList, Ports.filename);
+                    case 1 -> {
+                        if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                            System.out.println("You are not authorized to create a new port.");
+                        } else {
+                            Ports.createPort(portsList, Ports.filename);
+                        }
+                    }
                     case 2 -> {
                         for (Ports port : portsList) {
                             System.out.println(port);
                         }
                     }
                     case 3 -> Ports.updatePort(portsList, Ports.filename);
-                    case 4 -> Ports.deletePort(portsList, Ports.filename);
+                    case 4 -> {
+                        if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                            System.out.println("You are not authorized to delete a port.");
+                        } else {
+                            Ports.deletePort(portsList, Ports.filename);
+                        }
+                    }
                     case 5 -> Trip.createTrip(tripList, vehicleList, portsList, Trip.filename);
                     case 6 -> Trip.viewAllTrips(tripList);
                     case 7 -> Trip.updateTrip(tripList, vehicleList, portsList, Trip.filename);

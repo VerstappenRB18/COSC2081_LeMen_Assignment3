@@ -2,12 +2,13 @@ package vehicle;
 
 import ports.Ports;
 import container.Container;
+import User.*;
 
 import java.io.*;
 import java.util.*;
 
 public class Menu {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args, User loggedInUser) throws IOException {
         Scanner scanner = new Scanner(System.in);
         List<Ports> portsList = new ArrayList<>();
         List<Vehicle> vehicleList = new ArrayList<>();
@@ -45,16 +46,27 @@ public class Menu {
             System.out.println("7. Display all Containers");
             System.out.println("8. Calculate daily fuel consumption for a vehicle");
             System.out.println("9. Refuel vehicle");
-            System.out.println("10. Exit");
-            System.out.print("Choose an option (1-10): ");
+            System.out.println("10. Delete a vehicle");
+            System.out.println("11. Modify Truck");
+            System.out.println("12. Modify Ship");
+            System.out.println("13. Exit");
+            System.out.print("Choose an option (1-13): ");
             int choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
-                    vehicleList.add(Truck.addVehicle(scanner, portsList));
+                    if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                        System.out.println("You are not authorized to create a new Truck.");
+                    } else {
+                        vehicleList.add(Truck.addVehicle(scanner, portsList));
+                    }
                     break;
                 case 2:
-                    vehicleList.add(Ship.addVehicle(scanner, portsList));
+                    if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                        System.out.println("You are not authorized to create a new Ship.");
+                    } else {
+                        vehicleList.add(Ship.addVehicle(scanner, portsList));
+                    }
                     break;
                 case 3:
                     Vehicle.addContainer(scanner, vehicleList, containerList);
@@ -111,6 +123,19 @@ public class Menu {
                     Vehicle.refuel(scanner, vehicleList);
                     break;
                 case 10:
+                    if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                        System.out.println("You are not authorized to delete the vehicle.");
+                    } else {
+                        Vehicle.deleteVehicle(vehicleList, scanner, "vehicles.csv");
+                    }
+                    break;
+                case 11:
+                    Truck.modifyTruckAttributes(vehicleList, scanner);
+                    break;
+                case 12:
+                    Ship.modifyShipAttributes(vehicleList, scanner);
+                    break;
+                case 13:
                     System.out.println("Saving data...");
                     saveAllData(vehicleList, "vehicles.csv");
                     System.out.println("Exiting...");
@@ -196,8 +221,6 @@ public class Menu {
 
         return vehicleList;
     }
-
-
 
 
     public static Ports findPortById(List<Ports> portsList, String id) {

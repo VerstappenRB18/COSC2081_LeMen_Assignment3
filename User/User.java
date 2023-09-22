@@ -98,6 +98,7 @@ public class User {
         }
         return userList;
     }
+<<<<<<< Updated upstream
 
     public static Ports findPortById(List<Ports> portsList, String portId) {
         for (Ports port : portsList) {
@@ -113,5 +114,7 @@ public class User {
     }
 
 
+=======
+>>>>>>> Stashed changes
 }
 

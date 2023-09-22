@@ -314,7 +314,9 @@ public class Trip {
     public static void listTripsFromDayAToDayB(List<Trip> tripList) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        System.out.print("Please enter Day A: ");
         String startDateStr = reader.readLine();
+        System.out.print("Please enter Day B: ");
         String endDateStr = reader.readLine();
         LocalDate start = LocalDate.parse(startDateStr, formatter);
         LocalDate end = LocalDate.parse(endDateStr, formatter);

@@ -1,6 +1,7 @@
 package vehicle;
 
 import ports.Ports;
+import static trip.Trip.findVehicleById;
 
 import java.util.*;
 import java.io.*;
@@ -86,6 +87,80 @@ public class Truck extends Vehicle {
             System.err.println("An error occurred while saving to file: " + e.getMessage());
         }
         return newTruck;
+    }
+
+    public static void modifyTruckAttributes(List<Vehicle> vehicleList, Scanner scanner) {
+        System.out.print("Enter the Truck ID to modify: ");
+        String truckId = scanner.next();
+        Vehicle vehicle = findVehicleById(vehicleList, truckId);
+
+        if (vehicle instanceof Truck truckToModify) {
+            System.out.println("Which attribute would you like to modify?");
+            System.out.println("1. Name");
+            System.out.println("2. Carrying Capacity");
+            System.out.println("3. Fuel Capacity");
+            System.out.println("4. Current Fuel");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new name: ");
+                    String newName = scanner.next();
+                    truckToModify.setName(newName);
+                    break;
+                case 2:
+                    System.out.print("Enter new carrying capacity: ");
+                    double newCarryingCapacity = scanner.nextDouble();
+                    truckToModify.setCarryingCapacity(newCarryingCapacity);
+                    break;
+                case 3:
+                    System.out.print("Enter new fuel capacity: ");
+                    double newFuelCapacity = scanner.nextDouble();
+                    truckToModify.setFuelCapacity(newFuelCapacity);
+                    break;
+                case 4:
+                    double maxFuel = truckToModify.getFuelCapacity();
+                    double newCurrentFuel;
+                    do {
+                        System.out.print("Enter new current fuel (cannot exceed " + maxFuel + "): ");
+                        newCurrentFuel = scanner.nextDouble();
+                        if (newCurrentFuel > maxFuel) {
+                            System.out.println("Current fuel cannot exceed fuel capacity. Please try again.");
+                        }
+                    } while (newCurrentFuel > maxFuel);
+                    truckToModify.setCurrentFuel(newCurrentFuel);
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+            List<String> lines = new ArrayList<>();
+            try {
+                try (BufferedReader reader = new BufferedReader(new FileReader("vehicles.csv"))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String[] fields = line.split(",");
+                        if (fields[0].equals(truckId)) {
+                            // This is the line for the ship we're modifying
+                            line = truckToModify.toCSVFormat();
+                        }
+                        lines.add(line);
+                    }
+                }
+
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter("vehicles.csv"))) {
+                    for (String line : lines) {
+                        writer.write(line);
+                        writer.newLine();
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("An IO exception occurred: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Truck not found.");
+        }
     }
 
     public static Ports findPortById(List<Ports> portsList, String portId) {

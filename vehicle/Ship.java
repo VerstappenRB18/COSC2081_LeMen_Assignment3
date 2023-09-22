@@ -4,8 +4,10 @@ import ports.Ports;
 
 import java.util.*;
 import java.io.*;
+import static trip.Trip.findVehicleById;
 
 public class Ship extends Vehicle {
+
     public Ship(String[] data, Ports currentPort) {
         super();
         this.id = data[0];
@@ -66,5 +68,79 @@ public class Ship extends Vehicle {
             }
         }
         return null;
+    }
+
+    public static void modifyShipAttributes(List<Vehicle> vehicleList, Scanner scanner) {
+        System.out.print("Enter the Ship ID to modify: ");
+        String shipId = scanner.next();
+        Vehicle vehicle = findVehicleById(vehicleList, shipId);
+
+        if (vehicle instanceof Ship shipToModify) {
+            System.out.println("1. Name");
+            System.out.println("2. Carrying Capacity");
+            System.out.println("3. Fuel Capacity");
+            System.out.println("4. Current Fuel");
+            System.out.print("Which attribute would you like to modify?: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new name: ");
+                    String newName = scanner.next();
+                    shipToModify.setName(newName);
+                    break;
+                case 2:
+                    System.out.print("Enter new carrying capacity: ");
+                    double newCarryingCapacity = scanner.nextDouble();
+                    shipToModify.setCarryingCapacity(newCarryingCapacity);
+                    break;
+                case 3:
+                    System.out.print("Enter new fuel capacity: ");
+                    double newFuelCapacity = scanner.nextDouble();
+                    shipToModify.setFuelCapacity(newFuelCapacity);
+                    break;
+                case 4:
+                    double maxFuel = shipToModify.getFuelCapacity();
+                    double newCurrentFuel;
+                    do {
+                        System.out.print("Enter new current fuel (cannot exceed " + maxFuel + "): ");
+                        newCurrentFuel = scanner.nextDouble();
+                        if (newCurrentFuel > maxFuel) {
+                            System.out.println("Current fuel cannot exceed fuel capacity. Please try again.");
+                        }
+                    } while (newCurrentFuel > maxFuel);
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+
+            List<String> lines = new ArrayList<>();
+            try {
+                try (BufferedReader reader = new BufferedReader(new FileReader("vehicles.csv"))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String[] fields = line.split(",");
+                        if (fields[0].equals(shipId)) {
+                            // This is the line for the ship we're modifying
+                            line = shipToModify.toCSVFormat();
+                        }
+                        lines.add(line);
+                    }
+                }
+
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter("vehicles.csv"))) {
+                    for (String line : lines) {
+                        writer.write(line);
+                        writer.newLine();
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("An IO exception occurred: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Ship not found.");
+        }
     }
 }

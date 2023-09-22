@@ -40,10 +40,10 @@ public class Main {
         }
 
         // Display the main menu
-        displayMainMenu(scanner);
+        displayMainMenu(scanner, loggedInUser);
     }
 
-    public static void displayMainMenu(Scanner scanner) throws IOException {
+    public static void displayMainMenu(Scanner scanner, User loggedInUser) throws IOException {
         while (true) {
             try {
                 System.out.println("Please choose your desired option");
@@ -60,14 +60,14 @@ public class Main {
                 switch (option) {
                     case 1:
                         String[] portManagementArgs = {};
-                        PortManagementSystem.main(portManagementArgs);
+                        PortManagementSystem.main(portManagementArgs, loggedInUser);
                         break;
                     case 2:
                         container.Menu.displayMenu();
                         break;
                     case 3:
                         String[] vehicleMenuArgs = {};
-                        vehicle.Menu.main(vehicleMenuArgs);
+                        vehicle.Menu.main(vehicleMenuArgs, loggedInUser);
                         break;
                     case 4:
                         System.out.println("Goodbye!");

@@ -211,7 +211,7 @@ public abstract class Vehicle {
         for (Container container : containers) {
             sb.append(container.getId()).append(";");
         }
-        if (containers.size() > 0) {
+        if (!containers.isEmpty()) {
             sb.setLength(sb.length() - 1); // Remove the last semicolon
         }
 
@@ -225,7 +225,7 @@ public abstract class Vehicle {
             sb.append(container.getId()).append(";");
         }
         // Remove the last semicolon to avoid having an extra semicolon at the end
-        if (sb.length() > 0) {
+        if (!sb.isEmpty()) {
             sb.setLength(sb.length() - 1);
         }
         return sb.toString();
@@ -255,20 +255,14 @@ public abstract class Vehicle {
 
 
     private double getFuelConsumptionRate(String containerType) {
-        switch(containerType.toLowerCase()) {
-            case "dry storage":
-                return this instanceof Ship ? 3.5 : 4.6;
-            case "open top":
-                return this instanceof Ship ? 2.8 : 3.2;
-            case "open side":
-                return this instanceof Ship ? 2.7 : 3.2;
-            case "refrigerated":
-                return this instanceof Ship ? 4.5 : 5.4;
-            case "liquid":
-                return this instanceof Ship ? 4.8 : 5.3;
-            default:
-                throw new IllegalArgumentException("Unknown container type: " + containerType);
-        }
+        return switch (containerType.toLowerCase()) {
+            case "dry storage" -> this instanceof Ship ? 3.5 : 4.6;
+            case "open top" -> this instanceof Ship ? 2.8 : 3.2;
+            case "open side" -> this instanceof Ship ? 2.7 : 3.2;
+            case "refrigerated" -> this instanceof Ship ? 4.5 : 5.4;
+            case "liquid" -> this instanceof Ship ? 4.8 : 5.3;
+            default -> throw new IllegalArgumentException("Unknown container type: " + containerType);
+        };
     }
 
     public static void refuel(Scanner input, List<Vehicle> vehicleList) {
@@ -319,4 +313,56 @@ public abstract class Vehicle {
         return null;
     }
 
+    public static boolean deleteVehicle(List<Vehicle> vehicleList, Scanner scanner, String filename) throws IOException {
+        // Prompt the user for the vehicle ID
+        System.out.print("Enter the Vehicle ID to delete: ");
+        String vehicleId = scanner.next();
+
+        // Find the vehicle by its ID
+        Vehicle vehicleToDelete = null;
+        for (Vehicle vehicle : vehicleList) {
+            if (vehicle.getId().equals(vehicleId)) {
+                vehicleToDelete = vehicle;
+                break;
+            }
+        }
+
+        // If the vehicle is found, remove it from the list
+        if (vehicleToDelete != null) {
+            vehicleList.remove(vehicleToDelete);
+
+            // Write the updated list back to the file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+                for (Vehicle vehicle : vehicleList) {
+                    writer.write(vehicle.toCSVFormat() + "\n");
+                }
+            }
+
+            System.out.println("Vehicle deleted successfully.");
+            return true;
+        } else {
+            System.out.println("Vehicle not found.");
+            return false;
+        }
+    }
+
+    public double getFuelCapacity() {
+        return fuelCapacity;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCarryingCapacity(double carryingCapacity) {
+        this.carryingCapacity = carryingCapacity;
+    }
+
+    public void setFuelCapacity(double fuelCapacity) {
+        this.fuelCapacity = fuelCapacity;
+    }
+
+    public void setCurrentFuel(double currentFuel) {
+        this.currentFuel = currentFuel;
+    }
 }
