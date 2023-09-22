@@ -197,15 +197,15 @@ public abstract class Vehicle {
 
 
     public String toCSVFormat() {
-
         return id + "," +
                 name + "," +
                 carryingCapacity + "," +
                 fuelCapacity + "," +
                 currentFuel + "," +
-                currentPort.getId() + "," +
+                (currentPort != null ? currentPort.getId() : "null") + "," + // Include currentPort
                 this.getClass().getSimpleName();
     }
+
 
     public String getContainersCSV() {
         StringBuilder sb = new StringBuilder();
@@ -217,8 +217,6 @@ public abstract class Vehicle {
         }
         return sb.toString();
     }
-
-
 
     public double calculateDailyFuelConsumption(double dailyDistance) {
         double baseFuelConsumptionRate = this instanceof Ship ? BASE_SHIP_CONSUMPTION : BASE_TRUCK_CONSUMPTION;
@@ -291,15 +289,25 @@ public abstract class Vehicle {
     }
 
     public static Container findContainerById(List<Container> containerList, String id) {
-        System.out.println("Searching for container ID: " + id);
         for (Container container : containerList) {
-            System.out.println("Checking container ID: " + container.getId());
             if (container.getId().equals(id)) {
                 return container;
             }
         }
         return null;
     }
+
+    public static Vehicle findVehicleByContainerId(List<Vehicle> vehicleList, String containerId) {
+        for (Vehicle v : vehicleList) {
+            for (Container c : v.getContainers()) {
+                if (c.getId().equals(containerId)) {
+                    return v;
+                }
+            }
+        }
+        return null;
+    }
+
 
     public static boolean deleteVehicle(List<Vehicle> vehicleList, Scanner scanner, String filename) throws IOException {
         // Prompt the user for the vehicle ID

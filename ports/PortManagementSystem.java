@@ -15,7 +15,7 @@ public class PortManagementSystem {
         Scanner scanner = new Scanner(System.in);
         List<Ports> portsList = new ArrayList<>();
         List<Vehicle> vehicleList = new ArrayList<>();
-        List<Container> containerList = new ArrayList<>();
+        List<Container> containerList;
         List<Trip> tripList = new ArrayList<>();
 
         // Load ports, vehicles, containers, and trips from files

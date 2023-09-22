@@ -1,5 +1,6 @@
 package ports;
 
+import User.User;
 import container.Container;
 import trip.Trip;
 import vehicle.Ship;
@@ -173,10 +174,6 @@ public class Ports {
                 portsList.add(port);
             }
         }
-        System.out.println("Read from file: " + portsList.size() + " ports.");
-        for(Ports port : portsList) {
-            System.out.println(port.toString());
-        }
         return portsList;
     }
 
@@ -237,6 +234,25 @@ public class Ports {
 
         System.out.println("Port created successfully.");
     }
+
+    public static void displayAccessiblePorts(User loggedInUser) {
+        try {
+            List<Ports> allPorts = Ports.readFromFile("ports.csv");
+            List<Ports> accessiblePorts = Ports.filterPortsByAccess(allPorts, loggedInUser.getPortId(), loggedInUser.getUserRole());
+
+            if (accessiblePorts.isEmpty()) {
+                System.out.println("No accessible ports found.");
+                return;
+            }
+
+            for (Ports port : accessiblePorts) {
+                System.out.println(port);
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading the ports file: " + e.getMessage());
+        }
+    }
+
 
     // Method to update an existing port details
     public static void updatePort(List<Ports> portsList, String filename) throws IOException {
@@ -370,6 +386,23 @@ public class Ports {
             System.out.println("No ships found at this port.");
         }
     }
+
+    public static List<Ports> filterPortsByAccess(List<Ports> allPorts, String portId, User.UserRole userRole) {
+        List<Ports> accessiblePorts = new ArrayList<>();
+
+        if (userRole == User.UserRole.ADMIN) {
+            return allPorts; // Admin has access to all ports
+        }
+
+        for (Ports port : allPorts) {
+            if (port.getId().equals(portId)) {
+                accessiblePorts.add(port);
+            }
+        }
+
+        return accessiblePorts; // Manager has access to specific port
+    }
+
 
 
     public static void saveAllToFile(String filename, List<Ports> portsList) throws IOException {

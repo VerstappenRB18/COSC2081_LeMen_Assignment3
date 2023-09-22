@@ -21,15 +21,12 @@ public class Menu {
         }
         try {
             containerList = Container.readFromFile("containers.txt");
-            System.out.println("Available containers: " + containerList);
         } catch (IOException e) {
             System.err.println("Error loading containers from file: " + e.getMessage());
         }
         try {
             vehicleList = loadVehiclesFromFile("vehicles.csv", portsList, containerList);
             Vehicle.updateVehicleCounters(vehicleList);
-        for (Vehicle vehicle : vehicleList) {
-            System.out.println("Loaded containers for vehicle " + vehicle.getId() + ": " + vehicle.getContainers());}
         } catch (IOException e) {
             System.err.println("Error loading vehicle from file: " + e.getMessage());
         }
@@ -98,14 +95,30 @@ public class Menu {
                     break;
                 case 6:
                     for (Vehicle v : vehicleList) {
-                        System.out.println(v);
+                        if (loggedInUser.getUserRole() != User.UserRole.MANAGER ||
+                                (loggedInUser.getPortId().equals(v.getCurrentPort().getId()))) {
+                            System.out.println(loggedInUser.getPortId());
+                            System.out.println(v);
+                        }
                     }
                     break;
                 case 7:
                     for (Container c : containerList) {
-                        System.out.println(c);
+                        // Find the vehicle that this container is associated with
+                        Vehicle associatedVehicle = Vehicle.findVehicleByContainerId(vehicleList, c.getId());
+                        if (associatedVehicle == null) {
+                            continue; // Skip this container if it's not associated with any vehicle
+                        }
+
+                        // Check if the manager should see this container
+                        if (loggedInUser.getUserRole() != User.UserRole.MANAGER ||
+                                (loggedInUser.getPortId().equals(associatedVehicle.getCurrentPort().getId()))) {
+                            System.out.println(c);
+                        }
                     }
                     break;
+
+
                 case 8:
                     System.out.print("Enter Vehicle ID to calculate daily fuel consumption for: ");
                     String vehicleIdToCalculateFuel = scanner.next();

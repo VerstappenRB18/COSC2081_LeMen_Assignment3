@@ -1,7 +1,6 @@
 package User;
 import ports.Ports;
 
-import javax.sound.sampled.Port;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,16 +10,16 @@ public class User {
     private String username;
     private String password;
     private UserRole userRole;
-    private Ports portId;
+    private String portId;
 
-    private static List<User> userList;
+    public static List<User> userList;
 
     public enum UserRole {
         ADMIN,
         MANAGER,
     }
 
-    public User(String username, String password, UserRole userRole, Ports portId) {
+    public User(String username, String password, UserRole userRole, String portId) {
         this.username = username;
         this.password = password;
         this.userRole = userRole;
@@ -35,6 +34,30 @@ public class User {
         return password;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
+
+    public void setPortId(String portId) {
+        this.portId = portId;
+    }
+
+    public static void setUserList(List<User> userList) {
+        User.userList = userList;
+    }
+
+    public static void setCurrentUserRole(String currentUserRole) {
+        User.currentUserRole = currentUserRole;
+    }
+
     public UserRole getUserRole() {
         return userRole;
     }
@@ -42,6 +65,21 @@ public class User {
     private static String currentUserRole;
 
     public static User attemptLogin(Scanner scanner, List<User> userList) {
+
+        List<Ports> portsList = new ArrayList<>();
+
+        try {
+            portsList = Ports.readFromFile("ports.csv");
+        } catch (IOException e) {
+            System.err.println("Error loading ports from file: " + e.getMessage());
+        }
+
+        try {
+            userList = User.readFromFile("user.txt", portsList);
+        } catch (IOException e) {
+            System.err.println("Error loading containers from file: " + e.getMessage());
+        }
+
         System.out.print("\nPlease enter your username: ");
         String username = scanner.next();
 
@@ -53,7 +91,7 @@ public class User {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
                 System.out.println("Login successful! Welcome, " + u.getUsername() + " (" + u.getUserRole() + ")\n");
                 if (u.getPortId() != null) {  // Check if the user is managing a port
-                    System.out.println("Port Managing: " + u.getPortId().getId());  // Print the port ID
+                    System.out.println("Port Managing: " + u.getPortId());  // Print the port ID directly
                 }
                 return u;
             }
@@ -92,8 +130,8 @@ public class User {
                         continue;
                     }
                 }
-
-                User user = new User(username, password, userRole, port);  // Updated constructor
+                String portIdToUse = (port != null) ? port.getId() : null;
+                User user = new User(username, password, userRole, portIdToUse);  // Updated constructor
                 userList.add(user);
             }
         }
@@ -110,7 +148,7 @@ public class User {
         return null;
     }
 
-    public Ports getPortId() {
+    public String getPortId() {
         return portId;
     }
 }

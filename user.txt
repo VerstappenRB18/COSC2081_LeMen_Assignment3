@@ -1,2 +1,3 @@
 username,password,MANAGER,p-1
 admin,password,ADMIN
+manager,password,MANAGER,p-2
