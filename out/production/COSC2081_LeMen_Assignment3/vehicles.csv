@@ -1,5 +1,5 @@
 tr-1,tr,12.0,12.0,12.0,p-1,Truck,BASIC,c-9
-tr-2,trukc,12.0,12.0,12.0,p-1,Truck,BASIC,c-8
+tr-2,trukc,12.0,12.0,12.0,p-1,Truck,BASIC,c-8;c-9
 sh-1,shippy,12.0,12.0,12.0,p-1,Ship,c-18
 sh-2,pp,100.0,100.0,100.0,p-1,Ship,
 tr-3,RB19,2500.0,900.0,850.0,p-14,Truck,REEFER,

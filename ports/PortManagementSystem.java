@@ -33,7 +33,7 @@ public class PortManagementSystem {
         }
 
         try {
-            vehicleList = Main.loadVehiclesFromFile("vehicles.csv", portsList, containerList);
+            vehicleList = Menu.loadVehiclesFromFile("vehicles.csv", portsList, containerList);
         } catch (IOException e) {
             System.err.println("Error loading vehicles from file: " + e.getMessage());
         }
