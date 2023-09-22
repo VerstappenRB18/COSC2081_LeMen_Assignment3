@@ -55,24 +55,6 @@ public class User {
     private static String currentUserRole;
 
 
-    public static boolean findUserByUsername(String username, List<User> userList) {
-        for (User user : userList) {
-            if (user.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    public static boolean findUserByPassword(String password, List<User> userList) {
-        for (User user : userList) {
-            if (user.getPassword().equals(password)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public static void debugger(String currentUserRole){
         System.out.println("cUserRole is " + currentUserRole);
