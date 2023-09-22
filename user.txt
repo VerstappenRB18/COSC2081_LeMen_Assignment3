@@ -1,3 +1,3 @@
-username,password,MANAGER
+username,password,MANAGER,p-1
 admin,password,ADMIN
 username,password,ADMIN

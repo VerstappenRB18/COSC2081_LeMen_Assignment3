@@ -2,6 +2,7 @@ import ports.PortManagementSystem;
 import container.Container;
 import container.Menu;
 import User.User;
+import ports.Ports;
 import vehicle.*;
 
 import java.io.*;
@@ -12,9 +13,16 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Thread.setDefaultUncaughtExceptionHandler(new GlobalExceptionHandler());
         Scanner scanner = new Scanner(System.in);
+        List<Ports> portsList = new ArrayList<>();
+
+        try {
+            portsList = Ports.readFromFile("ports.csv");
+        } catch (IOException e) {
+            System.err.println("Error loading ports from file: " + e.getMessage());
+        }
 
         // Load user data
-        List<User> userList = User.readFromFile("user.txt");
+        List<User> userList = User.readFromFile("user.txt", portsList);
 
         System.out.println("COSC2081 GROUP ASSIGNMENT");
         System.out.println("CONTAINER PORT MANAGEMENT SYSTEM");

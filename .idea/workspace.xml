@@ -5,27 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea6743fb-9ea8-4c4e-a896-2362f776c3be" name="Changes" comment="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
-      <change afterPath="$PROJECT_DIR$/GlobalExceptionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/container/Container.java" beforeDir="false" afterPath="$PROJECT_DIR$/container/Container.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/container/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/container/Menu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/container/Container$ContainerType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/container/Container$ContainerType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/container/Container.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/container/Container.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/PortManagementSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/PortManagementSystem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/Ports.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/ports/Ports.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip$TripStatus.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip$TripStatus.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trip/Trip.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trips.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/trips.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicles.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COSC2081_LeMen_Assignment3/vehicles.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ports/PortManagementSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/ports/PortManagementSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ports/Ports.java" beforeDir="false" afterPath="$PROJECT_DIR$/ports/Ports.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trip/Trip.java" beforeDir="false" afterPath="$PROJECT_DIR$/trip/Trip.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trips.csv" beforeDir="false" afterPath="$PROJECT_DIR$/trips.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Menu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Ship.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Ship.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vehicle/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/vehicle/Truck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user.txt" beforeDir="false" afterPath="$PROJECT_DIR$/user.txt" afterDir="false" />
     </list>
     <list id="73615d9d-a151-4bd4-899d-c6f400a00c00" name="Changes by Hoang" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -196,7 +180,7 @@
       <workItem from="1695280751536" duration="2249000" />
       <workItem from="1695348485133" duration="2989000" />
       <workItem from="1695373020592" duration="3807000" />
-      <workItem from="1695380575914" duration="352000" />
+      <workItem from="1695380575914" duration="1869000" />
     </task>
     <task id="LOCAL-00001" summary="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java">
       <option name="closed" value="true" />
@@ -293,11 +277,11 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java" />
     <MESSAGE value="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java&#10;&#10;This is the newest code, force pull this before doing anything else!" />
     <MESSAGE value="Finished the CRUD and connect containers for vehicles" />
     <MESSAGE value="Implement User login and changes to class attributes" />
     <MESSAGE value="Debug the container and vehicle loader method to work properly" />
-    <option name="LAST_COMMIT_MESSAGE" value="Debug the container and vehicle loader method to work properly" />
+    <MESSAGE value="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Restructure Vehicle into Vehicle.java, Ship.java, and Truck.java&#10;Revise Trip.java and Ports.java" />
   </component>
 </project>
