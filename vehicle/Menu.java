@@ -34,131 +34,128 @@ public class Menu {
         while (true) {
             try {
                 System.out.println("Menu:");
-            System.out.println("1. Create a new Truck");
-            System.out.println("2. Create a new Ship");
-            System.out.println("3. Add a Container to a Vehicle");
-            System.out.println("4. Unload a Container from a Vehicle");
-            System.out.println("6. Display all Vehicles");
-            System.out.println("7. Display all Containers");
-            System.out.println("8. Calculate daily fuel consumption for a vehicle");
-            System.out.println("9. Refuel vehicle");
-            System.out.println("10. Delete a vehicle");
-            System.out.println("11. Modify Truck");
-            System.out.println("12. Modify Ship");
-            System.out.println("13. Exit");
-            System.out.print("Choose an option (1-13): ");
-            int choice = scanner.nextInt();
+                System.out.println("1. Display all Vehicles");
+                System.out.println("2. Display all Containers");
+                System.out.println("3. Add a Container to a Vehicle");
+                System.out.println("4. Unload a Container from a Vehicle");
+                System.out.println("5. Calculate daily fuel consumption for a vehicle");
+                System.out.println("6. Refuel vehicle");
+                System.out.println("7. Exit");
 
-            switch (choice) {
-                case 1:
-                    if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
-                        System.out.println("You are not authorized to create a new Truck.");
-                    } else {
-                        vehicleList.add(Truck.addVehicle(scanner, portsList));
-                    }
-                    break;
-                case 2:
-                    if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
-                        System.out.println("You are not authorized to create a new Ship.");
-                    } else {
-                        vehicleList.add(Ship.addVehicle(scanner, portsList));
-                    }
-                    break;
-                case 3:
-                    Vehicle.addContainer(scanner, vehicleList, containerList);
-                    break;
-                case 4:
-                    System.out.print("Enter Vehicle ID to unload a container from: ");
-                    String unloadVehicleId = scanner.next();
-                    Vehicle unloadVehicle = findVehicleById(vehicleList, unloadVehicleId);
-                    if (unloadVehicle == null) {
-                        System.out.println("Vehicle not found.");
-                        break;
-                    }
+                if (loggedInUser.getUserRole() == User.UserRole.ADMIN) {
+                    System.out.println("-------- Admin Options ----------");
+                    System.out.println("8. Create a new Truck");
+                    System.out.println("9. Create a new Ship");
+                    System.out.println("10. Delete a vehicle");
+                    System.out.println("11. Modify Truck");
+                    System.out.println("12. Modify Ship");
+                    System.out.println("---------------------------------");
+                }
 
-                    if (unloadVehicle.getContainers().isEmpty()) {
-                        System.out.println("No container to unload.");
-                        break;
-                    }
+                System.out.print("Choose an option: ");
+                int choice = scanner.nextInt();
 
-                    Container unloadContainer = unloadVehicle.getContainers().get(0);
-                    if (unloadVehicle.unloadContainer(unloadContainer, unloadVehicle.getCurrentPort())) {
-                        System.out.println("Container unloaded successfully.");
-                    } else {
-                        System.out.println("Failed to unload container.");
-                    }
-                    break;
-                case 5:
-                    for (Vehicle v : vehicleList) {
-                        if (loggedInUser.getUserRole() != User.UserRole.MANAGER ||
-                                (loggedInUser.getPortId().equals(v.getCurrentPort().getId()))) {
+
+                switch (choice) {
+                    case 1:
+                        for (Vehicle v : vehicleList) {
                             System.out.println(loggedInUser.getPortId());
                             System.out.println(v);
                         }
-                    }
-                    break;
-                case 6:
-                    for (Container c : containerList) {
-                        // Find the vehicle that this container is associated with
-                        Vehicle associatedVehicle = Vehicle.findVehicleByContainerId(vehicleList, c.getId());
-                        if (associatedVehicle == null) {
-                            continue; // Skip this container if it's not associated with any vehicle
-                        }
-
-                        // Check if the manager should see this container
-                        if (loggedInUser.getUserRole() != User.UserRole.MANAGER ||
-                                (loggedInUser.getPortId().equals(associatedVehicle.getCurrentPort().getId()))) {
-                            System.out.println(c);
-                        }
-                    }
-                    break;
-
-
-                case 7:
-                    System.out.print("Enter Vehicle ID to calculate daily fuel consumption for: ");
-                    String vehicleIdToCalculateFuel = scanner.next();
-                    Vehicle vehicleToCalculateFuel = findVehicleById(vehicleList, vehicleIdToCalculateFuel);
-                    if (vehicleToCalculateFuel == null) {
-                        System.out.println("Vehicle not found.");
                         break;
-                    }
-                    System.out.print("Enter the daily distance traveled by the vehicle (in km): ");
-                    double dailyDistance = scanner.nextDouble();
-                    double dailyFuelConsumption = vehicleToCalculateFuel.calculateDailyFuelConsumption(dailyDistance);
-                    System.out.println("The daily fuel consumption for the vehicle is: " + dailyFuelConsumption + " liters");
-                    break;
-                case 8:
-                    Vehicle.refuel(scanner, vehicleList);
-                    break;
-                case 9:
-                    if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
-                        System.out.println("You are not authorized to delete the vehicle.");
-                    } else {
-                        Vehicle.deleteVehicle(vehicleList, scanner, "vehicles.csv");
-                    }
-                    break;
-                case 10:
-                    if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
-                        System.out.println("You are not authorized to modify vehicles. ");
-                    } else {
-                    Truck.modifyTruckAttributes(vehicleList, scanner);
-                    }
-                    break;
-                case 11:
-                    if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
-                        System.out.println("You are not authorized to modify vehicles. ");
-                    } else {
-                        Ship.modifyShipAttributes(vehicleList, scanner);
-                    }
-                    break;
-                case 12:
-                    System.out.println("Saving data...");
-                    saveAllData(vehicleList, "vehicles.csv");
-                    System.out.println("Exiting...");
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
+                    case 2:
+                        for (Container c : containerList) {
+                            Vehicle associatedVehicle = Vehicle.findVehicleByContainerId(vehicleList, c.getId());
+                            if (associatedVehicle == null) {
+                                continue;
+                            }
+                            if (loggedInUser.getUserRole() != User.UserRole.MANAGER ||
+                                    (loggedInUser.getPortId().equals(associatedVehicle.getCurrentPort().getId()))) {
+                                System.out.println(c);
+                            }
+                        }
+                        break;
+                    case 3:
+                        Vehicle.addContainer(scanner, vehicleList, containerList);
+                        break;
+                    case 4:
+                        System.out.print("Enter Vehicle ID to unload a container from: ");
+                        String unloadVehicleId = scanner.next();
+                        Vehicle unloadVehicle = findVehicleById(vehicleList, unloadVehicleId);
+                        if (unloadVehicle == null) {
+                            System.out.println("Vehicle not found.");
+                            break;
+                        }
+                        if (unloadVehicle.getContainers().isEmpty()) {
+                            System.out.println("No container to unload.");
+                            break;
+                        }
+                        Container unloadContainer = unloadVehicle.getContainers().get(0);
+                        if (unloadVehicle.unloadContainer(unloadContainer, unloadVehicle.getCurrentPort())) {
+                            System.out.println("Container unloaded successfully.");
+                        } else {
+                            System.out.println("Failed to unload container.");
+                        }
+                        break;
+                    case 5:
+                        System.out.print("Enter Vehicle ID to calculate daily fuel consumption for: ");
+                        String vehicleIdToCalculateFuel = scanner.next();
+                        Vehicle vehicleToCalculateFuel = findVehicleById(vehicleList, vehicleIdToCalculateFuel);
+                        if (vehicleToCalculateFuel == null) {
+                            System.out.println("Vehicle not found.");
+                            break;
+                        }
+                        System.out.print("Enter the daily distance traveled by the vehicle (in km): ");
+                        double dailyDistance = scanner.nextDouble();
+                        double dailyFuelConsumption = vehicleToCalculateFuel.calculateDailyFuelConsumption(dailyDistance);
+                        System.out.println("The daily fuel consumption for the vehicle is: " + dailyFuelConsumption + " liters");
+                        break;
+                    case 6:
+                        Vehicle.refuel(scanner, vehicleList);
+                        break;
+                    case 7:
+                        System.out.println("Saving data...");
+                        saveAllData(vehicleList, "vehicles.csv");
+                        System.out.println("Exiting...");
+                        return;
+                    case 8:
+                        if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                            System.out.println("You are not authorized to create a new Truck.");
+                        } else {
+                            vehicleList.add(Truck.addVehicle(scanner, portsList));
+                        }
+                        break;
+                    case 9:
+                        if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                            System.out.println("You are not authorized to create a new Ship.");
+                        } else {
+                            vehicleList.add(Ship.addVehicle(scanner, portsList));
+                        }
+                        break;
+                    case 10:
+                        if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                            System.out.println("You are not authorized to delete the vehicle.");
+                        } else {
+                            Vehicle.deleteVehicle(vehicleList, scanner, "vehicles.csv");
+                        }
+                        break;
+                    case 11:
+                        if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                            System.out.println("You are not authorized to modify vehicles.");
+                        } else {
+                            Truck.modifyTruckAttributes(vehicleList, scanner);
+                        }
+                        break;
+                    case 12:
+                        if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                            System.out.println("You are not authorized to modify vehicles.");
+                        } else {
+                            Ship.modifyShipAttributes(vehicleList, scanner);
+                        }
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a number between 1 and 10.");
                 scanner.next(); // Clear the invalid input
