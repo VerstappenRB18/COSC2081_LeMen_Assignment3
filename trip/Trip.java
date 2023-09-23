@@ -8,10 +8,12 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Trip {
+    private static int tripCounter;
+    private String id;
     private Vehicle vehicle;
     private Ports departurePort;
     private Ports arrivalPort;
@@ -22,24 +24,51 @@ public class Trip {
 
     public static final String filename = "trips.csv";
 
+    static {
+        tripCounter = getMaxTripID();
+    }
+
     public Trip() {
+        this.id = null;
         this.vehicle = null;
         this.departurePort = null;
         this.arrivalPort = null;
         this.departureDate = null;
         this.arrivalDate = null;
-        this.status = null;
+        status = null;
         this.containers = new ArrayList<>();
     }
 
-    public Trip(Vehicle vehicle, Ports departurePort, Ports arrivalPort, LocalDateTime departureDate, LocalDateTime arrivalDate, TripStatus status, List<Container> containers) {
+    public Trip(Vehicle vehicle, Ports departurePort, Ports arrivalPort, LocalDateTime departureDate, LocalDateTime arrivalDate, TripStatus status) {
+        this.id = generateTripID();
         this.vehicle = vehicle;
         this.departurePort = departurePort;
         this.arrivalPort = arrivalPort;
         this.departureDate = departureDate;
         this.arrivalDate = arrivalDate;
-        this.status = status;
-        this.containers = containers;
+        Trip.status = status;
+    }
+
+    public static int getMaxTripID() {
+        int maxID = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String idPart = parts[0];
+                int idNumber = Integer.parseInt(idPart.split("-")[1]);
+                if (idNumber > maxID) {
+                    maxID = idNumber;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the file: " + e.getMessage());
+        }
+        return maxID;
+    }
+
+    private String generateTripID() {
+        return "t-" + (++tripCounter);
     }
 
     public Vehicle getVehicle() {
@@ -87,18 +116,22 @@ public class Trip {
     }
 
     public void setStatus(TripStatus status) {
-        this.status = status;
+        Trip.status = status;
     }
 
     public List<Container> getContainers() {
         return containers;
     }
 
-    public void setContainers(List<Container> containers) {
-        this.containers = containers;
+    public String getId() {
+        return id;
     }
 
-    public static void createTrip(List<Trip> tripList, List<Vehicle> vehicleList, List<Ports> portsList, List<Container> containerList, String filename) throws IOException {
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public static void createTrip(List<Trip> tripList, List<Vehicle> vehicleList, List<Ports> portsList, String filename) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Enter vehicle ID: ");
         String vehicleId = reader.readLine();
@@ -174,27 +207,22 @@ public class Trip {
                 System.out.println("Invalid status.");
             }
         }
+        tripCounter = getMaxTripID();
 
-        List<Container> validContainers = new ArrayList<>();
-        for (Container container : containerList) {
-            if (container.getPortId().equals(vehicle.getCurrentPort().getId())) {
-                validContainers.add(container);
-            }
-        }
-
-        Trip trip = new Trip(vehicle, departurePort, arrivalPort, departureDate, arrivalDate, status, validContainers);
+        Trip trip = new Trip(vehicle, departurePort, arrivalPort, departureDate, arrivalDate, status);
         tripList.add(trip);
 
         // Save the trip to trips.csv
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.newLine();  // Move to the next line before writing the new entry
             String tripData = String.join(",",
-                    vehicle.getId(),
-                    departurePort.getId(),
-                    arrivalPort.getId(),
-                    departureDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                    arrivalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                    status.name()
+                    trip.getId(),
+                    trip.getVehicle().getId(),
+                    trip.getDeparturePort().getId(),
+                    trip.getArrivalPort().getId(),
+                    trip.getDepartureDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                    trip.getArrivalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                    trip.getStatus().name()
             );
             writer.write(tripData);
         }
@@ -205,41 +233,38 @@ public class Trip {
         Trip latestTrip = findLatestCompletedTripForVehicle(tripList, vehicle);
         if (latestTrip == null || latestTrip.getArrivalDate().isBefore(arrivalDate)) {
             vehicle.setCurrentPort(arrivalPort);
-            for (Container container : validContainers) {
-                container.setPortId(arrivalPort.getId());
-            }
         }
     }
 
-    public static void updateTrip(List<Trip> tripList, List<Vehicle> vehicleList, List<Ports> portsList, List<Container> containerList, String filename) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    public static void updateTrip(List<Trip> tripList, List<Vehicle> vehicleList, List<Ports> portsList, String filename) throws IOException {
+        Scanner scanner = new Scanner(System.in);
         System.out.print("Enter trip ID to update: ");
-        String tripId = reader.readLine();
+        String tripId = scanner.nextLine();
         Trip tripToUpdate = findTripById(tripList, tripId);
         if (tripToUpdate == null) {
             System.out.println("Invalid trip ID.");
             return;
         }
         System.out.print("Enter new vehicle ID: ");
-        String vehicleId = reader.readLine();
+        String vehicleId = scanner.nextLine();
         Vehicle vehicle = findVehicleById(vehicleList, vehicleId);
         if (vehicle != null) {
             tripToUpdate.setVehicle(vehicle);
         }
         System.out.print("Enter new departure port ID: ");
-        String departurePortId = reader.readLine();
+        String departurePortId = scanner.nextLine();
         Ports newDeparturePort = findPortById(portsList, departurePortId);
         if (newDeparturePort != null) {
             tripToUpdate.setDeparturePort(newDeparturePort);
         }
         System.out.print("Enter new arrival port ID: ");
-        String arrivalPortId = reader.readLine();
+        String arrivalPortId = scanner.nextLine();
         Ports newArrivalPort = findPortById(portsList, arrivalPortId);
         if (newArrivalPort != null) {
             tripToUpdate.setArrivalPort(newArrivalPort);
         }
         System.out.print("Enter new departure date (yyyy-MM-dd HH:mm): ");
-        String departureDateInput = reader.readLine();
+        String departureDateInput = scanner.nextLine();
         try {
             LocalDateTime newDepartureDate = LocalDateTime.parse(departureDateInput, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
             tripToUpdate.setDepartureDate(newDepartureDate);
@@ -247,7 +272,7 @@ public class Trip {
             System.out.println("Invalid date format.");
         }
         System.out.print("Enter new arrival date (yyyy-MM-dd HH:mm): ");
-        String arrivalDateInput = reader.readLine();
+        String arrivalDateInput = scanner.nextLine();
         try {
             LocalDateTime newArrivalDate = LocalDateTime.parse(arrivalDateInput, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
             tripToUpdate.setArrivalDate(newArrivalDate);
@@ -255,7 +280,7 @@ public class Trip {
             System.out.println("Invalid date format.");
         }
         System.out.print("Enter new status (PLANNED/IN_PROGRESS/COMPLETED/CANCELLED): ");
-        String statusInput = reader.readLine();
+        String statusInput = scanner.nextLine();
         try {
             TripStatus newStatus = TripStatus.valueOf(statusInput.toUpperCase());
             tripToUpdate.setStatus(newStatus);
@@ -263,20 +288,44 @@ public class Trip {
             System.out.println("Invalid status.");
         }
 
-        List<Container> validContainers = new ArrayList<>();
-        for (Container container : containerList) {
-            if (container.getPortId().equals(tripToUpdate.getVehicle().getCurrentPort().getId())) {
-                validContainers.add(container);
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader1 = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader1.readLine()) != null) {
+                lines.add(line);
             }
         }
-        tripToUpdate.setContainers(validContainers);
+
+        for (int i = 0; i < lines.size(); i++) {
+            String[] parts = lines.get(i).split(",");
+            if (parts[0].equals(tripId)) {
+                String updatedTripData = String.join(",",
+                        tripToUpdate.getId(),
+                        tripToUpdate.getVehicle().getId(),
+                        tripToUpdate.getDeparturePort().getId(),
+                        tripToUpdate.getArrivalPort().getId(),
+                        tripToUpdate.getDepartureDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                        tripToUpdate.getArrivalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                        tripToUpdate.getStatus().name()
+                );
+                lines.set(i, updatedTripData);
+                break;
+            }
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (int i = 0; i < lines.size(); i++) {
+                writer.write(lines.get(i));
+                if (i < lines.size() - 1) {
+                    writer.newLine();
+                }
+            }
+        }
 
         Trip latestTrip = findLatestCompletedTripForVehicle(tripList, vehicle);
         if (latestTrip == null || latestTrip.getArrivalDate().isBefore(tripToUpdate.getArrivalDate())) {
+            assert vehicle != null;
             vehicle.setCurrentPort(newArrivalPort);
-            for (Container container : validContainers) {
-                container.setPortId(newArrivalPort.getId());
-            }
         }
     }
 
@@ -302,34 +351,60 @@ public class Trip {
             }
 
             // Display the trip information
-            System.out.println("Trip{" +
-                    "vehicle=" + tripVehicle +
-                    ", departurePort=" + trip.getDeparturePort() +
-                    ", arrivalPort=" + trip.getArrivalPort() +
-                    ", departureDate=" + trip.getDepartureDate() +
-                    ", arrivalDate=" + trip.getArrivalDate() +
-                    ", status=" + trip.getStatus() +
-                    ", containers=" + actualLoadedContainers +
-                    '}');
+            System.out.println("Trip Details: \n" +
+                    "-------------------------\n" +
+                    "Vehicle ID: " + tripVehicle.getId() + "\n" +
+                    "Departure Port: " + trip.getDeparturePort().getId() + "\n" +
+                    "Arrival Port: " + trip.getArrivalPort().getId() + "\n" +
+                    "Departure Date: " + trip.getDepartureDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + "\n" +
+                    "Arrival Date: " + trip.getArrivalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + "\n" +
+                    "Trip Status: " + trip.getStatus() + "\n" +
+                    "Containers: " + actualLoadedContainers.stream().map(Container::getId).collect(Collectors.joining(", ")) + "\n" +
+                    "-------------------------");
         }
     }
 
 
     public static void deleteTrip(List<Trip> tripList, String filename) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Enter index of trip to delete: ");
-        String indexStr = reader.readLine();
-        try {
-            int index = Integer.parseInt(indexStr);
-            if (index < 0 || index >= tripList.size()) {
-                System.out.println("Invalid index.");
-                return;
+        System.out.print("Enter trip ID to delete: ");
+        String tripId = reader.readLine();
+
+        // Remove the trip from the tripList
+        Trip tripToRemove = null;
+        for (Trip trip : tripList) {
+            if (trip.getId().equals(tripId)) {
+                tripToRemove = trip;
+                break;
             }
-            tripList.remove(index);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a number.");
+        }
+        if (tripToRemove == null) {
+            System.out.println("Invalid trip ID.");
+            return;
+        }
+        tripList.remove(tripToRemove);
+
+
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader csvReader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = csvReader.readLine()) != null) {
+                if (!line.startsWith(tripId + ",")) {
+                    lines.add(line);
+                }
+            }
+        }
+
+        try (BufferedWriter csvWriter = new BufferedWriter(new FileWriter(filename))) {
+            for (int i = 0; i < lines.size(); i++) {
+                csvWriter.write(lines.get(i));
+                if (i < lines.size() - 1) {
+                    csvWriter.newLine();
+                }
+            }
         }
     }
+
 
     public static void listTripsOnGivenDay(List<Trip> tripList) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -382,30 +457,32 @@ public class Trip {
 
     public static Trip findTripById(List<Trip> tripList, String tripId) {
         return tripList.stream()
-                .filter(trip -> trip.getVehicle().getId().equals(tripId))
+                .filter(trip -> trip.getId().equals(tripId))
                 .findFirst()
                 .orElse(null);
     }
 
-    public static List<Trip> readFromFile(String filename, List<Vehicle> vehicleList, List<Ports> portsList, List<Container> containers) throws IOException {
+    public static List<Trip> readFromFile(String filename, List<Vehicle> vehicleList, List<Ports> portsList) throws IOException {
         List<Trip> tripList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] details = line.split(",");
-                Vehicle vehicle = findVehicleById(vehicleList, details[0]);
-                Ports departurePort = findPortById(portsList, details[1]);
-                Ports arrivalPort = findPortById(portsList, details[2]);
-                LocalDateTime departureDate = LocalDateTime.parse(details[3], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                LocalDateTime arrivalDate = LocalDateTime.parse(details[4], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                TripStatus status = TripStatus.valueOf(details[5]);
-                Trip trip = new Trip(vehicle, departurePort, arrivalPort, departureDate, arrivalDate, status, containers);
+                String tripId = details[0];  // Parsing tripID at index 0
+                Vehicle vehicle = findVehicleById(vehicleList, details[1]);
+                Ports departurePort = findPortById(portsList, details[2]);
+                Ports arrivalPort = findPortById(portsList, details[3]);
+                LocalDateTime departureDate = LocalDateTime.parse(details[4], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                LocalDateTime arrivalDate = LocalDateTime.parse(details[5], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                TripStatus status = TripStatus.valueOf(details[6]);
+                Trip trip = new Trip(vehicle, departurePort, arrivalPort, departureDate, arrivalDate, status);
+                trip.setId(tripId);
                 tripList.add(trip);
             }
         }
-
         return tripList;
     }
+
 
     public static Trip findLatestCompletedTripForVehicle(List<Trip> tripList, Vehicle vehicle) {
         Trip latestTrip = null;

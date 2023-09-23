@@ -153,8 +153,23 @@ public class Ports {
 
     // CRUD operation methods
     public void saveToFile(String filename) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            writer.write(String.format("%s,%s,%.2f,%.2f,%.2f,%b%n", id, name, latitude, longitude, storingCapacity, landingAbility));
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+
+        lines.add(String.format("%s,%s,%.2f,%.2f,%.2f,%b", id, name, latitude, longitude, storingCapacity, landingAbility));
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (int i = 0; i < lines.size(); i++) {
+                writer.write(lines.get(i));
+                if (i < lines.size() - 1) {
+                    writer.newLine();
+                }
+            }
         }
     }
 
@@ -407,11 +422,16 @@ public class Ports {
 
     public static void saveAllToFile(String filename, List<Ports> portsList) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (Ports port : portsList) {
-                writer.write(String.format("%s,%s,%.2f,%.2f,%.2f,%b%n", port.getId(), port.getName(), port.getLatitude(), port.getLongitude(), port.getStoringCapacity(), port.isLandingAbility()));
+            for (int i = 0; i < portsList.size(); i++) {
+                Ports port = portsList.get(i);
+                writer.write(String.format("%s,%s,%.2f,%.2f,%.2f,%b", port.getId(), port.getName(), port.getLatitude(), port.getLongitude(), port.getStoringCapacity(), port.isLandingAbility()));
+                if (i < portsList.size() - 1) {
+                    writer.newLine();
+                }
             }
         }
     }
+
 
 
     @Override

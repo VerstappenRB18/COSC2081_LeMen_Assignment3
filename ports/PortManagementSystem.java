@@ -16,7 +16,7 @@ public class PortManagementSystem {
         Scanner scanner = new Scanner(System.in);
         List<Ports> portsList = new ArrayList<>();
         List<Vehicle> vehicleList = new ArrayList<>();
-        List<Container> containerList = new ArrayList<>();
+        List<Container> containerList;
         List<Trip> tripList = new ArrayList<>();
 
         // Load ports, vehicles, containers, and trips from files
@@ -24,7 +24,7 @@ public class PortManagementSystem {
             portsList = Ports.readFromFile("ports.csv");
             containerList = Container.readFromFile("containers.txt");
             vehicleList = Menu.loadVehiclesFromFile("vehicles.csv", portsList, containerList);
-            tripList = Trip.readFromFile("trips.csv", vehicleList, portsList, containerList);
+            tripList = Trip.readFromFile("trips.csv", vehicleList, portsList);
         } catch (IOException e) {
             System.err.println("Error loading data from file: " + e.getMessage());
         }
@@ -97,14 +97,14 @@ public class PortManagementSystem {
                         break;
                     case 10:
                         if (loggedInUser.getUserRole() == User.UserRole.ADMIN) {
-                            Trip.createTrip(tripList, vehicleList, portsList, containerList, Trip.filename);
+                            Trip.createTrip(tripList, vehicleList, portsList, Trip.filename);
                         } else {
                             System.out.println("You are not authorized to perform this action.");
                         }
                         break;
                     case 11:
                         if (loggedInUser.getUserRole() == User.UserRole.ADMIN) {
-                            Trip.updateTrip(tripList, vehicleList, portsList, containerList, Trip.filename);
+                            Trip.updateTrip(tripList, vehicleList, portsList, Trip.filename);
                         } else {
                             System.out.println("You are not authorized to perform this action.");
                         }
