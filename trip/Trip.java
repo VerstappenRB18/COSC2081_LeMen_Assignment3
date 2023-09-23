@@ -185,6 +185,23 @@ public class Trip {
         Trip trip = new Trip(vehicle, departurePort, arrivalPort, departureDate, arrivalDate, status, validContainers);
         tripList.add(trip);
 
+        // Save the trip to trips.csv
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+            writer.newLine();  // Move to the next line before writing the new entry
+            String tripData = String.join(",",
+                    vehicle.getId(),
+                    departurePort.getId(),
+                    arrivalPort.getId(),
+                    departureDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                    arrivalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                    status.name()
+            );
+            writer.write(tripData);
+        }
+        catch (IOException e) {
+            System.out.println("An error occurred while writing to the file: " + e.getMessage());
+        }
+
         Trip latestTrip = findLatestCompletedTripForVehicle(tripList, vehicle);
         if (latestTrip == null || latestTrip.getArrivalDate().isBefore(arrivalDate)) {
             vehicle.setCurrentPort(arrivalPort);
@@ -386,6 +403,7 @@ public class Trip {
                 tripList.add(trip);
             }
         }
+
         return tripList;
     }
 
