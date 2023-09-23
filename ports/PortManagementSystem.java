@@ -16,7 +16,7 @@ public class PortManagementSystem {
         Scanner scanner = new Scanner(System.in);
         List<Ports> portsList = new ArrayList<>();
         List<Vehicle> vehicleList = new ArrayList<>();
-        List<Container> containerList;
+        List<Container> containerList = new ArrayList<>();
         List<Trip> tripList = new ArrayList<>();
 
         // Load ports, vehicles, containers, and trips from files
@@ -57,8 +57,37 @@ public class PortManagementSystem {
                     case 1:
                         for (Ports port : portsList) {
                             System.out.println(port);
+
+                            // List the vehicles that are currently at this port
+                            List<Vehicle> vehiclesAtThisPort = new ArrayList<>();
+                            for (Vehicle vehicle : vehicleList) {
+                                if (vehicle.getCurrentPort().getId().equals(port.getId())) {
+                                    vehiclesAtThisPort.add(vehicle);
+                                }
+                            }
+                            System.out.println("  - Vehicles at this port: ");
+                            for (Vehicle vehicle : vehiclesAtThisPort) {
+                                System.out.println(vehicle.toString());
+                                System.out.println("--------------------------");  // Separator line
+                            }
+
+                            // List the containers that are currently at this port
+                            List<Container> containersAtThisPort = new ArrayList<>();
+                            for (Container container : containerList) {
+                                if (container.getPortId().equals(port.getId())) {
+                                    containersAtThisPort.add(container);
+                                }
+                            }
+                            System.out.println("  - Containers at this port: ");
+                            for (Container container : containersAtThisPort) {
+                                System.out.println(container.toString());
+                                System.out.println("==========================");  // Separator line
+                            }
+
+                            System.out.println("\n"); // Add an extra line for better separation between ports
                         }
                         break;
+
                     case 2:
                         Trip.viewAllTrips(tripList, vehicleList);
                         break;

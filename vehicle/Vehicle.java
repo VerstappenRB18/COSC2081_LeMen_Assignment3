@@ -302,23 +302,29 @@ public abstract class Vehicle {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Vehicle ID: ").append(id).append('\n')
-                .append("Name: ").append(name).append('\n')
-                .append("Carrying Capacity: ").append(carryingCapacity).append('\n')
-                .append("Fuel Capacity: ").append(fuelCapacity).append('\n')
-                .append("Current Fuel: ").append(currentFuel).append('\n');
+        sb.append("Vehicle Information:").append('\n')
+                .append("  - ID: ").append(id).append('\n')
+                .append("  - Name: ").append(name).append('\n')
+                .append("  - Carrying Capacity: ").append(carryingCapacity).append('\n')
+                .append("  - Fuel Capacity: ").append(fuelCapacity).append('\n')
+                .append("  - Current Fuel: ").append(currentFuel).append('\n');
 
         if (this instanceof Truck) {
-            sb.append("Truck Type: ").append(((Truck) this).getTruckType()).append('\n');
+            sb.append("  - Truck Type: ").append(((Truck) this).getTruckType()).append('\n');
         }
 
-        sb.append("Containers: ");
-        for (Container container : containers) {
-            sb.append(container.toString()).append(", ");
+        if (containers.isEmpty()) {
+            sb.append("  - Containers: None");
+        } else {
+            sb.append("  - Containers:");
+            for (Container container : containers) {
+                sb.append("\n    * ").append(container.toString());
+            }
         }
 
         return sb.toString();
     }
+
 
     public static Container findContainerById(List<Container> containerList, String id) {
         for (Container container : containerList) {

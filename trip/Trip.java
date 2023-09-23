@@ -407,36 +407,57 @@ public class Trip {
 
 
     public static void listTripsOnGivenDay(List<Trip> tripList) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Please enter the day you want to view trips: ");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String dateStr = reader.readLine();
+        String dateStr = scanner.nextLine();
         LocalDate givenDate = LocalDate.parse(dateStr, formatter);
+
+        boolean tripFound = false;  // Flag to keep track of whether any trips are found
+
         for (Trip trip : tripList) {
             LocalDate departureDate = trip.getDepartureDate().toLocalDate();
             LocalDate arrivalDate = trip.getArrivalDate().toLocalDate();
             if (givenDate.equals(departureDate) || givenDate.equals(arrivalDate)) {
                 System.out.println(trip);
+                tripFound = true;  // Set the flag to true because a trip was found
             }
+        }
+
+        // Check the flag to print appropriate message
+        if (!tripFound) {
+            System.out.println("No trips were found for the given date: " + givenDate);
         }
     }
 
+
     public static void listTripsFromDayAToDayB(List<Trip> tripList) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        Scanner scanner = new Scanner(System.in);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         System.out.print("Please enter Day A: ");
-        String startDateStr = reader.readLine();
+        String startDateStr = scanner.nextLine();
         System.out.print("Please enter Day B: ");
-        String endDateStr = reader.readLine();
+        String endDateStr = scanner.nextLine();
         LocalDate start = LocalDate.parse(startDateStr, formatter);
         LocalDate end = LocalDate.parse(endDateStr, formatter);
+
+        boolean tripFound = false; // Flag to keep track of whether any trips are found
+
         for (Trip trip : tripList) {
             LocalDate departureDate = trip.getDepartureDate().toLocalDate();
             LocalDate arrivalDate = trip.getArrivalDate().toLocalDate();
             if ((departureDate.isAfter(start) || departureDate.equals(start)) && (arrivalDate.isBefore(end) || arrivalDate.equals(end))) {
                 System.out.println(trip);
+                tripFound = true; // Set the flag to true because a trip was found
             }
         }
+
+        // Check the flag to print an appropriate message
+        if (!tripFound) {
+            System.out.println("No trips were found between " + start + " and " + end);
+        }
     }
+
 
 
     public static Vehicle findVehicleById(List<Vehicle> vehicleList, String vehicleId) {
@@ -506,14 +527,31 @@ public class Trip {
 
     @Override
     public String toString() {
-        return "Trip{" +
-                "vehicle=" + vehicle +
-                ", departurePort=" + departurePort +
-                ", arrivalPort=" + arrivalPort +
-                ", departureDate=" + departureDate +
-                ", arrivalDate=" + arrivalDate +
-                ", status=" + status +
-                ", containers=" + containers +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Trip Information:\n");
+        sb.append("  - Vehicle ID: ").append(vehicle != null ? vehicle.getId() : "N/A").append('\n');  // Check if vehicle is null
+        sb.append("  - Departure Port: ").append(departurePort.getId()).append('\n');
+        sb.append("  - Arrival Port: ").append(arrivalPort.getId()).append('\n');
+        sb.append("  - Departure Date: ").append(departureDate).append('\n');
+        sb.append("  - Arrival Date: ").append(arrivalDate).append('\n');
+        sb.append("  - Status: ").append(status).append('\n');
+        sb.append("  - Containers: ");
+
+        if (containers != null) {  // Check if containers is null before iterating
+            for (Container container : containers) {
+                sb.append(container != null ? container.getId() : "N/A").append(", ");  // Check if container is null
+            }
+
+            // Remove the trailing comma and space
+            if (!containers.isEmpty()) {
+                sb.setLength(sb.length() - 2);
+            }
+        } else {
+            sb.append("N/A");
+        }
+
+        return sb.toString();
     }
+
+
 }
