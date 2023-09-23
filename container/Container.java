@@ -4,7 +4,6 @@ import java.util.*;
 import java.io.*;
 
 public class Container {
-
     public static String filename = "containers.txt";
 
     public enum ContainerType {
@@ -31,15 +30,18 @@ public class Container {
         }
     }
 
+
     private static int containerCounter;
     private static final HashMap<ContainerType, Double> totalWeightByType = new HashMap<>();
     private final String id;
     private final double weight;
     private final ContainerType type;
+    private String portId;
 
     static {
         containerCounter = getMaxContainerID();
     }
+
 
     public static int getMaxContainerID() {
         int maxID = 0;
@@ -59,31 +61,36 @@ public class Container {
         return maxID;
     }
 
-    public Container(String id, double weight, ContainerType type) {
+    public void setPortId(String portId) {
+        this.portId = portId;
+    }
+
+    public Container(String id, double weight, ContainerType type, String portId) {
         if (weight < 0) {
             throw new IllegalArgumentException("Weight cannot be negative.");
         }
-        this.id = id; // Use the ID passed as a parameter
+        this.id = id;
         this.weight = weight;
         this.type = type;
+        this.portId = portId;
 
         if (type != null) {
             totalWeightByType.merge(type, weight, Double::sum);
         }
     }
 
-
     private String generateContainerID() {
         return "c-" + (++containerCounter);
     }
 
-    public Container(double weight, ContainerType type) {
+    public Container(double weight, ContainerType type, String portId) {
         if (weight < 0) {
             throw new IllegalArgumentException("Weight cannot be negative.");
         }
         this.id = generateContainerID();
         this.weight = weight;
         this.type = type;
+        this.portId = portId;
 
         if (type != null) {
             totalWeightByType.merge(type, weight, Double::sum);
@@ -102,6 +109,10 @@ public class Container {
         return type;
     }
 
+    public String getPortId() {
+        return portId;
+    }
+
     public double getFuelConsumptionPerKmForShip() {
         return type != null ? type.getShipConsumption() * weight : 0.0;
     }
@@ -110,20 +121,17 @@ public class Container {
         return type != null ? type.getTruckConsumption() * weight : 0.0;
     }
 
-
     public String getContainer() {
-        return id + "," + weight + "," + type;
+        return id + "," + weight + "," + type + "," + portId;
     }
 
     public static void getTotalWeightByType() {
-        // Clear existing data
         totalWeightByType.clear();
-
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length >= 3) {
+                if (parts.length >= 4) {
                     String typeString = parts[2];
                     if (typeString == null || typeString.isBlank()) {
                         System.out.println("Container type is null or blank on line: " + line);
@@ -142,7 +150,6 @@ public class Container {
             System.out.println("An error occurred while reading the file: " + e.getMessage());
         }
 
-        // Print the total weights by type
         for (Map.Entry<ContainerType, Double> entry : totalWeightByType.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
@@ -155,10 +162,7 @@ public class Container {
 
         Container.ContainerType type = null;
         while (type == null) {
-            System.out.print("Please enter the Container's type (");
-            System.out.print(Arrays.toString(Container.ContainerType.values()));
-            System.out.print("): ");
-
+            System.out.print("Please enter the Container's type: ");
             try {
                 type = Container.ContainerType.valueOf(input.next().toUpperCase());
             } catch (IllegalArgumentException e) {
@@ -166,7 +170,10 @@ public class Container {
             }
         }
 
-        Container container = new Container(weight, type);
+        System.out.print("Please enter the Container's port ID: ");
+        String portId = input.next();
+
+        Container container = new Container(weight, type, portId);
 
         try {
             FileWriter writer = new FileWriter(filename, true);
@@ -195,36 +202,35 @@ public class Container {
             System.out.println("Enter the Container ID to delete a record: ");
             String searchKey = input.next();
 
-            boolean isFound = false; // Variable to track if the ID was found
+            boolean isFound = false;
 
             try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     if (line.contains(searchKey)) {
                         System.out.println("Deleting the following record: " + line);
-                        isFound = true; // Set the variable to true as the ID is found
+                        isFound = true;
                     } else {
-                        arrayList.add(line); // This should add all lines not containing the searchKey
+                        arrayList.add(line);
                     }
                 }
             } catch (IOException e) {
                 System.out.println("An error occurred while reading the file: " + e.getMessage());
             }
 
-            if (!isFound) { // Check if the ID was not found and notify the user
+            if (!isFound) {
                 System.out.println("No record found with the ID: " + searchKey);
                 System.out.println("Please try again.");
-                // Repeat the loop to prompt the user again
             } else {
                 try (FileWriter writer = new FileWriter(filename)) {
                     for (int i = 0; i < arrayList.size(); i++) {
                         writer.write(arrayList.get(i));
-                        if (i < arrayList.size() - 1) { // Prevent writing a newline character at the end of the file
+                        if (i < arrayList.size() - 1) {
                             writer.write("\n");
                         }
                     }
                     System.out.println("Deletion successful!");
-                    break; // Break out of the while loop as the operation is successful
+                    break;
                 } catch (IOException e) {
                     System.out.println("An error occurred while writing to the file: " + e.getMessage());
                 }
@@ -250,25 +256,33 @@ public class Container {
 
                     String fieldToUpdate;
                     while (true) {
-                        System.out.println("What do you want to update? (weight/type):");
+                        System.out.println("What do you want to update? (weight/type/portId):");
                         fieldToUpdate = input.next().toLowerCase();
 
-                        if (fieldToUpdate.equals("weight") || fieldToUpdate.equals("type")) {
+                        if (fieldToUpdate.equals("weight") || fieldToUpdate.equals("type") || fieldToUpdate.equals("portId")) {
                             break;
                         } else {
-                            System.out.println("Invalid field. Please enter 'weight' or 'type'.");
+                            System.out.println("Invalid field. Please enter 'weight', 'type', or 'portId'.");
                         }
                     }
 
                     System.out.println("Enter the new value:");
                     String newValue = input.next();
                     String[] lineParts = arrayList.get(i).split(",");
+                    fieldToUpdate = input.next().toLowerCase();
+
 
                     switch (fieldToUpdate) {
-                        case "weight" -> lineParts[1] = newValue;
-                        case "type" -> lineParts[2] = newValue.toUpperCase();
+                        case "weight":
+                            lineParts[1] = newValue;
+                            break;
+                        case "type":
+                            lineParts[2] = newValue.toUpperCase();
+                            break;
+                        case "portid":
+                            lineParts[3] = newValue;
+                            break;
                     }
-
                     arrayList.set(i, String.join(",", lineParts));
                     System.out.println("Record updated: " + arrayList.get(i));
                     break;
@@ -340,7 +354,8 @@ public class Container {
                 String id = parts[0];
                 double weight = Double.parseDouble(parts[1]);
                 ContainerType type = ContainerType.valueOf(parts[2]);
-                Container container = new Container(id, weight, type); // Pass the ID read from the file
+                String portId = parts[3];
+                Container container = new Container(id, weight, type, portId);
                 containerList.add(container);
             }
         }
@@ -349,6 +364,11 @@ public class Container {
 
     @Override
     public String toString() {
-        return id;
+        return "Container{" +
+                "id='" + id + '\'' +
+                ", weight=" + weight +
+                ", type=" + type +
+                ", portId='" + portId + '\'' +
+                '}';
     }
 }

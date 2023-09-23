@@ -62,6 +62,9 @@ public abstract class Vehicle {
     private static final double BASE_TRUCK_CONSUMPTION = 0.5;
 
 
+    public double getCarryingCapacity() {
+        return carryingCapacity;
+    }
 
     public static boolean addContainer(Scanner scanner, List<Vehicle> vehicleList, List<Container> containerList) {
         System.out.print("Enter Vehicle ID to add container to: ");
@@ -71,55 +74,84 @@ public abstract class Vehicle {
             System.out.println("Vehicle not found.");
             return false;
         }
-        System.out.println("Available Containers:");
-        for (int i = 0; i < containerList.size(); i++) {
-            System.out.println((i + 1) + ". " + containerList.get(i).toString());
+
+        // Automatically filter containers based on the current port of the vehicle
+        List<Container> availableContainers = new ArrayList<>();
+        for (Container container : containerList) {
+            if (container.getPortId().equals(vehicle.getCurrentPort().getId())) {
+                availableContainers.add(container);
+            }
         }
+
+        if (availableContainers.isEmpty()) {
+            System.out.println("No containers available at the current port.");
+            return false;
+        }
+
+        System.out.println("Available Containers:");
+        for (int i = 0; i < availableContainers.size(); i++) {
+            System.out.println((i + 1) + ". " + availableContainers.get(i).toString());
+        }
+
         System.out.print("Enter the ID of the Container to add: ");
         scanner.nextLine();
         String containerId = scanner.nextLine();
-        Container container = findContainerById(containerList, containerId);
-        if (container != null) {
-            if (vehicle instanceof Truck) {
-                Truck thisTruck = (Truck) vehicle;
-                switch (thisTruck.getTruckType()) {
-                    case BASIC:
-                        if (container.getType() == Container.ContainerType.REFRIGERATED || container.getType() == Container.ContainerType.LIQUID) {
-                            System.out.println("This type of truck cannot carry this type of container.");
-                            return false;
-                        }
-                        break;
-                    case REEFER:
-                        if (container.getType() != Container.ContainerType.REFRIGERATED) {
-                            System.out.println("This type of truck can only carry refrigerated containers.");
-                            return false;
-                        }
-                        break;
-                    case TANKER:
-                        if (container.getType() != Container.ContainerType.LIQUID) {
-                            System.out.println("This type of truck can only carry liquid containers.");
-                            return false;
-                        }
-                        break;
-                }
-            }
-            vehicle.getContainers().add(container);
-            vehicle.getContainerByType().put(
-                    container.getType(),
-                    vehicle.getContainerByType().getOrDefault(container.getType(), 0) + 1
-            );
-            System.out.println("Container added to vehicle.");
-            System.out.println("Added container " + container.getId() + " to vehicle " + vehicle.getId());
-            return true;
-        } else {
+        Container container = findContainerById(availableContainers, containerId); // Note: We're searching in availableContainers
+        if (container == null) {
             System.out.println("Invalid container ID. Please try again.");
             return false;
         }
+
+        // Existing check for container type compatibility with the vehicle
+        if (vehicle instanceof Truck) {
+            Truck thisTruck = (Truck) vehicle;
+            switch (thisTruck.getTruckType()) {
+                case BASIC:
+                    if (container.getType() == Container.ContainerType.REFRIGERATED || container.getType() == Container.ContainerType.LIQUID) {
+                        System.out.println("This type of truck cannot carry this type of container.");
+                        return false;
+                    }
+                    break;
+                case REEFER:
+                    if (container.getType() != Container.ContainerType.REFRIGERATED) {
+                        System.out.println("This type of truck can only carry refrigerated containers.");
+                        return false;
+                    }
+                    break;
+                case TANKER:
+                    if (container.getType() != Container.ContainerType.LIQUID) {
+                        System.out.println("This type of truck can only carry liquid containers.");
+                        return false;
+                    }
+                    break;
+            }
+        }
+
+        // Check if adding the container will exceed the vehicle's weight capacity
+        double totalWeight = vehicle.getContainers().stream().mapToDouble(Container::getWeight).sum();
+        if (totalWeight + container.getWeight() > vehicle.getCarryingCapacity()) {
+            System.out.println("Adding this container will exceed the vehicle's carrying capacity.");
+            return false;
+        }
+
+        // If all checks pass, add the container to the vehicle
+        vehicle.getContainers().add(container);
+        vehicle.getContainerByType().put(
+                container.getType(),
+                vehicle.getContainerByType().getOrDefault(container.getType(), 0) + 1
+        );
+        System.out.println("Container added to vehicle.");
+        System.out.println("Added container " + container.getId() + " to vehicle " + vehicle.getId());
+        return true;
     }
 
 
     public Ports getCurrentPort() {
         return currentPort;
+    }
+
+    public void setCurrentPort(Ports currentPort) {
+        this.currentPort = currentPort;
     }
 
     public Map<Container.ContainerType, Integer> getContainerByType() {

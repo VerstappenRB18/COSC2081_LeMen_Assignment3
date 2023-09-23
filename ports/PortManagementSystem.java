@@ -12,10 +12,11 @@ import java.util.Scanner;
 
 public class PortManagementSystem {
     public static void main(String[] args, User loggedInUser) {
+
         Scanner scanner = new Scanner(System.in);
         List<Ports> portsList = new ArrayList<>();
         List<Vehicle> vehicleList = new ArrayList<>();
-        List<Container> containerList;
+        List<Container> containerList = new ArrayList<>();
         List<Trip> tripList = new ArrayList<>();
 
         // Load ports, vehicles, containers, and trips from files
@@ -23,7 +24,7 @@ public class PortManagementSystem {
             portsList = Ports.readFromFile("ports.csv");
             containerList = Container.readFromFile("containers.txt");
             vehicleList = Menu.loadVehiclesFromFile("vehicles.csv", portsList, containerList);
-            tripList = Trip.readFromFile("trips.csv", vehicleList, portsList);
+            tripList = Trip.readFromFile("trips.csv", vehicleList, portsList, containerList);
         } catch (IOException e) {
             System.err.println("Error loading data from file: " + e.getMessage());
         }
@@ -67,9 +68,9 @@ public class PortManagementSystem {
                             Ports.deletePort(portsList, Ports.filename);
                         }
                     }
-                    case 5 -> Trip.createTrip(tripList, vehicleList, portsList, Trip.filename);
-                    case 6 -> Trip.viewAllTrips(tripList);
-                    case 7 -> Trip.updateTrip(tripList, vehicleList, portsList, Trip.filename);
+                    case 5 -> Trip.createTrip(tripList, vehicleList, portsList,containerList ,Trip.filename);
+                    case 6 -> Trip.viewAllTrips(tripList, vehicleList);
+                    case 7 -> Trip.updateTrip(tripList, vehicleList, portsList,containerList,Trip.filename);
                     case 8 -> Trip.deleteTrip(tripList, Trip.filename);
                     case 9 -> Ports.listAllShips(portsList, vehicleList);
                     case 10 -> Trip.listTripsOnGivenDay(tripList);

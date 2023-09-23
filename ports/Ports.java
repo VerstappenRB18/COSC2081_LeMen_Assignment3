@@ -416,8 +416,15 @@ public class Ports {
 
     @Override
     public String toString() {
-        return String.format("Port ID: %s, Name: %s, Latitude: %.2f, Longitude: %.2f, Storing Capacity: %.2f, Landing Ability: %b",
-                id, name, latitude, longitude, storingCapacity, landingAbility);
+        return "Ports{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", storingCapacity=" + storingCapacity +
+                ", landingAbility=" + landingAbility +
+                ", containersList=" + containersList +
+                ", vehicleList=" + vehicleList +
+                '}';
     }
-
 }
