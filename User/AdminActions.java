@@ -27,6 +27,15 @@ public class AdminActions {
 
         System.out.print("Enter new manager's username: ");
         String username = scanner.next();
+
+        // Check if username already exists
+        for (User user : userList) {
+            if (user.getUsername().equals(username)) {
+                System.out.println("Username already exists. Choose another username.");
+                return;
+            }
+        }
+
         System.out.print("Enter new manager's password: ");
         String password = scanner.next();
 

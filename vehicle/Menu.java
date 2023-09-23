@@ -38,7 +38,6 @@ public class Menu {
             System.out.println("2. Create a new Ship");
             System.out.println("3. Add a Container to a Vehicle");
             System.out.println("4. Unload a Container from a Vehicle");
-            System.out.println("5. Move a Vehicle to a different Port");
             System.out.println("6. Display all Vehicles");
             System.out.println("7. Display all Containers");
             System.out.println("8. Calculate daily fuel consumption for a vehicle");
@@ -67,8 +66,6 @@ public class Menu {
                     break;
                 case 3:
                     Vehicle.addContainer(scanner, vehicleList, containerList);
-                    System.out.println(containerList);
-                    System.out.println(vehicleList);
                     break;
                 case 4:
                     System.out.print("Enter Vehicle ID to unload a container from: ");
@@ -92,8 +89,6 @@ public class Menu {
                     }
                     break;
                 case 5:
-                    break;
-                case 6:
                     for (Vehicle v : vehicleList) {
                         if (loggedInUser.getUserRole() != User.UserRole.MANAGER ||
                                 (loggedInUser.getPortId().equals(v.getCurrentPort().getId()))) {
@@ -102,7 +97,7 @@ public class Menu {
                         }
                     }
                     break;
-                case 7:
+                case 6:
                     for (Container c : containerList) {
                         // Find the vehicle that this container is associated with
                         Vehicle associatedVehicle = Vehicle.findVehicleByContainerId(vehicleList, c.getId());
@@ -119,7 +114,7 @@ public class Menu {
                     break;
 
 
-                case 8:
+                case 7:
                     System.out.print("Enter Vehicle ID to calculate daily fuel consumption for: ");
                     String vehicleIdToCalculateFuel = scanner.next();
                     Vehicle vehicleToCalculateFuel = findVehicleById(vehicleList, vehicleIdToCalculateFuel);
@@ -132,23 +127,31 @@ public class Menu {
                     double dailyFuelConsumption = vehicleToCalculateFuel.calculateDailyFuelConsumption(dailyDistance);
                     System.out.println("The daily fuel consumption for the vehicle is: " + dailyFuelConsumption + " liters");
                     break;
-                case 9:
+                case 8:
                     Vehicle.refuel(scanner, vehicleList);
                     break;
-                case 10:
+                case 9:
                     if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
                         System.out.println("You are not authorized to delete the vehicle.");
                     } else {
                         Vehicle.deleteVehicle(vehicleList, scanner, "vehicles.csv");
                     }
                     break;
-                case 11:
+                case 10:
+                    if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                        System.out.println("You are not authorized to modify vehicles. ");
+                    } else {
                     Truck.modifyTruckAttributes(vehicleList, scanner);
+                    }
+                    break;
+                case 11:
+                    if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                        System.out.println("You are not authorized to modify vehicles. ");
+                    } else {
+                        Ship.modifyShipAttributes(vehicleList, scanner);
+                    }
                     break;
                 case 12:
-                    Ship.modifyShipAttributes(vehicleList, scanner);
-                    break;
-                case 13:
                     System.out.println("Saving data...");
                     saveAllData(vehicleList, "vehicles.csv");
                     System.out.println("Exiting...");
