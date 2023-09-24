@@ -1,8 +1,6 @@
 package vehicle;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import container.Container;
 import ports.Ports;
@@ -262,6 +260,29 @@ public abstract class Vehicle {
         return totalFuelConsumption;
     }
 
+    public static void updateVehicleFuelInCSV(Vehicle vehicle, String filePath) throws IOException {
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(vehicle.getId())) {
+                    // Update the fuel (assuming fuel is the 7th column in vehicles.csv)
+                    data[4] = String.valueOf(vehicle.getCurrentFuel());
+                    line = String.join(",", data);
+                }
+                lines.add(line);
+            }
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        }
+    }
+
 
 
     public double calculateFuelConsumption(double distance, double weight, String containerType) {
@@ -382,6 +403,10 @@ public abstract class Vehicle {
 
     public double getFuelCapacity() {
         return fuelCapacity;
+    }
+
+    public double getCurrentFuel() {
+        return currentFuel;
     }
 
     public void setName(String name) {

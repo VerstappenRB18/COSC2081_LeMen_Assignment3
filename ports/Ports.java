@@ -445,9 +445,4 @@ public class Ports {
     }
 
 
-    public List<Vehicle> getVehicleList() {
-        return vehicleList;
-    }
-
-
 }

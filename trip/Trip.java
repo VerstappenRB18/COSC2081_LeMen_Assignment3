@@ -24,6 +24,8 @@ public class Trip {
 
     public static final String filename = "trips.csv";
 
+    public static final String filepath = "vehicles.csv";
+
     static {
         tripCounter = getMaxTripID();
     }
@@ -151,6 +153,9 @@ public class Trip {
 
         List<Ports> availablePorts = new ArrayList<>();
         for (Ports port : portsList) {
+            if (port.getId().equals(departurePort.getId())) {
+                continue;  // Skip the departure port
+            }
             double distance = departurePort.calculateDistance(port);
             if (vehicle.canMoveToPort(departurePort, port) && vehicle.hasEnoughFuel(distance) && port.isLandingAbility()) {
                 availablePorts.add(port);
@@ -212,6 +217,23 @@ public class Trip {
         Trip trip = new Trip(vehicle, departurePort, arrivalPort, departureDate, arrivalDate, status);
         tripList.add(trip);
 
+        // Calculate fuel consumption for the trip
+        double distance = departurePort.calculateDistance(arrivalPort);
+        double fuelConsumption = vehicle.calculateFuelConsumption(distance);
+
+        // Update the vehicle's current fuel
+        double newFuelLevel = vehicle.getCurrentFuel() - fuelConsumption;
+        vehicle.setCurrentFuel(newFuelLevel);
+
+        // Update the vehicle's fuel in the vehicleList
+        for (Vehicle v : vehicleList) {
+            if (v.getId().equals(vehicle.getId())) {
+                v.setCurrentFuel(newFuelLevel);
+                break;
+            }
+        }
+
+
         // Save the trip to trips.csv
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.newLine();  // Move to the next line before writing the new entry
@@ -230,10 +252,15 @@ public class Trip {
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
         }
 
+        Vehicle.updateVehicleFuelInCSV(vehicle, filepath);
+
         Trip latestTrip = findLatestCompletedTripForVehicle(tripList, vehicle);
         if (latestTrip == null || latestTrip.getArrivalDate().isBefore(arrivalDate)) {
             vehicle.setCurrentPort(arrivalPort);
         }
+
+        System.out.println("Trip successfully created with ID: " + trip.getId());
+        System.out.println("Vehicle's current fuel has been updated to: " + newFuelLevel);
     }
 
     public static void updateTrip(List<Trip> tripList, List<Vehicle> vehicleList, List<Ports> portsList, String filename) throws IOException {
