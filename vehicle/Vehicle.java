@@ -267,7 +267,6 @@ public abstract class Vehicle {
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
                 if (data[0].equals(vehicle.getId())) {
-                    // Update the fuel (assuming fuel is the 7th column in vehicles.csv)
                     data[4] = String.valueOf(vehicle.getCurrentFuel());
                     line = String.join(",", data);
                 }
@@ -276,9 +275,12 @@ public abstract class Vehicle {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (String line : lines) {
-                writer.write(line);
-                writer.newLine();
+            for (int i = 0; i < lines.size(); i++) {
+                writer.write(lines.get(i));
+                // Only add a new line if this is not the last line
+                if (i < lines.size() - 1) {
+                    writer.newLine();
+                }
             }
         }
     }
