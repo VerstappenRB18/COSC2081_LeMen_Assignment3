@@ -40,17 +40,18 @@ public class Menu {
                 System.out.println("4. Unload a Container from a Vehicle");
                 System.out.println("5. Calculate daily fuel consumption for a vehicle");
                 System.out.println("6. Refuel vehicle");
-                System.out.println("7. Exit");
+                System.out.println("11. Modify Truck");
+                System.out.println("12. Modify Ship");
 
                 if (loggedInUser.getUserRole() == User.UserRole.ADMIN) {
                     System.out.println("-------- Admin Options ----------");
                     System.out.println("8. Create a new Truck");
                     System.out.println("9. Create a new Ship");
                     System.out.println("10. Delete a vehicle");
-                    System.out.println("11. Modify Truck");
-                    System.out.println("12. Modify Ship");
                     System.out.println("---------------------------------");
                 }
+
+                System.out.println("7. Exit");
 
                 System.out.print("Choose an option: ");
                 int choice = scanner.nextInt();
@@ -140,18 +141,10 @@ public class Menu {
                         }
                         break;
                     case 11:
-                        if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
-                            System.out.println("You are not authorized to modify vehicles.");
-                        } else {
-                            Truck.modifyTruckAttributes(vehicleList, scanner);
-                        }
+                        Truck.modifyTruckAttributes(vehicleList, scanner, loggedInUser);
                         break;
                     case 12:
-                        if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
-                            System.out.println("You are not authorized to modify vehicles.");
-                        } else {
-                            Ship.modifyShipAttributes(vehicleList, scanner);
-                        }
+                        Ship.modifyShipAttributes(vehicleList, scanner, loggedInUser);
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");

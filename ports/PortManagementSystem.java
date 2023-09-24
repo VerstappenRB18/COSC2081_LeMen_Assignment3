@@ -37,18 +37,19 @@ public class PortManagementSystem {
                 System.out.println("3. List all ship from port");
                 System.out.println("4. List all trip in a day");
                 System.out.println("5. List all trip in a span of time");
-                System.out.println("6. Exit");
+                System.out.println("6. Update existing port");
 
                 if (loggedInUser.getUserRole() == User.UserRole.ADMIN) {
                     System.out.println("-------- Admin Options ----------");
-                    System.out.println("7. Create a new port");
-                    System.out.println("8. Update existing port");
+                    System.out.println("8. Create a new port");
                     System.out.println("9. Delete existing port");
                     System.out.println("10. Create a new trip");
                     System.out.println("11. Update existing trip");
                     System.out.println("12. Delete existing trip");
                     System.out.println("---------------------------------");
                 }
+
+                System.out.println("7. Exit");
 
                 System.out.print("Choose an option: ");
                 int choice = scanner.nextInt();
@@ -101,18 +102,14 @@ public class PortManagementSystem {
                         Trip.listTripsFromDayAToDayB(tripList);
                         break;
                     case 6:
+                        Ports.updatePort(portsList, Ports.filename, loggedInUser);
+                        break;
+                    case 7:
                         System.out.println("Exiting...");
                         return;
-                    case 7:
-                        if (loggedInUser.getUserRole() == User.UserRole.ADMIN) {
-                            Ports.createPort(portsList, Ports.filename);
-                        } else {
-                            System.out.println("You are not authorized to perform this action.");
-                        }
-                        break;
                     case 8:
                         if (loggedInUser.getUserRole() == User.UserRole.ADMIN) {
-                            Ports.updatePort(portsList, Ports.filename);
+                            Ports.createPort(portsList, Ports.filename);
                         } else {
                             System.out.println("You are not authorized to perform this action.");
                         }

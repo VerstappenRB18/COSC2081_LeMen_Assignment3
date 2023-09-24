@@ -2,6 +2,7 @@ package vehicle;
 
 import ports.Ports;
 import static trip.Trip.findVehicleById;
+import User.User;
 
 import java.util.*;
 import java.io.*;
@@ -89,12 +90,30 @@ public class Truck extends Vehicle {
         return newTruck;
     }
 
-    public static void modifyTruckAttributes(List<Vehicle> vehicleList, Scanner scanner) {
+    public static void modifyTruckAttributes(List<Vehicle> vehicleList, Scanner scanner, User loggedInUser) {
+        List<String> modifiableTrucks = new ArrayList<>();
+
+        for (Vehicle vehicle : vehicleList) {
+            if (vehicle instanceof Truck) {
+                if (loggedInUser.getUserRole() == User.UserRole.ADMIN ||
+                        vehicle.getCurrentPort().getId().equals(loggedInUser.getPortId())) {
+                    modifiableTrucks.add(vehicle.getId());
+                }
+            }
+        }
+
+        System.out.println("Trucks you can modify: " + String.join(", ", modifiableTrucks));
+        System.out.println();
         System.out.print("Enter the Truck ID to modify: ");
         String truckId = scanner.next();
         Vehicle vehicle = findVehicleById(vehicleList, truckId);
 
         if (vehicle instanceof Truck truckToModify) {
+            if (loggedInUser.getUserRole() == User.UserRole.MANAGER &&
+                    !truckToModify.getCurrentPort().getId().equals(loggedInUser.getPortId())) {
+                System.out.println("You are not authorized to modify trucks that don't belong to your port.");
+                return;
+            }
             System.out.println("Which attribute would you like to modify?");
             System.out.println("1. Name");
             System.out.println("2. Carrying Capacity");

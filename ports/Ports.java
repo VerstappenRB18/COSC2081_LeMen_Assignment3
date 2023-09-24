@@ -270,12 +270,19 @@ public class Ports {
 
 
     // Method to update an existing port details
-    public static void updatePort(List<Ports> portsList, String filename) throws IOException {
+    public static void updatePort(List<Ports> portsList, String filename, User loggedInUser) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {
-            System.out.print("Enter port ID to update: ");
-            String id = reader.readLine();
+            String id;
+            // If the user is a manager, they can only update the port they manage
+            if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                System.out.println("You can only update the port you manage: " + loggedInUser.getPortId());
+                id = loggedInUser.getPortId();
+            } else {
+                System.out.print("Enter port ID to update: ");
+                id = reader.readLine();
+            }
 
             Ports existingPort = null;
 
