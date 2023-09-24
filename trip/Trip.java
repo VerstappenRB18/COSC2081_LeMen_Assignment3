@@ -8,6 +8,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -433,12 +434,21 @@ public class Trip {
     }
 
 
-    public static void listTripsOnGivenDay(List<Trip> tripList) throws IOException {
+    public static void listTripsOnGivenDay(List<Trip> tripList) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Please enter the day you want to view trips: ");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String dateStr = scanner.nextLine();
-        LocalDate givenDate = LocalDate.parse(dateStr, formatter);
+        LocalDate givenDate;
+
+        while (true) {
+            System.out.print("Please enter the day you want to view trips (format: yyyy-MM-dd): ");
+            String dateStr = scanner.nextLine();
+            try {
+                givenDate = LocalDate.parse(dateStr, formatter);
+                break;
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format. Please try again.");
+            }
+        }
 
         boolean tripFound = false;  // Flag to keep track of whether any trips are found
 
@@ -458,15 +468,32 @@ public class Trip {
     }
 
 
-    public static void listTripsFromDayAToDayB(List<Trip> tripList) throws IOException {
+    public static void listTripsFromDayAToDayB(List<Trip> tripList) {
         Scanner scanner = new Scanner(System.in);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        System.out.print("Please enter Day A: ");
-        String startDateStr = scanner.nextLine();
-        System.out.print("Please enter Day B: ");
-        String endDateStr = scanner.nextLine();
-        LocalDate start = LocalDate.parse(startDateStr, formatter);
-        LocalDate end = LocalDate.parse(endDateStr, formatter);
+        LocalDate start, end;
+
+        while (true) {
+            System.out.print("Please enter Day A (format: yyyy-MM-dd): ");
+            String startDateStr = scanner.nextLine();
+            try {
+                start = LocalDate.parse(startDateStr, formatter);
+                break;
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format for Day A. Please try again.");
+            }
+        }
+
+        while (true) {
+            System.out.print("Please enter Day B (format: yyyy-MM-dd): ");
+            String endDateStr = scanner.nextLine();
+            try {
+                end = LocalDate.parse(endDateStr, formatter);
+                break;
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format for Day B. Please try again.");
+            }
+        }
 
         boolean tripFound = false; // Flag to keep track of whether any trips are found
 
