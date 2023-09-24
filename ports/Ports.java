@@ -153,8 +153,23 @@ public class Ports {
 
     // CRUD operation methods
     public void saveToFile(String filename) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            writer.write(String.format("%s,%s,%.2f,%.2f,%.2f,%b%n", id, name, latitude, longitude, storingCapacity, landingAbility));
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+
+        lines.add(String.format("%s,%s,%.2f,%.2f,%.2f,%b", id, name, latitude, longitude, storingCapacity, landingAbility));
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (int i = 0; i < lines.size(); i++) {
+                writer.write(lines.get(i));
+                if (i < lines.size() - 1) {
+                    writer.newLine();
+                }
+            }
         }
     }
 
@@ -235,32 +250,23 @@ public class Ports {
         System.out.println("Port created successfully.");
     }
 
-    public static void displayAccessiblePorts(User loggedInUser) {
-        try {
-            List<Ports> allPorts = Ports.readFromFile("ports.csv");
-            List<Ports> accessiblePorts = Ports.filterPortsByAccess(allPorts, loggedInUser.getPortId(), loggedInUser.getUserRole());
 
-            if (accessiblePorts.isEmpty()) {
-                System.out.println("No accessible ports found.");
-                return;
-            }
-
-            for (Ports port : accessiblePorts) {
-                System.out.println(port);
-            }
-        } catch (IOException e) {
-            System.err.println("An error occurred while reading the ports file: " + e.getMessage());
-        }
-    }
 
 
     // Method to update an existing port details
-    public static void updatePort(List<Ports> portsList, String filename) throws IOException {
+    public static void updatePort(List<Ports> portsList, String filename, User loggedInUser) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {
-            System.out.print("Enter port ID to update: ");
-            String id = reader.readLine();
+            String id;
+            // If the user is a manager, they can only update the port they manage
+            if (loggedInUser.getUserRole() == User.UserRole.MANAGER) {
+                System.out.println("You can only update the port you manage: " + loggedInUser.getPortId());
+                id = loggedInUser.getPortId();
+            } else {
+                System.out.print("Enter port ID to update: ");
+                id = reader.readLine();
+            }
 
             Ports existingPort = null;
 
@@ -387,6 +393,24 @@ public class Ports {
         }
     }
 
+    public static void displayAccessiblePorts(User loggedInUser) {
+        try {
+            List<Ports> allPorts = Ports.readFromFile("ports.csv");
+            List<Ports> accessiblePorts = Ports.filterPortsByAccess(allPorts, loggedInUser.getPortId(), loggedInUser.getUserRole());
+
+            if (accessiblePorts.isEmpty()) {
+                System.out.println("No accessible ports found.");
+                return;
+            }
+
+            for (Ports port : accessiblePorts) {
+                System.out.println(port);
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading the ports file: " + e.getMessage());
+        }
+    }
+
     public static List<Ports> filterPortsByAccess(List<Ports> allPorts, String portId, User.UserRole userRole) {
         List<Ports> accessiblePorts = new ArrayList<>();
 
@@ -403,28 +427,45 @@ public class Ports {
         return accessiblePorts; // Manager has access to specific port
     }
 
-
-
     public static void saveAllToFile(String filename, List<Ports> portsList) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (Ports port : portsList) {
-                writer.write(String.format("%s,%s,%.2f,%.2f,%.2f,%b%n", port.getId(), port.getName(), port.getLatitude(), port.getLongitude(), port.getStoringCapacity(), port.isLandingAbility()));
+            for (int i = 0; i < portsList.size(); i++) {
+                Ports port = portsList.get(i);
+                writer.write(String.format("%s,%s,%.2f,%.2f,%.2f,%b", port.getId(), port.getName(), port.getLatitude(), port.getLongitude(), port.getStoringCapacity(), port.isLandingAbility()));
+                if (i < portsList.size() - 1) {
+                    writer.newLine();
+                }
             }
         }
     }
 
 
+    public static Ports findPortById(String portId) {
+        List<Ports> portsList = new ArrayList<>();
+        try {
+            portsList = readFromFile(filename); // Assuming readFromFile is a static method
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the file: " + e.getMessage());
+        }
+
+        for (Ports port : portsList) {
+            if (port.getId().equals(portId)) {
+                return port;
+            }
+        }
+        return null; // Return null if no matching port is found
+    }
+
+
     @Override
     public String toString() {
-        return "Ports{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", storingCapacity=" + storingCapacity +
-                ", landingAbility=" + landingAbility +
-                ", containersList=" + containersList +
-                ", vehicleList=" + vehicleList +
-                '}';
+        return "Port Information:" + "\n" +
+                "  - ID: " + id + "\n" +
+                "  - Name: " + name + "\n" +
+                "  - Coordinates: (" + latitude + ", " + longitude + ")\n" +
+                "  - Storing Capacity: " + storingCapacity + "\n" +
+                "  - Landing Ability: " + landingAbility;
     }
+
+
 }

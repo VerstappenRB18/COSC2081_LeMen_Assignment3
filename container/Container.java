@@ -1,5 +1,7 @@
 package container;
 
+import ports.Ports;
+
 import java.util.*;
 import java.io.*;
 
@@ -36,7 +38,7 @@ public class Container {
     private final String id;
     private final double weight;
     private final ContainerType type;
-    private String portId;
+    private final String portId;
 
     static {
         containerCounter = getMaxContainerID();
@@ -59,10 +61,6 @@ public class Container {
             System.out.println("An error occurred while reading the file: " + e.getMessage());
         }
         return maxID;
-    }
-
-    public void setPortId(String portId) {
-        this.portId = portId;
     }
 
     public Container(String id, double weight, ContainerType type, String portId) {
@@ -155,7 +153,7 @@ public class Container {
         }
     }
 
-    public static Container createContainer(Scanner input) {
+    public static void createContainer(Scanner input) {
         System.out.print("Please enter the Container's weight: ");
         double weight = input.nextDouble();
         input.nextLine();
@@ -193,7 +191,6 @@ public class Container {
         } catch (IOException e) {
             System.out.println("Container not successfully added");
         }
-        return container;
     }
 
     public static void deleteContainer(ArrayList<String> arrayList, Scanner input) {
@@ -240,9 +237,18 @@ public class Container {
 
     public static void updateContainer(ArrayList<String> arrayList, Scanner input) {
         arrayList.clear();
+        String searchKey;
+        while (true) {
+            System.out.print("Please enter the Container ID to update the record (format: c-number): ");
+            searchKey = input.next();
+            if (searchKey.matches("c-\\d+")) {
+                break;
+            } else {
+                System.out.println("Invalid format. Please enter the Container ID in the format 'c-number'.");
+            }
+        }
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            System.out.println("Please enter the Container ID to update the record:");
-            String searchKey = input.next();
+            System.out.println("Reading from file: " + filename);
             String line;
 
             boolean found = false;
@@ -256,30 +262,90 @@ public class Container {
 
                     String fieldToUpdate;
                     while (true) {
-                        System.out.println("What do you want to update? (weight/type/portId):");
+                        System.out.print("What do you want to update? (weight/type/portid): ");
                         fieldToUpdate = input.next().toLowerCase();
-
-                        if (fieldToUpdate.equals("weight") || fieldToUpdate.equals("type") || fieldToUpdate.equals("portId")) {
+                        if (fieldToUpdate.equals("weight") || fieldToUpdate.equals("type") || fieldToUpdate.equals("portid")) {
                             break;
                         } else {
-                            System.out.println("Invalid field. Please enter 'weight', 'type', or 'portId'.");
+                            System.out.println("Invalid field. Please enter 'weight', 'type', or 'portid'.");
                         }
                     }
 
-                    System.out.println("Enter the new value:");
-                    String newValue = input.next();
+                    String newValue;  // Initialize to null
                     String[] lineParts = arrayList.get(i).split(",");
-                    fieldToUpdate = input.next().toLowerCase();
-
 
                     switch (fieldToUpdate) {
                         case "weight":
-                            lineParts[1] = newValue;
+                            while (true) {
+                                try {
+                                    Ports relevantPort = Ports.findPortById(lineParts[3]); // portId is at index 3
+                                    if (relevantPort != null) {
+                                        double storingCapacity = relevantPort.getStoringCapacity();
+                                        System.out.println("The port's remaining storage capacity is: " + storingCapacity);
+
+                                        System.out.print("Enter the new weight: ");
+                                        newValue = input.next();  // Get newValue only for this case
+
+                                        int newIntValue = Integer.parseInt(newValue);
+                                        String formattedValue = String.format("%.1f", (double) newIntValue);
+
+                                        if (Double.parseDouble(formattedValue) <= storingCapacity) {
+                                            lineParts[1] = formattedValue;
+                                            break; // Exit the loop as the weight is within capacity
+                                        } else {
+                                            System.out.println("The updated weight exceeds the port's remaining storage capacity. Please try again.");
+                                        }
+                                    }
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Invalid input for weight. Please enter an integer.");
+                                }
+                            }
                             break;
                         case "type":
+                            System.out.print("Enter the new container's type: ");
+                            newValue = input.next();
                             lineParts[2] = newValue.toUpperCase();
+
+                            List<String> vehicleLines = new ArrayList<>();
+                            try (BufferedReader vehicleReader = new BufferedReader(new FileReader("vehicles.csv"))) {
+                                String vehicleLine;
+                                while ((vehicleLine = vehicleReader.readLine()) != null) {
+                                    vehicleLines.add(vehicleLine);
+                                }
+                            } catch (IOException e) {
+                                System.out.println("An error occurred while reading vehicles.csv: " + e.getMessage());
+                            }
+
+                            for (int j = 0; j < vehicleLines.size(); j++) {
+                                String[] vehicleParts = vehicleLines.get(j).split(",");
+                                if (vehicleParts.length > 8 && vehicleParts[8].equals(searchKey)) {
+                                    String vehicleType = vehicleParts[6];
+                                    if ("Truck".equals(vehicleType)) {
+                                        if (!isValidVehicleForContainer(vehicleParts[7], newValue)) {
+                                            vehicleParts[8] = "";
+                                            vehicleLines.set(j, String.join(",", vehicleParts));
+                                            System.out.println("Removed container from incompatible truck.");
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+
+
+                            try (BufferedWriter vehicleWriter = new BufferedWriter(new FileWriter("vehicles.csv"))) {
+                                for (int j = 0; j < vehicleLines.size(); j++) {
+                                    vehicleWriter.write(vehicleLines.get(j));
+                                    if (j < vehicleLines.size() - 1) {
+                                        vehicleWriter.newLine();
+                                    }
+                                }
+                            } catch (IOException e) {
+                                System.out.println("An error occurred while writing to vehicles.csv: " + e.getMessage());
+                            }
                             break;
                         case "portid":
+                            System.out.print("Enter the new portId: ");
+                            newValue = input.next();  // Get newValue for this case
                             lineParts[3] = newValue;
                             break;
                     }
@@ -297,14 +363,25 @@ public class Container {
         }
 
         try (FileWriter writer = new FileWriter(filename)) {
-            for (String record : arrayList) {
-                writer.write(record);
-                writer.write("\n");
+            for (int i = 0; i < arrayList.size(); i++) {
+                writer.write(arrayList.get(i));
+                if (i < arrayList.size() - 1) {
+                    writer.write("\n");
+                }
             }
             System.out.println("Update successful!");
         } catch (IOException e) {
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
         }
+    }
+
+    public static boolean isValidVehicleForContainer(String vehicleType, String containerType) {
+        return switch (vehicleType.toUpperCase()) {
+            case "BASIC" -> Arrays.asList("DRY_STORAGE", "OPEN_TOP", "OPEN_SIDE").contains(containerType.toUpperCase());
+            case "REEFER" -> "REFRIGERATED".equalsIgnoreCase(containerType);
+            case "TANKER" -> "LIQUID".equalsIgnoreCase(containerType);
+            default -> false;
+        };
     }
 
     public static void viewContainerById(Scanner input) {
@@ -361,6 +438,10 @@ public class Container {
         }
         return containerList;
     }
+
+
+
+
 
     @Override
     public String toString() {

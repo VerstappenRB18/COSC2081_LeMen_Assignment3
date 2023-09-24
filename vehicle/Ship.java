@@ -1,6 +1,7 @@
 package vehicle;
 
 import ports.Ports;
+import User.User;
 
 import java.util.*;
 import java.io.*;
@@ -70,12 +71,30 @@ public class Ship extends Vehicle {
         return null;
     }
 
-    public static void modifyShipAttributes(List<Vehicle> vehicleList, Scanner scanner) {
+    public static void modifyShipAttributes(List<Vehicle> vehicleList, Scanner scanner, User loggedInUser) {
+        List<String> modifiableShips = new ArrayList<>();
+
+        for (Vehicle vehicle : vehicleList) {
+            if (vehicle instanceof Ship) {
+                if (loggedInUser.getUserRole() == User.UserRole.ADMIN ||
+                        vehicle.getCurrentPort().getId().equals(loggedInUser.getPortId())) {
+                    modifiableShips.add(vehicle.getId());
+                }
+            }
+        }
+
+        System.out.println("Ships you can modify: " + String.join(", ", modifiableShips));
+        System.out.println();
         System.out.print("Enter the Ship ID to modify: ");
         String shipId = scanner.next();
         Vehicle vehicle = findVehicleById(vehicleList, shipId);
 
         if (vehicle instanceof Ship shipToModify) {
+            if (loggedInUser.getUserRole() == User.UserRole.MANAGER &&
+                    !shipToModify.getCurrentPort().getId().equals(loggedInUser.getPortId())) {
+                System.out.println("You are not authorized to modify ships that don't belong to your port.");
+                return;
+            }
             System.out.println("1. Name");
             System.out.println("2. Carrying Capacity");
             System.out.println("3. Fuel Capacity");

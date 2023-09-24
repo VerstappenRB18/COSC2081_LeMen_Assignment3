@@ -1,8 +1,6 @@
 package vehicle;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import container.Container;
 import ports.Ports;
@@ -66,13 +64,13 @@ public abstract class Vehicle {
         return carryingCapacity;
     }
 
-    public static boolean addContainer(Scanner scanner, List<Vehicle> vehicleList, List<Container> containerList) {
+    public static void addContainer(Scanner scanner, List<Vehicle> vehicleList, List<Container> containerList) {
         System.out.print("Enter Vehicle ID to add container to: ");
         String vehicleId = scanner.next();
         Vehicle vehicle = findVehicleById(vehicleList, vehicleId);
         if (vehicle == null) {
             System.out.println("Vehicle not found.");
-            return false;
+            return;
         }
 
         // Automatically filter containers based on the current port of the vehicle
@@ -85,7 +83,7 @@ public abstract class Vehicle {
 
         if (availableContainers.isEmpty()) {
             System.out.println("No containers available at the current port.");
-            return false;
+            return;
         }
 
         System.out.println("Available Containers:");
@@ -99,29 +97,28 @@ public abstract class Vehicle {
         Container container = findContainerById(availableContainers, containerId); // Note: We're searching in availableContainers
         if (container == null) {
             System.out.println("Invalid container ID. Please try again.");
-            return false;
+            return;
         }
 
         // Existing check for container type compatibility with the vehicle
-        if (vehicle instanceof Truck) {
-            Truck thisTruck = (Truck) vehicle;
+        if (vehicle instanceof Truck thisTruck) {
             switch (thisTruck.getTruckType()) {
                 case BASIC:
                     if (container.getType() == Container.ContainerType.REFRIGERATED || container.getType() == Container.ContainerType.LIQUID) {
                         System.out.println("This type of truck cannot carry this type of container.");
-                        return false;
+                        return;
                     }
                     break;
                 case REEFER:
                     if (container.getType() != Container.ContainerType.REFRIGERATED) {
                         System.out.println("This type of truck can only carry refrigerated containers.");
-                        return false;
+                        return;
                     }
                     break;
                 case TANKER:
                     if (container.getType() != Container.ContainerType.LIQUID) {
                         System.out.println("This type of truck can only carry liquid containers.");
-                        return false;
+                        return;
                     }
                     break;
             }
@@ -131,7 +128,7 @@ public abstract class Vehicle {
         double totalWeight = vehicle.getContainers().stream().mapToDouble(Container::getWeight).sum();
         if (totalWeight + container.getWeight() > vehicle.getCarryingCapacity()) {
             System.out.println("Adding this container will exceed the vehicle's carrying capacity.");
-            return false;
+            return;
         }
 
         // If all checks pass, add the container to the vehicle
@@ -142,7 +139,6 @@ public abstract class Vehicle {
         );
         System.out.println("Container added to vehicle.");
         System.out.println("Added container " + container.getId() + " to vehicle " + vehicle.getId());
-        return true;
     }
 
 
@@ -262,6 +258,31 @@ public abstract class Vehicle {
         return totalFuelConsumption;
     }
 
+    public static void updateVehicleFuelInCSV(Vehicle vehicle, String filePath) throws IOException {
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(vehicle.getId())) {
+                    data[4] = String.valueOf(vehicle.getCurrentFuel());
+                    line = String.join(",", data);
+                }
+                lines.add(line);
+            }
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (int i = 0; i < lines.size(); i++) {
+                writer.write(lines.get(i));
+                // Only add a new line if this is not the last line
+                if (i < lines.size() - 1) {
+                    writer.newLine();
+                }
+            }
+        }
+    }
+
 
 
     public double calculateFuelConsumption(double distance, double weight, String containerType) {
@@ -302,23 +323,29 @@ public abstract class Vehicle {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Vehicle ID: ").append(id).append('\n')
-                .append("Name: ").append(name).append('\n')
-                .append("Carrying Capacity: ").append(carryingCapacity).append('\n')
-                .append("Fuel Capacity: ").append(fuelCapacity).append('\n')
-                .append("Current Fuel: ").append(currentFuel).append('\n');
+        sb.append("Vehicle Information:").append('\n')
+                .append("  - ID: ").append(id).append('\n')
+                .append("  - Name: ").append(name).append('\n')
+                .append("  - Carrying Capacity: ").append(carryingCapacity).append('\n')
+                .append("  - Fuel Capacity: ").append(fuelCapacity).append('\n')
+                .append("  - Current Fuel: ").append(currentFuel).append('\n');
 
         if (this instanceof Truck) {
-            sb.append("Truck Type: ").append(((Truck) this).getTruckType()).append('\n');
+            sb.append("  - Truck Type: ").append(((Truck) this).getTruckType()).append('\n');
         }
 
-        sb.append("Containers: ");
-        for (Container container : containers) {
-            sb.append(container.toString()).append(", ");
+        if (containers.isEmpty()) {
+            sb.append("  - Containers: None");
+        } else {
+            sb.append("  - Containers:");
+            for (Container container : containers) {
+                sb.append("\n    * ").append(container.toString());
+            }
         }
 
         return sb.toString();
     }
+
 
     public static Container findContainerById(List<Container> containerList, String id) {
         for (Container container : containerList) {
@@ -341,7 +368,7 @@ public abstract class Vehicle {
     }
 
 
-    public static boolean deleteVehicle(List<Vehicle> vehicleList, Scanner scanner, String filename) throws IOException {
+    public static void deleteVehicle(List<Vehicle> vehicleList, Scanner scanner, String filename) throws IOException {
         // Prompt the user for the vehicle ID
         System.out.print("Enter the Vehicle ID to delete: ");
         String vehicleId = scanner.next();
@@ -367,15 +394,17 @@ public abstract class Vehicle {
             }
 
             System.out.println("Vehicle deleted successfully.");
-            return true;
         } else {
             System.out.println("Vehicle not found.");
-            return false;
         }
     }
 
     public double getFuelCapacity() {
         return fuelCapacity;
+    }
+
+    public double getCurrentFuel() {
+        return currentFuel;
     }
 
     public void setName(String name) {
