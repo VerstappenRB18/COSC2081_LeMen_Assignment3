@@ -240,9 +240,18 @@ public class Container {
 
     public static void updateContainer(ArrayList<String> arrayList, Scanner input) {
         arrayList.clear();
+        String searchKey;
+        while (true) {
+            System.out.print("Please enter the Container ID to update the record (format: c-number): ");
+            searchKey = input.next();
+            if (searchKey.matches("c-\\d+")) {
+                break;
+            } else {
+                System.out.println("Invalid format. Please enter the Container ID in the format 'c-number'.");
+            }
+        }
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            System.out.println("Please enter the Container ID to update the record:");
-            String searchKey = input.next();
+
             String line;
 
             boolean found = false;
@@ -259,7 +268,7 @@ public class Container {
                         System.out.println("What do you want to update? (weight/type/portId):");
                         fieldToUpdate = input.next().toLowerCase();
 
-                        if (fieldToUpdate.equals("weight") || fieldToUpdate.equals("type") || fieldToUpdate.equals("portId")) {
+                        if (fieldToUpdate.equals("weight") || fieldToUpdate.equals("type") || fieldToUpdate.equals("portid")) {
                             break;
                         } else {
                             System.out.println("Invalid field. Please enter 'weight', 'type', or 'portId'.");
