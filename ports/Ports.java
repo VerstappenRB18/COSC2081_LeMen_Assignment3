@@ -250,23 +250,7 @@ public class Ports {
         System.out.println("Port created successfully.");
     }
 
-    public static void displayAccessiblePorts(User loggedInUser) {
-        try {
-            List<Ports> allPorts = Ports.readFromFile("ports.csv");
-            List<Ports> accessiblePorts = Ports.filterPortsByAccess(allPorts, loggedInUser.getPortId(), loggedInUser.getUserRole());
 
-            if (accessiblePorts.isEmpty()) {
-                System.out.println("No accessible ports found.");
-                return;
-            }
-
-            for (Ports port : accessiblePorts) {
-                System.out.println(port);
-            }
-        } catch (IOException e) {
-            System.err.println("An error occurred while reading the ports file: " + e.getMessage());
-        }
-    }
 
 
     // Method to update an existing port details
@@ -409,6 +393,24 @@ public class Ports {
         }
     }
 
+    public static void displayAccessiblePorts(User loggedInUser) {
+        try {
+            List<Ports> allPorts = Ports.readFromFile("ports.csv");
+            List<Ports> accessiblePorts = Ports.filterPortsByAccess(allPorts, loggedInUser.getPortId(), loggedInUser.getUserRole());
+
+            if (accessiblePorts.isEmpty()) {
+                System.out.println("No accessible ports found.");
+                return;
+            }
+
+            for (Ports port : accessiblePorts) {
+                System.out.println(port);
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading the ports file: " + e.getMessage());
+        }
+    }
+
     public static List<Ports> filterPortsByAccess(List<Ports> allPorts, String portId, User.UserRole userRole) {
         List<Ports> accessiblePorts = new ArrayList<>();
 
@@ -425,8 +427,6 @@ public class Ports {
         return accessiblePorts; // Manager has access to specific port
     }
 
-
-
     public static void saveAllToFile(String filename, List<Ports> portsList) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (int i = 0; i < portsList.size(); i++) {
@@ -439,6 +439,22 @@ public class Ports {
         }
     }
 
+
+    public static Ports findPortById(String portId) {
+        List<Ports> portsList = new ArrayList<>();
+        try {
+            portsList = readFromFile(filename); // Assuming readFromFile is a static method
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the file: " + e.getMessage());
+        }
+
+        for (Ports port : portsList) {
+            if (port.getId().equals(portId)) {
+                return port;
+            }
+        }
+        return null; // Return null if no matching port is found
+    }
 
 
     @Override

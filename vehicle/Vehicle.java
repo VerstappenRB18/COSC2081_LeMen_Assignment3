@@ -64,13 +64,13 @@ public abstract class Vehicle {
         return carryingCapacity;
     }
 
-    public static boolean addContainer(Scanner scanner, List<Vehicle> vehicleList, List<Container> containerList) {
+    public static void addContainer(Scanner scanner, List<Vehicle> vehicleList, List<Container> containerList) {
         System.out.print("Enter Vehicle ID to add container to: ");
         String vehicleId = scanner.next();
         Vehicle vehicle = findVehicleById(vehicleList, vehicleId);
         if (vehicle == null) {
             System.out.println("Vehicle not found.");
-            return false;
+            return;
         }
 
         // Automatically filter containers based on the current port of the vehicle
@@ -83,7 +83,7 @@ public abstract class Vehicle {
 
         if (availableContainers.isEmpty()) {
             System.out.println("No containers available at the current port.");
-            return false;
+            return;
         }
 
         System.out.println("Available Containers:");
@@ -97,29 +97,28 @@ public abstract class Vehicle {
         Container container = findContainerById(availableContainers, containerId); // Note: We're searching in availableContainers
         if (container == null) {
             System.out.println("Invalid container ID. Please try again.");
-            return false;
+            return;
         }
 
         // Existing check for container type compatibility with the vehicle
-        if (vehicle instanceof Truck) {
-            Truck thisTruck = (Truck) vehicle;
+        if (vehicle instanceof Truck thisTruck) {
             switch (thisTruck.getTruckType()) {
                 case BASIC:
                     if (container.getType() == Container.ContainerType.REFRIGERATED || container.getType() == Container.ContainerType.LIQUID) {
                         System.out.println("This type of truck cannot carry this type of container.");
-                        return false;
+                        return;
                     }
                     break;
                 case REEFER:
                     if (container.getType() != Container.ContainerType.REFRIGERATED) {
                         System.out.println("This type of truck can only carry refrigerated containers.");
-                        return false;
+                        return;
                     }
                     break;
                 case TANKER:
                     if (container.getType() != Container.ContainerType.LIQUID) {
                         System.out.println("This type of truck can only carry liquid containers.");
-                        return false;
+                        return;
                     }
                     break;
             }
@@ -129,7 +128,7 @@ public abstract class Vehicle {
         double totalWeight = vehicle.getContainers().stream().mapToDouble(Container::getWeight).sum();
         if (totalWeight + container.getWeight() > vehicle.getCarryingCapacity()) {
             System.out.println("Adding this container will exceed the vehicle's carrying capacity.");
-            return false;
+            return;
         }
 
         // If all checks pass, add the container to the vehicle
@@ -140,7 +139,6 @@ public abstract class Vehicle {
         );
         System.out.println("Container added to vehicle.");
         System.out.println("Added container " + container.getId() + " to vehicle " + vehicle.getId());
-        return true;
     }
 
 
@@ -370,7 +368,7 @@ public abstract class Vehicle {
     }
 
 
-    public static boolean deleteVehicle(List<Vehicle> vehicleList, Scanner scanner, String filename) throws IOException {
+    public static void deleteVehicle(List<Vehicle> vehicleList, Scanner scanner, String filename) throws IOException {
         // Prompt the user for the vehicle ID
         System.out.print("Enter the Vehicle ID to delete: ");
         String vehicleId = scanner.next();
@@ -396,10 +394,8 @@ public abstract class Vehicle {
             }
 
             System.out.println("Vehicle deleted successfully.");
-            return true;
         } else {
             System.out.println("Vehicle not found.");
-            return false;
         }
     }
 

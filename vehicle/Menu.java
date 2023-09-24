@@ -195,7 +195,7 @@ public class Menu {
                     System.err.println("Invalid port ID in line: " + line);
                     continue;
                 }
-                Vehicle vehicle = null;
+                Vehicle vehicle;
                 if ("Truck".equals(data[6])) {
                     vehicle = new Truck(data, currentPort);
                 } else if ("Ship".equals(data[6])) {
